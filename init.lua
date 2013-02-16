@@ -5,8 +5,39 @@ travelnet = {};
 
 travelnet.targets = {};
 
-travelnet.get_targets = function()
+
+-- TODO: save and restore ought to be library functions and not implemented in each individual mod!
+-- called whenever a station is added or removed
+travelnet.save_data = function()
+   
+   local data = minetest.serialize( travelnet.targets );
+   local path = minetest.get_worldpath().."/mod_travelnet.data";
+
+   local file = io.open( path, "w" );
+   if( file ) then
+      file:write( data );
+      file:close();
+   else
+      print("[Mod travelnet] Error: Savefile '"..tostring( path ).."' could not be written.");
+   end
 end
+
+
+travelnet.restore_data = function()
+
+   local path = minetest.get_worldpath().."/mod_travelnet.data";
+   
+   local file = io.open( path, "r" );
+   if( file ) then
+      local data = file:read("*all");
+      travelnet.targets = minetest.deserialize( data );
+      file:close();
+   else
+      print("[Mod travelnet] Error: Savefile '"..tostring( path ).."' not found.");
+   end
+end
+
+
 
 
 travelnet.update_formspec = function( pos, puncher_name )
@@ -32,7 +63,7 @@ travelnet.update_formspec = function( pos, puncher_name )
 -- minetest.chat_send_player(puncher_name, "data: "..minetest.serialize(  travelnet.targets ));
 
 
-      meta:set_string("infotext",       "Travel-box (unconfigured)");
+      meta:set_string("infotext",       "Travelnet-box (unconfigured)");
       meta:set_string("station_name",   "");
       meta:set_string("station_network","");
       meta:set_string("owner",          "");
@@ -79,7 +110,7 @@ travelnet.update_formspec = function( pos, puncher_name )
 
    -- add name of station + network + owner + update-button
    local formspec = "size[12,10]"..
-                            "label[3.3,0.0;Travel-Box: Punch box to update target list.]"..
+                            "label[3.3,0.0;Travelnet-Box: Punch box to update target list.]"..
                             "label[0.3,0.4;Name of this station:]".."label[6.3,0.4;"..(station_name or "?").."]"..
                             "label[0.3,0.8;Assigned to Network:]" .."label[6.3,0.8;"..(station_network or "?").."]"..
                             "label[0.3,1.2;Owned by:]"            .."label[6.3,1.2;"..(owner_name or "?").."]"..
@@ -120,6 +151,9 @@ travelnet.update_formspec = function( pos, puncher_name )
    end
 
    meta:set_string( "formspec", formspec );
+
+   meta:set_string( "infotext", "Station '"..tostring( station_name ).."' on travelnet '"..tostring( station_network )..
+                                "' (owned by "..tostring( owner_name )..") ready for usage. Right-click to travel, punch to update.");
 
    minetest.chat_send_player(puncher_name, "The target list of this box on the travelnet has been updated.");
 end
@@ -192,6 +226,9 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
       -- display a list of all stations that can be reached from here
       travelnet.update_formspec( pos, player_name );
+
+      -- save the updated network data in a savefile over server restart
+      travelnet.save_data();
    end
 end
 
@@ -256,11 +293,44 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 end
 
 
+travelnet.remove_box = function( pos, oldnode, oldmetadata, digger )
+
+
+   if( not( oldmetadata ) or oldmetadata=="nil" or not(oldmetadata.fields)) then
+      return;
+   end
+
+   local owner_name      = oldmetadata.fields[ "owner" ];
+   local station_name    = oldmetadata.fields[ "station_name" ];
+   local station_network = oldmetadata.fields[ "station_network" ];
+
+   -- station is not known? then just remove it
+   if(  not( owner_name ) 
+     or not( station_name ) 
+     or not( station_network ) 
+     or not( travelnet.targets[ player_name ] )
+     or not( travelnet.targets[ player_name ][ station_network ] )) then
+       
+      return;
+   end
+
+   travelnet.targets[ player_name ][ station_network ][ station_name ] = nil;
+   
+   
+   minetest.chat_send_player( player_name, "Station '"..station_name.."' has been REMOVED from the network '"..station_network.."'.");
+   if( digger ~= nil and player_name ~= digger:get_player_name() ) then
+      minetest.chat_send_player( digger:get_player_name(), "Station '"..station_name.."' has been REMOVED from the network '"..station_network.."'.");
+   end
+
+   -- save the updated network data in a savefile over server restart
+   travelnet.save_data();
+end
+
 
 
 minetest.register_node("travelnet:travelnet", {
 
-    description = "Travel box",
+    description = "Travelnet box",
 
     drawtype = "nodebox",
     sunlight_propagates = true,
@@ -316,7 +386,7 @@ minetest.register_node("travelnet:travelnet", {
 
     after_place_node  = function(pos, placer, itemstack)
 	local meta = minetest.env:get_meta(pos);
-        meta:set_string("infotext",       "Travel-box (unconfigured)");
+        meta:set_string("infotext",       "Travelnet-box (unconfigured)");
         meta:set_string("station_name",   "");
         meta:set_string("station_network","");
         meta:set_string("owner",          placer:get_player_name() );
@@ -332,7 +402,13 @@ minetest.register_node("travelnet:travelnet", {
     on_punch          = function(pos, node, puncher)
                           travelnet.update_formspec(pos, puncher:get_player_name())
     end,
+
+    after_dig_node = function(pos, oldnode, oldmetadata, digger)
+			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
+    end,
 })
 
 
 
+-- upon server start, read the savefile
+travelnet.restore_data();
