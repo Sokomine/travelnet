@@ -1,4 +1,7 @@
 
+-- TODO: fix nodeboxes
+-- TODO: require priv to place box 
+
 local MAX_STATIONS_PER_NETWORK = 24;
 
 travelnet = {};
@@ -346,11 +349,14 @@ minetest.register_node("travelnet:travelnet", {
 	    type = "fixed",
 	    fixed = {
 
+                {  0.5, -0.5,-0.5, 0.45, 1.45, 0.5},
+                { 0.45, -0.5, 0.5,-0.5, 1.45, 0.45}, 
+                {-0.45, -0.5,-0.5,-0.45,1.45, 0.5},
 
-                {-0.45,-0.5,-0.5,-0.5,1.5, 0.5},
-                { 0.45,-0.5,-0.5, 0.5,1.5, 0.5},
+   --             {-0.45,-0.5,-0.5,-0.5,1.5, 0.5},
+   --             { 0.45,-0.5,-0.5, 0.5,1.5, 0.5},
 
-                { -0.5,-0.5, 0.5,0.45,1.5, 0.45},
+   --             { -0.5,-0.5, 0.5,0.45,1.5, 0.45},
 
                 --groundplate to stand on
                 { -0.5,-0.5,-0.5,0.5,-0.45, 0.5}, 
@@ -358,7 +364,7 @@ minetest.register_node("travelnet:travelnet", {
                 { -0.5, 1.45,-0.5,0.5, 1.5, 0.5}, 
 
                 -- control panel
-                { -0.2, 0.6,  0.3, 0.2, 1.1,  0.5},
+--                { -0.2, 0.6,  0.3, 0.2, 1.1,  0.5},
 
             },
     },
@@ -373,15 +379,10 @@ minetest.register_node("travelnet:travelnet", {
 
              "default_brick.png", -- front view
              "default_wood.png",  -- backward view
---             "moreblocks_glowglass.png",
---             "moreblocks_glowglass.png",
---             "moreblocks_glowglass.png",
---             "moreblocks_glowglass.png"},
              },
 --    inventory_image = minetest.inventorycube("travelnet_travelnet.png"),
 
     groups = {choppy=2,dig_immediate=2,attached_node=1},
-    legacy_wallmounted = true,
 
 
     after_place_node  = function(pos, placer, itemstack)
@@ -406,9 +407,32 @@ minetest.register_node("travelnet:travelnet", {
     after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
     end,
+
+    -- taken from VanessaEs homedecor fridge
+    on_place = function(itemstack, placer, pointed_thing)
+
+       local pos = pointed_thing.above;
+       if( minetest.env:get_node({x=pos.x, y=pos.y+1, z=pos.z}).name ~= "air" ) then
+
+          minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
+          return;
+       end
+       return minetest.item_place(itemstack, placer, pointed_thing);
+    end,
+
 })
 
+
+minetest.register_craft({
+        output = "travelnet:travelnet",
+        recipe = {
+                {"default:glass", "default:steel_ingot", "default:glass", },
+                {"default:glass", "default:mese", "default:glass", },
+                {"default:glass", "default:steel_ingot", "default:glass", }
+        }
+})
 
 
 -- upon server start, read the savefile
 travelnet.restore_data();
+
