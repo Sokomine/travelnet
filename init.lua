@@ -1,6 +1,5 @@
 
--- TODO: fix nodeboxes
--- TODO: require priv to place box 
+-- TODO: require priv to place box?
 
 local MAX_STATIONS_PER_NETWORK = 24;
 
@@ -351,12 +350,7 @@ minetest.register_node("travelnet:travelnet", {
 
                 {  0.5, -0.5,-0.5, 0.45, 1.45, 0.5},
                 { 0.45, -0.5, 0.5,-0.5, 1.45, 0.45}, 
-                {-0.45, -0.5,-0.5,-0.45,1.45, 0.5},
-
-   --             {-0.45,-0.5,-0.5,-0.5,1.5, 0.5},
-   --             { 0.45,-0.5,-0.5, 0.5,1.5, 0.5},
-
-   --             { -0.5,-0.5, 0.5,0.45,1.5, 0.45},
+                {-0.45, -0.5,-0.5,-0.5,1.45, 0.5},
 
                 --groundplate to stand on
                 { -0.5,-0.5,-0.5,0.5,-0.45, 0.5}, 
@@ -374,16 +368,17 @@ minetest.register_node("travelnet:travelnet", {
           
              "default_clay.png",  -- view from top
              "default_clay.png",  -- view from bottom
-             "moreblocks_glowglass.png", -- side
-             "moreblocks_glowglass.png", -- side
+             "travelnet_travelnet_side.png", -- side
+             "travelnet_travelnet_side.png", -- side
 
-             "default_brick.png", -- front view
-             "default_wood.png",  -- backward view
+             "travelnet_travelnet_back.png", -- front view
+             "travelnet_travelnet_front.png",  -- backward view
              },
 --    inventory_image = minetest.inventorycube("travelnet_travelnet.png"),
 
     groups = {choppy=2,dig_immediate=2,attached_node=1},
 
+    light_source = 10,
 
     after_place_node  = function(pos, placer, itemstack)
 	local meta = minetest.env:get_meta(pos);
@@ -427,7 +422,7 @@ minetest.register_craft({
         output = "travelnet:travelnet",
         recipe = {
                 {"default:glass", "default:steel_ingot", "default:glass", },
-                {"default:glass", "default:mese", "default:glass", },
+                {"default:glass", "default:mese",        "default:glass", },
                 {"default:glass", "default:steel_ingot", "default:glass", }
         }
 })
