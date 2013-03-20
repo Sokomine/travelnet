@@ -364,7 +364,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          yaw = 270;
       end
        
-      player:set_view_yaw( yaw ); -- this is only supported in recent versions of MT
+      player:set_look_yaw( yaw ); -- this is only supported in recent versions of MT
    end
 
 end
