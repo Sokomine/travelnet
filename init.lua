@@ -1,6 +1,7 @@
 --
 -- Changelog:
--- 20.03.13 - fixed bug that made it impossible to remove stations from the net
+-- 20.03.13 - addet inventory image provided by VanessaE
+--          - fixed bug that made it impossible to remove stations from the net
 --          - if the station a player beamed to no longer exists, the station will be removed automaticly
 --          - with the travelnet_attach priv, you can now attach your box to the nets of other players
 --          - in newer versions of Minetest, the players yaw is set so that he/she looks out of the receiving box
@@ -343,7 +344,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          yaw = 270;
       end
        
-      player:setyaw( yaw ); -- this is only supported in recent versions of MT
+      player:set_view_yaw( yaw ); -- this is only supported in recent versions of MT
    end
 
 end
@@ -429,7 +430,7 @@ minetest.register_node("travelnet:travelnet", {
              "travelnet_travelnet_back.png", -- front view
              "travelnet_travelnet_front.png",  -- backward view
              },
---    inventory_image = minetest.inventorycube("travelnet_travelnet.png"),
+    inventory_image = "travelnet_inv.png",
 
     groups = {choppy=2,dig_immediate=2,attached_node=1},
 
