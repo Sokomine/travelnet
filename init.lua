@@ -331,13 +331,15 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
 
 
+   minetest.sound_play("128590_7037-lq.mp3", {pos = pos, gain = 1.0, max_hear_distance = 10,})
+   minetest.env:add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
 
-   -- TODO
-   --minetest.sound_play("teleporter_teleport", {pos = pos, gain = 1.0, max_hear_distance = 10,})
    -- transport the player to the target location
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:moveto( target_pos, false);
-   --minetest.sound_play("teleporter_teleport", {pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos, gain = 1.0, max_hear_distance = 10,})
+
+   minetest.sound_play("travelnet_travel.wav", {pos = target_pos, gain = 1.0, max_hear_distance = 10,})
+   minetest.env:add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
 
 
    -- check if the box has at the other end has been removed
@@ -366,6 +368,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       end
        
       player:set_look_yaw( math.rad( yaw )); -- this is only supported in recent versions of MT
+      player:set_look_pitch( math.rad( 0 )); -- this is only supported in recent versions of MT
    end
 
 end
@@ -496,6 +499,38 @@ minetest.register_node("travelnet:travelnet", {
 })
 
 
+minetest.register_entity( 'travelnet:effect', {
+
+    hp_max = 1,
+    physical = false,
+    weight = 5,
+    collisionbox = {-0.4,-0.5,-0.4, 0.4,1.5,0.4},
+    visual = "upright_sprite",
+    visual_size = {x=1, y=2},
+--    mesh = "model",
+    textures = { "travelnet_flash.png" }, -- number of required textures depends on visual
+--    colors = {}, -- number of required colors depends on visual
+    spritediv = {x=1, y=1},
+    initial_sprite_basepos = {x=0, y=0},
+    is_visible = true,
+    makes_footstep_sound = false,
+    automatic_rotate = true,
+
+    anz_rotations = 0,
+
+    on_step = function( self, dtime )
+       -- this is supposed to be more flickering than smooth animation
+       self.object:setyaw( self.object:getyaw()+1);
+       self.anz_rotations = self.anz_rotations + 1;
+       -- eventually self-destruct
+       if( self.anz_rotations > 15 ) then
+          self.object:remove();
+       end
+    end
+})
+
+
+
 minetest.register_craft({
         output = "travelnet:travelnet",
         recipe = {
@@ -508,4 +543,5 @@ minetest.register_craft({
 
 -- upon server start, read the savefile
 travelnet.restore_data();
+
 
