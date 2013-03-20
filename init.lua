@@ -1,11 +1,31 @@
---
--- Changelog:
--- 20.03.13 - addet inventory image provided by VanessaE
---          - fixed bug that made it impossible to remove stations from the net
---          - if the station a player beamed to no longer exists, the station will be removed automaticly
---          - with the travelnet_attach priv, you can now attach your box to the nets of other players
---          - in newer versions of Minetest, the players yaw is set so that he/she looks out of the receiving box
---          - target list is now centered if there are less than 9 targets
+
+          
+--[[
+    Teleporter networks that allow players to choose a destination out of a list
+    Copyright (C) 2013 Sokomine
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    
+ Changelog:
+ 20.03.13 - added inventory image provided by VanessaE
+          - fixed bug that made it impossible to remove stations from the net
+          - if the station a player beamed to no longer exists, the station will be removed automaticly
+          - with the travelnet_attach priv, you can now attach your box to the nets of other players
+          - in newer versions of Minetest, the players yaw is set so that he/she looks out of the receiving box
+          - target list is now centered if there are less than 9 targets
+--]]
 
 local MAX_STATIONS_PER_NETWORK = 24;
 
