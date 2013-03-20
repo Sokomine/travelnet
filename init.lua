@@ -353,7 +353,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    else
 
       -- rotate the player so that he/she can walk straight out of the box
-      local yaw = 0;
+      local yaw    = 0;
+      local param2 = node2.param2;
       if( param2==0 ) then
          yaw = 180;
       elseif( param2==1 ) then
