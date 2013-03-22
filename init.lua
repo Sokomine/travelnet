@@ -19,6 +19,8 @@
 
     
  Changelog:
+ 22.03.13 - added automatic detection if yaw can be set
+          - beam effect is disabled by default
  20.03.13 - added inventory image provided by VanessaE
           - fixed bug that made it impossible to remove stations from the net
           - if the station a player beamed to no longer exists, the station will be removed automaticly
@@ -35,6 +37,9 @@ travelnet = {};
 
 travelnet.targets = {};
 
+-- set this to true if you want a simulated beam effect
+travelnet_effect_enabled = false;
+travelnet_sound_enabled = false;
 
 -- TODO: save and restore ought to be library functions and not implemented in each individual mod!
 -- called whenever a station is added or removed
@@ -331,15 +336,23 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
 
 
-   minetest.sound_play("128590_7037-lq.mp3", {pos = pos, gain = 1.0, max_hear_distance = 10,})
-   minetest.env:add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
+   if( travelnet_sound_enabled ) then
+      minetest.sound_play("128590_7037-lq.mp3", {pos = pos, gain = 1.0, max_hear_distance = 10,})
+   end
+   if( travelnet_effect_enabled ) then 
+      minetest.env:add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
+   end
 
    -- transport the player to the target location
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:moveto( target_pos, false);
 
-   minetest.sound_play("travelnet_travel.wav", {pos = target_pos, gain = 1.0, max_hear_distance = 10,})
-   minetest.env:add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
+   if( travelnet_sound_enabled ) then
+      minetest.sound_play("travelnet_travel.wav", {pos = target_pos, gain = 1.0, max_hear_distance = 10,})
+   end
+   if( travelnet_effect_enabled ) then 
+      minetest.env:add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
+   end
 
 
    -- check if the box has at the other end has been removed
@@ -352,7 +365,9 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
                                        station_network = station_network }};
 
       travelnet.remove_box( target_pos, nil, oldmetadata, player );
-   else
+
+   -- do this only on servers where the function exists
+   elseif( player.set_look_yaw ) then
 
       -- rotate the player so that he/she can walk straight out of the box
       local yaw    = 0;
