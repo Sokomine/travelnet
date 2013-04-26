@@ -317,10 +317,11 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
      or not( travelnet.targets[ owner_name ][ station_network ] )) then
 
 
-      minetest.chat_send_player(puncher_name, "Error: There is something wrong with the configuration of this station. "..
-                                             " DEBUG DATA: owner: "..(  owner_name or "?")..
-                                                  " station_name: "..(station_name or "?")..
-                                               " station_network: "..(station_network or "?")..".");
+      minetest.chat_send_player(name, "Error: There is something wrong with the configuration of this station. "..
+                                      " DEBUG DATA: owner: "..(  owner_name or "?")..
+                                      " station_name: "..(station_name or "?")..
+                                      " station_network: "..(station_network or "?")..".");
+      return
    end
 
    -- if the target station is gone
