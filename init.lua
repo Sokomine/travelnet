@@ -355,9 +355,9 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    end
 
 
-   -- check if the box has at the other end has been removed
+   -- check if the box has at the other end has been removed.
    local node2 = minetest.env:get_node(  target_pos );
-   if( node2 ~= nil and node2.name ~= 'ignore' and node2.name ~= 'travelnet:travelnet' ) then
+   if( node2 ~= nil and node2.name ~= 'ignore' and node2.name ~= 'travelnet:travelnet' and node2.name ~= 'travelnet:elevator') then
 
       -- provide information necessary to identify the removed box
       local oldmetadata = { fields = { owner           = owner_name,
@@ -558,32 +558,6 @@ minetest.register_craft({
 -- upon server start, read the savefile
 travelnet.restore_data();
 
-
------- elevator type nodes
---minetest.register_node('mymod:my_best_nodebox', {
---        description = "My kickass nodebox object",
---        tiles = {
---          "top.jpg",
---          "bottom.jpg",
---          "left.jpg",
---          "right.jpg",
---          "front.jpg",
---          "back.jpg",
---        },
---        -- [more of the usual register_node() stuff here]
---        drawtype = "nodebox",
---        node_box = {
---                type = "fixed",
---                fixed = {
---                    {X1, Y1, Z1,  X2, Y2, Z2}, 
---                    {X1, Y1, Z1,  X2, Y2, Z2}, 
---                    {X1, Y1, Z1,  X2, Y2, Z2}, 
---                    {X1, Y1, Z1,  X2, Y2, Z2}, 
---                    -- for as many boxes as you want to include
---                }
---        },
---})
-
 minetest.register_node("travelnet:elevator", {
     description = "Travelnet Elevator Bottom",
 
@@ -680,6 +654,7 @@ minetest.register_node("travelnet:elevator_top", {
     selection_box = {
                 type = "fixed",
                 fixed = { 0, 0, 0,  0, 0, 0 }
+--                fixed = { -0.5, -0.5, -0.5,  0.5, 0.5, 0.5 }
     },
 
     node_box = {
