@@ -19,6 +19,14 @@
 
     
  Changelog:
+ 13.06.13 - bugfix
+          - elevator added (written by kpoppel) and placed into extra file
+          - elevator doors added
+          - groups changed to avoid accidental dig/drop on dig of node beneath
+          - added new priv travelnet_remove for digging of boxes owned by other players
+          - only the owner of a box or players with the travelnet_remove priv can now dig it
+          - entering your own name as owner_name does no longer abort setup
+TODO      - the elevator can only move vertically; the network name is defined by its x and z coordinate
  22.03.13 - added automatic detection if yaw can be set
           - beam effect is disabled by default
  20.03.13 - added inventory image provided by VanessaE
@@ -32,6 +40,7 @@
 local MAX_STATIONS_PER_NETWORK = 24;
 
 minetest.register_privilege("travelnet_attach", { description = "allows to attach travelnet boxes to travelnets of other players", give_to_singleplayer = false});
+minetest.register_privilege("travelnet_remove", { description = "allows to dig travelnet boxes which belog to nets of other players", give_to_singleplayer = false});
 
 travelnet = {};
 
@@ -213,7 +222,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       return;
    end
 
-   if(     owner_name == nil or owner_name == '' ) then
+   if(     owner_name == nil or owner_name == '' or owner_name == player_name ) then
       owner_name = player_name;
 
    elseif( not( travelnet.targets[ owner_name ] )
@@ -426,6 +435,34 @@ end
 
 
 
+travelnet.can_dig = function( pos, player, description )
+
+   if( not( player )) then
+      return false;
+   end
+   local name          = player:get_player_name();
+
+   -- players with that priv can dig regardless of owner
+   if( minetest.check_player_privs(name, {travelnet_remove=true})) then
+      return true;
+   end
+
+   local meta          = minetest.env:get_meta( pos );
+   local owner         = meta:get_string('owner');
+
+   if( not( meta ) or not( owner) or owner=='') then
+      minetest.chat_send_player(name, "This "..description.." has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.");
+      return false;
+
+   elseif( owner ~= name) then
+      minetest.chat_send_player(name, "This "..description.." belongs to "..tostring( meta:get_string('owner'))..". You can't remove it.");
+      return false;
+   end
+   return true;
+end
+
+
+
 minetest.register_node("travelnet:travelnet", {
 
     description = "Travelnet box",
@@ -471,7 +508,7 @@ minetest.register_node("travelnet:travelnet", {
              },
     inventory_image = "travelnet_inv.png",
 
-    groups = {choppy=2,dig_immediate=2,attached_node=1},
+    groups = {cracky=1,choppy=1,snappy=1},
 
     light_source = 10,
 
@@ -493,6 +530,10 @@ minetest.register_node("travelnet:travelnet", {
     on_receive_fields = travelnet.on_receive_fields,
     on_punch          = function(pos, node, puncher)
                           travelnet.update_formspec(pos, puncher:get_player_name())
+    end,
+
+    can_dig = function( pos, player )
+                          return travelnet.can_dig( pos, player, 'travelnet box' )
     end,
 
     after_dig_node = function(pos, oldnode, oldmetadata, digger)
@@ -555,155 +596,9 @@ minetest.register_craft({
         }
 })
 
+dofile(minetest.get_modpath("travelnet").."/elevator.lua");
+
 
 -- upon server start, read the savefile
 travelnet.restore_data();
 
-minetest.register_node("travelnet:elevator", {
-    description = "Travelnet Elevator Bottom",
-
-    drawtype = "nodebox",
-    sunlight_propagates = true,
-    paramtype = 'light',
-    paramtype2 = "facedir",
-
-    selection_box = {
-                type = "fixed",
-                fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
-    },
-
-    node_box = {
-	    type = "fixed",
-	    fixed = {
-
-                { 0.48, -0.5,-0.5,  0.5,  0.5, 0.5},
-                {-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5}, 
-                {-0.5,  -0.5,-0.5 ,-0.48, 0.5, 0.5},
-
-                --groundplate to stand on
-                { -0.5,-0.5,-0.5,0.5,-0.48, 0.5}, 
-            },
-    },
-    
-
-    tiles = {
-          
-             "travelnet_elevator_inside_floor.png",  -- view from top
-             "default_stone.png",  -- view from bottom
-	     "travelnet_elevator_inside_bottom.png", -- left side
-	     "travelnet_elevator_inside_bottom.png", -- right side
-	     "travelnet_elevator_inside_bottom.png",   -- front view
-	     "travelnet_elevator_inside_bottom.png",  -- backward view
-             },
-    inventory_image = "travelnet_inv.png",
-
-    groups = {choppy=2,dig_immediate=2,attached_node=1},
-
-    light_source = 10,
-
-    after_place_node  = function(pos, placer, itemstack)
-	local meta = minetest.env:get_meta(pos);
-        meta:set_string("infotext",       "Travelnet Elevator (unconfigured)");
-        meta:set_string("station_name",   "");
-        meta:set_string("station_network","");
-        meta:set_string("owner",          placer:get_player_name() );
-        -- request initinal data
-        meta:set_string("formspec", 
-                            "size[12,10]"..
-                            "field[0.3,5.6;6,0.7;station_name;Name of this station:;]"..
-                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
-                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
-                            "button_exit[6.3,6.2;1.7,0.7;station_set;Store]" );
-    end,
-    
-    on_receive_fields = travelnet.on_receive_fields,
-    on_punch          = function(pos, node, puncher)
-                          travelnet.update_formspec(pos, puncher:get_player_name())
-    end,
-
-    after_dig_node = function(pos, oldnode, oldmetadata, digger)
-			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
-    end,
-
-    -- taken from VanessaEs homedecor fridge
-    on_place = function(itemstack, placer, pointed_thing)
-       local pos = pointed_thing.above;
-       if( minetest.env:get_node({x=pos.x, y=pos.y+1, z=pos.z}).name ~= "air" ) then
-          minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
-          return;
-       end
-       local p = {x=pos.x, y=pos.y+1, z=pos.z}
-       local p2 = minetest.dir_to_facedir(placer:get_look_dir())
-       minetest.env:add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
-       return minetest.item_place(itemstack, placer, pointed_thing);
-    end,
-
-    on_destruct = function(pos)
-            local p = {x=pos.x, y=pos.y+1, z=pos.z}
-	    minetest.env:remove_node(p)
-    end
-})
-
-minetest.register_node("travelnet:elevator_top", {
-    description = "Travelnet Elevator Top",
-
-    drawtype = "nodebox",
-    sunlight_propagates = true,
-    paramtype = 'light',
-    paramtype2 = "facedir",
-
-    selection_box = {
-                type = "fixed",
-                fixed = { 0, 0, 0,  0, 0, 0 }
---                fixed = { -0.5, -0.5, -0.5,  0.5, 0.5, 0.5 }
-    },
-
-    node_box = {
-	    type = "fixed",
-	    fixed = {
-
-                { 0.48, -0.5,-0.5,  0.5,  0.5, 0.5},
-                {-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5}, 
-                {-0.5,  -0.5,-0.5 ,-0.48, 0.5, 0.5},
-
-                --top ceiling
-                { -0.5, 0.48,-0.5,0.5, 0.5, 0.5}, 
-            },
-    },
-    
-
-    tiles = {
-          
-             "default_stone.png",  -- view from top
-             "travelnet_elevator_inside_ceiling.png",  -- view from bottom
-	     "travelnet_elevator_inside_top_control.png", -- left side
-	     "travelnet_elevator_inside_top.png", -- right side
-	     "travelnet_elevator_inside_top.png",   -- front view
-	     "travelnet_elevator_inside_top.png",  -- backward view
-             },
-    inventory_image = "travelnet_inv.png",
-
-    light_source = 10,
-
-    groups = {choppy=2,dig_immediate=2,attached_node=1},
-})
-
-if( minetest.get_modpath("technic") ~= nil ) then
-        minetest.register_craft({
-                output = "travelnet:elevator",
-		recipe = {
-                        {"default:steel_ingot", "technic:motor", "default:steel_ingot", },
-                	{"default:steel_ingot", "technic:control_logic_unit", "default:steel_ingot", },
-                	{"default:steel_ingot", "moreores:copper_ingot", "default:steel_ingot", }
-                }
-        })
-else
-	minetest.register_craft({
-	        output = "travelnet:elevator",
-	        recipe = {
-		        {"default:steel_ingot", "default_sandstone", "default:steel_ingot", },
-			{"default:steel_ingot", "default_sandstone", "default:steel_ingot", },
-			{"default:mese_crystal_fragment", "default:mese_crystal_fragment", "default:mese_crystal_fragment", }
-		        }
-	})
-end

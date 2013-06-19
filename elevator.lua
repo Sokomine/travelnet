@@ -62,6 +62,10 @@ minetest.register_node("travelnet:elevator", {
                           travelnet.update_formspec(pos, puncher:get_player_name())
     end,
 
+    can_dig = function( pos, player )
+                          return travelnet.can_dig( pos, player, 'elevator' )
+    end,
+
     after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
     end,
