@@ -52,8 +52,8 @@ minetest.register_node("travelnet:elevator", {
         meta:set_string("formspec", 
                             "size[12,10]"..
                             "field[0.3,5.6;6,0.7;station_name;Name of this station:;]"..
-                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
-                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
+--                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
+--                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
                             "button_exit[6.3,6.2;1.7,0.7;station_set;Store]" );
     end,
     
@@ -146,9 +146,9 @@ else
 	minetest.register_craft({
 	        output = "travelnet:elevator",
 	        recipe = {
-		        {"default:steel_ingot", "default_sandstone", "default:steel_ingot", },
-			{"default:steel_ingot", "default_sandstone", "default:steel_ingot", },
-			{"default:mese_crystal_fragment", "default:mese_crystal_fragment", "default:mese_crystal_fragment", }
+		        {"default:steel_ingot", "default:glass", "default:steel_ingot", },
+			{"default:steel_ingot", "",              "default:steel_ingot", },
+			{"default:steel_ingot", "default:glass", "default:steel_ingot", }
 		        }
 	})
 end
@@ -269,7 +269,23 @@ minetest.register_node("travelnet:elevator_door_glass_closed", {
                 end,
 })
 
+minetest.register_craft({
+	        output = "travelnet:elevator_door_glass_closed",
+	        recipe = {
+		        {"default:glass", "", "default:glass", },
+			{"default:glass", "", "default:glass", },
+			{"default:glass", "", "default:glass", }
+		        }
+	})
 
+minetest.register_craft({
+	        output = "travelnet:elevator_door_steel_closed",
+	        recipe = {
+		        {"default:steel_ingot", "", "default:steel_ingot", },
+			{"default:steel_ingot", "", "default:steel_ingot", },
+			{"default:steel_ingot", "", "default:steel_ingot", }
+		        }
+	})
 --      local old_node = minetest.env:get_node( pos );
 --      minetest.env:add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = old_node.param2})
 

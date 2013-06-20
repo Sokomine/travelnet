@@ -19,6 +19,8 @@
 
     
  Changelog:
+ 20.06.13 - doors can be opened and closed from inside the travelnet box/elevator
+          - the elevator can only move vertically; the network name is defined by its x and z coordinate
  13.06.13 - bugfix
           - elevator added (written by kpoppel) and placed into extra file
           - elevator doors added
@@ -26,7 +28,6 @@
           - added new priv travelnet_remove for digging of boxes owned by other players
           - only the owner of a box or players with the travelnet_remove priv can now dig it
           - entering your own name as owner_name does no longer abort setup
-TODO      - the elevator can only move vertically; the network name is defined by its x and z coordinate
  22.03.13 - added automatic detection if yaw can be set
           - beam effect is disabled by default
  20.03.13 - added inventory image provided by VanessaE
@@ -184,7 +185,13 @@ travelnet.update_formspec = function( pos, puncher_name )
 
    for index,k in ipairs( stations ) do 
 
-      if( k ~= station_name ) then 
+      -- check if there is an elevator door in front that needs to be opened
+      local open_door_cmd = false;
+      if( k==station_name ) then
+         open_door_cmd = true;
+      end
+
+      if( k ~= station_name or open_door_cmd) then 
          i = i+1;
 
          -- new column
@@ -193,7 +200,17 @@ travelnet.update_formspec = function( pos, puncher_name )
             y = 0;
          end
 
-         formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k.."]"
+         if( open_door_cmd ) then
+            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;open_door;Open/Close door"
+         else
+            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k
+         end
+
+--         if( owner_name == '*' ) then
+--            formspec = formspec ..' '..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m';
+--         end
+         formspec = formspec .. ']';
+
          y = y+1;
          --x = x+4;
       end
@@ -212,6 +229,16 @@ end
 -- add a new target; meta is optional
 travelnet.add_target = function( station_name, network_name, pos, player_name, meta, owner_name )
 
+   -- if it is an elevator, determine the network name through x and z coordinates
+   local this_node = minetest.env:get_node( pos );
+   if( this_node.name == 'travelnet:elevator' ) then
+      owner_name   = '*'; -- the owner name is not relevant here
+      network_name = tostring( pos.x )..','..tostring( pos.z ); 
+      if( not( station_name ) or station_name == '' ) then
+         station_name = 'at '..tostring( pos.y )..'m';
+      end
+   end
+
    if( station_name == "" or not(station_name )) then
       minetest.chat_send_player(player_name, "Please provide a name for this station.");
       return;
@@ -222,7 +249,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       return;
    end
 
-   if(     owner_name == nil or owner_name == '' or owner_name == player_name ) then
+   if(     owner_name == nil or owner_name == '' or owner_name == player_name  or owner_name == '*') then
       owner_name = player_name;
 
    elseif( not( travelnet.targets[ owner_name ] )
@@ -295,6 +322,42 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 end
 
 
+
+-- allow doors to open
+travelnet.open_close_door = function( pos, player, mode )
+
+   local this_node = minetest.env:get_node( pos );
+   local pos2 = {x=pos.x,y=pos.y,z=pos.z};
+
+   if(     this_node.param2 == 0 ) then pos2 = {x=pos.x,y=pos.y,z=(pos.z-1)};
+   elseif( this_node.param2 == 1 ) then pos2 = {x=(pos.x-1),y=pos.y,z=pos.z};
+   elseif( this_node.param2 == 2 ) then pos2 = {x=pos.x,y=pos.y,z=(pos.z+1)};
+   elseif( this_node.param2 == 3 ) then pos2 = {x=(pos.x+1),y=pos.y,z=pos.z};
+   end
+
+   local door_node = minetest.env:get_node( pos2 );
+   if( door_node ~= nil and door_node.name ~= 'ignore' and door_node.name ~= 'air' and minetest.registered_nodes[ door_node.name ].on_rightclick ~= nil) then
+
+      -- do not close the elevator door if it is already closed
+      if( mode==1 and ( door_node.name == 'travelnet:elevator_door_glass_closed'
+                     or door_node.name == 'travelnet:elevator_door_steel_closed')) then
+         return;
+      end
+      -- do not open the doors if they are already open (works only on elevator-doors; not on doors in general)
+      if( mode==2 and ( door_node.name == 'travelnet:elevator_door_glass_open'
+                     or door_node.name == 'travelnet:elevator_door_steel_open')) then
+         return;
+      end
+        
+      if( mode==2 ) then
+         minetest.after( 1, minetest.registered_nodes[ door_node.name ].on_rightclick, pos2, door_node, player );
+      else
+         minetest.registered_nodes[ door_node.name ].on_rightclick(pos2, door_node, player);
+      end
+   end
+end
+
+
 travelnet.on_receive_fields = function(pos, formname, fields, player)
    local meta = minetest.env:get_meta(pos);
 
@@ -304,6 +367,11 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if( meta:get_string("station_network")=="" ) then
 
       travelnet.add_target( fields.station_name, fields.station_network, pos, name, meta, fields.owner_name );
+      return;
+   end
+
+   if( fields.open_door ) then
+      travelnet.open_close_door( pos, player, 0 );
       return;
    end
 
@@ -353,6 +421,9 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       minetest.env:add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
+   -- close the doors at the sending station
+   travelnet.open_close_door( pos, player, 1 );
+
    -- transport the player to the target location
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:moveto( target_pos, false);
@@ -396,6 +467,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       player:set_look_pitch( math.rad( 0 )); -- this is only supported in recent versions of MT
    end
 
+   travelnet.open_close_door( target_pos, player, 2 );
 end
 
 
