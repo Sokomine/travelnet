@@ -242,11 +242,11 @@ travelnet.update_formspec = function( pos, puncher_name )
          end
 
          if( open_door_cmd ) then
-            formspec = formspec .."label["..(x)..","..(y+2.5)..";"..tostring( k )..":]"..
-                                  "button_exit["..(x+3)..","..(y+2.5)..";1,0.5;open_door;<>]";
+            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";1,0.5;open_door;<>]"..
+                                  "label["..(x+0.9)..","..(y+2.35)..";"..tostring( k ).."]";
          elseif( is_elevator ) then
-            formspec = formspec .."label["..(x)..","..(y+2.5)..";"..tostring( k )..":]"..
-                                  "button_exit["..(x+3)..","..(y+2.5)..";1,0.5;target;"..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].nr ).."]";
+            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";1,0.5;target;"..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].nr ).."]"..
+                                  "label["..(x+0.9)..","..(y+2.35)..";"..tostring( k ).."]";
          else
             formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k.."]";
          end
