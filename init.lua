@@ -19,6 +19,8 @@
 
     
  Changelog:
+ 21.06.13 - elevator stations are sorted by height instead of date of creation as is the case with travelnet boxes
+          - elevator stations are named automaticly
  20.06.13 - doors can be opened and closed from inside the travelnet box/elevator
           - the elevator can only move vertically; the network name is defined by its x and z coordinate
  13.06.13 - bugfix
@@ -89,6 +91,13 @@ travelnet.update_formspec = function( pos, puncher_name )
 
    local meta = minetest.env:get_meta(pos);
 
+   local this_node   = minetest.env:get_node( pos );
+   local is_elevator = false;
+
+   if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then
+      is_elevator = true;
+   end 
+
    if( not( meta )) then
       return;
    end
@@ -98,9 +107,14 @@ travelnet.update_formspec = function( pos, puncher_name )
    local station_network = meta:get_string( "station_network" );
 
    if(  not( owner_name ) 
-     or not( station_name ) 
+     or not( station_name ) or station_network == ''
      or not( station_network )) then
 
+
+      if( is_elevator == true ) then
+         travelnet.add_target( nil, nil, pos, puncher_name, meta, owner_name );
+         return;
+      end
 
 --      minetest.chat_send_player(puncher_name, "DEBUG DATA: owner: "..(owner_name or "?")..
 --                                                  " station_name: "..(station_name or "?")..
@@ -174,9 +188,31 @@ travelnet.update_formspec = function( pos, puncher_name )
    end
    -- minetest.chat_send_player(puncher_name, "stations: "..minetest.serialize( stations ));
     
-   -- sort the table according to the timestamp (=time the station was configured)
-   table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].timestamp < 
-                                              travelnet.targets[ owner_name ][ station_network ][ b ].timestamp  end);
+   local ground_level = 1;
+   if( is_elevator ) then
+      table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].pos.y > 
+                                                 travelnet.targets[ owner_name ][ station_network ][ b ].pos.y  end);
+      -- find ground level
+      local vgl_timestamp = 999999999999;
+      for index,k in ipairs( stations ) do
+         if( travelnet.targets[ owner_name ][ station_network ][ k ].timestamp < vgl_timestamp ) then
+            vgl_timestamp = travelnet.targets[ owner_name ][ station_network ][ k ].timestamp;       
+            ground_level  = index;
+         end
+      end
+      for index,k in ipairs( stations ) do
+         if( index == ground_level ) then
+            travelnet.targets[ owner_name ][ station_network ][ k ].nr = 'G';
+         else
+            travelnet.targets[ owner_name ][ station_network ][ k ].nr = tostring( ground_level - index );
+         end
+      end
+            
+   else 
+      -- sort the table according to the timestamp (=time the station was configured)
+      table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].timestamp < 
+                                                 travelnet.targets[ owner_name ][ station_network ][ b ].timestamp  end);
+   end
 
    -- if there are only 8 stations (plus this one), center them in the formspec
    if( #stations < 10 ) then
@@ -202,13 +238,15 @@ travelnet.update_formspec = function( pos, puncher_name )
 
          if( open_door_cmd ) then
             formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;open_door;Open/Close door"
+         elseif( is_elevator ) then
+            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].nr )
          else
             formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k
          end
 
---         if( owner_name == '*' ) then
---            formspec = formspec ..' '..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m';
---         end
+         if( is_elevator ) then
+            formspec = formspec ..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)';
+         end
          formspec = formspec .. ']';
 
          y = y+1;
@@ -230,9 +268,12 @@ end
 travelnet.add_target = function( station_name, network_name, pos, player_name, meta, owner_name )
 
    -- if it is an elevator, determine the network name through x and z coordinates
-   local this_node = minetest.env:get_node( pos );
+   local this_node   = minetest.env:get_node( pos );
+   local is_elevator = false;
+
    if( this_node.name == 'travelnet:elevator' ) then
-      owner_name   = '*'; -- the owner name is not relevant here
+--      owner_name   = '*'; -- the owner name is not relevant here
+      is_elevator  = true;
       network_name = tostring( pos.x )..','..tostring( pos.z ); 
       if( not( station_name ) or station_name == '' ) then
          station_name = 'at '..tostring( pos.y )..'m';
@@ -249,7 +290,10 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       return;
    end
 
-   if(     owner_name == nil or owner_name == '' or owner_name == player_name  or owner_name == '*') then
+   if(     owner_name == nil or owner_name == '' or owner_name == player_name) then
+      owner_name = player_name;
+
+   elseif( is_elevator ) then -- elevator networks
       owner_name = player_name;
 
    elseif( not( travelnet.targets[ owner_name ] )
@@ -295,7 +339,6 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
      
    -- add this station
    travelnet.targets[ owner_name ][ network_name ][ station_name ] = {pos=pos, timestamp=os.time() };
-
 
    -- do we have a new node to set up? (and are not just reading from a safefile?)
    if( meta ) then
@@ -400,6 +443,17 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
                                       " station_network: "..(station_network or "?")..".");
       return
    end
+
+   local this_node = minetest.env:get_node( pos );
+   if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then 
+      for k,v in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
+         if( travelnet.targets[ owner_name ][ station_network ][ k ].nr..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)'
+               == fields.target) then
+            fields.target = k;
+         end
+      end
+   end
+
 
    -- if the target station is gone
    if( not( travelnet.targets[ owner_name ][ station_network ][ fields.target ] )) then
@@ -526,7 +580,7 @@ travelnet.can_dig = function( pos, player, description )
       minetest.chat_send_player(name, "This "..description.." has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.");
       return false;
 
-   elseif( owner ~= name) then
+   elseif( owner ~= name ) then
       minetest.chat_send_player(name, "This "..description.." belongs to "..tostring( meta:get_string('owner'))..". You can't remove it.");
       return false;
    end
