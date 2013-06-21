@@ -19,6 +19,11 @@
 
     
  Changelog:
+ 21.06.13 - bugfix: wielding an elevator while digging a door caused the elevator_top to be placed
+          - leftover floating elevator_top nodes can be removed by placing a new travelnet:elevator underneath them and removing that afterwards
+          - homedecor-doors are now opened and closed correctly as well
+          - removed nodes that are not intended for manual use from creative inventory
+          - improved naming of station levels for the elevator
  21.06.13 - elevator stations are sorted by height instead of date of creation as is the case with travelnet boxes
           - elevator stations are named automaticly
  20.06.13 - doors can be opened and closed from inside the travelnet box/elevator
@@ -237,17 +242,19 @@ travelnet.update_formspec = function( pos, puncher_name )
          end
 
          if( open_door_cmd ) then
-            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;open_door;Open/Close door"
+            formspec = formspec .."label["..(x)..","..(y+2.5)..";"..tostring( k )..":]"..
+                                  "button_exit["..(x+3)..","..(y+2.5)..";1,0.5;open_door;<>]";
          elseif( is_elevator ) then
-            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].nr )
+            formspec = formspec .."label["..(x)..","..(y+2.5)..";"..tostring( k )..":]"..
+                                  "button_exit["..(x+3)..","..(y+2.5)..";1,0.5;target;"..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].nr ).."]";
          else
-            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k
+            formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k.."]";
          end
 
-         if( is_elevator ) then
-            formspec = formspec ..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)';
-         end
-         formspec = formspec .. ']';
+--         if( is_elevator ) then
+--            formspec = formspec ..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)';
+--         end
+--         formspec = formspec .. ']';
 
          y = y+1;
          --x = x+4;
@@ -381,14 +388,24 @@ travelnet.open_close_door = function( pos, player, mode )
    local door_node = minetest.env:get_node( pos2 );
    if( door_node ~= nil and door_node.name ~= 'ignore' and door_node.name ~= 'air' and minetest.registered_nodes[ door_node.name ].on_rightclick ~= nil) then
 
+      -- at least for homedecor, same facedir would mean "door closed"
+
       -- do not close the elevator door if it is already closed
       if( mode==1 and ( door_node.name == 'travelnet:elevator_door_glass_closed'
-                     or door_node.name == 'travelnet:elevator_door_steel_closed')) then
+                     or door_node.name == 'travelnet:elevator_door_steel_closed' 
+                     -- handle doors that change their facedir
+                     or ( door_node.param2 == this_node.param2
+                      and door_node.name ~= 'travelnet:elevator_door_glass_open'
+                      and door_node.name ~= 'travelnet:elevator_door_steel_open'))) then
          return;
       end
       -- do not open the doors if they are already open (works only on elevator-doors; not on doors in general)
       if( mode==2 and ( door_node.name == 'travelnet:elevator_door_glass_open'
-                     or door_node.name == 'travelnet:elevator_door_steel_open')) then
+                     or door_node.name == 'travelnet:elevator_door_steel_open'
+                     -- handle doors that change their facedir
+                     or ( door_node.param2 ~= this_node.param2 
+                      and door_node.name ~= 'travelnet:elevator_door_glass_closed'
+                      and door_node.name ~= 'travelnet:elevator_door_steel_closed'))) then
          return;
       end
         
@@ -447,7 +464,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local this_node = minetest.env:get_node( pos );
    if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then 
       for k,v in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
-         if( travelnet.targets[ owner_name ][ station_network ][ k ].nr..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)'
+         if( travelnet.targets[ owner_name ][ station_network ][ k ].nr  --..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)'
                == fields.target) then
             fields.target = k;
          end

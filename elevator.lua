@@ -1,6 +1,6 @@
 
 minetest.register_node("travelnet:elevator", {
-    description = "Travelnet Elevator Bottom",
+    description = "Elevator",
 
     drawtype = "nodebox",
     sunlight_propagates = true,
@@ -44,7 +44,7 @@ minetest.register_node("travelnet:elevator", {
 
     after_place_node  = function(pos, placer, itemstack)
 	local meta = minetest.env:get_meta(pos);
-        meta:set_string("infotext",       "Travelnet Elevator (unconfigured)");
+        meta:set_string("infotext",       "Elevator (unconfigured)");
         meta:set_string("station_name",   "");
         meta:set_string("station_network","");
         meta:set_string("owner",          placer:get_player_name() );
@@ -55,6 +55,10 @@ minetest.register_node("travelnet:elevator", {
 --                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
 --                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
                             "button_exit[6.3,6.2;1.7,0.7;station_set;Store]" );
+
+       local p = {x=pos.x, y=pos.y+1, z=pos.z}
+       local p2 = minetest.dir_to_facedir(placer:get_look_dir())
+       minetest.env:add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
     end,
     
     on_receive_fields = travelnet.on_receive_fields,
@@ -72,14 +76,13 @@ minetest.register_node("travelnet:elevator", {
 
     -- taken from VanessaEs homedecor fridge
     on_place = function(itemstack, placer, pointed_thing)
-       local pos = pointed_thing.above;
-       if( minetest.env:get_node({x=pos.x, y=pos.y+1, z=pos.z}).name ~= "air" ) then
+       local pos  = pointed_thing.above;
+       local node = minetest.env:get_node({x=pos.x, y=pos.y+1, z=pos.z});
+       -- leftover elevator_top nodes can be removed by placing a new elevator underneath
+       if( node ~= nil and node.name ~= "air" and node.name ~= 'travelnet:elevator_top') then
           minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
           return;
        end
-       local p = {x=pos.x, y=pos.y+1, z=pos.z}
-       local p2 = minetest.dir_to_facedir(placer:get_look_dir())
-       minetest.env:add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
        return minetest.item_place(itemstack, placer, pointed_thing);
     end,
 
@@ -90,7 +93,7 @@ minetest.register_node("travelnet:elevator", {
 })
 
 minetest.register_node("travelnet:elevator_top", {
-    description = "Travelnet Elevator Top",
+    description = "Elevator Top",
 
     drawtype = "nodebox",
     sunlight_propagates = true,
@@ -130,7 +133,7 @@ minetest.register_node("travelnet:elevator_top", {
 
     light_source = 10,
 
-    groups = {cracky=1,choppy=1,snappy=1},
+    groups = {cracky=1,choppy=1,snappy=1,not_in_creative_inventory=1},
 })
 
 if( minetest.get_modpath("technic") ~= nil ) then
@@ -162,7 +165,7 @@ minetest.register_node("travelnet:elevator_door_steel_open", {
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = true,
-		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=2},
+		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=2,not_in_creative_inventory=1},
                 -- larger than one node but slightly smaller than a half node so that wallmounted torches pose no problem
 		node_box = {
 			type = "fixed",
@@ -221,7 +224,7 @@ minetest.register_node("travelnet:elevator_door_glass_open", {
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = true,
-		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=2},
+		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=2,not_in_creative_inventory=1},
                 -- larger than one node but slightly smaller than a half node so that wallmounted torches pose no problem
 		node_box = {
 			type = "fixed",
