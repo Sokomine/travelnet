@@ -17,8 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+ Version: 2.0 (with elevators!)
     
  Changelog:
+ 26.06.13 - added inventory image for elevator (created by VanessaE)
  21.06.13 - bugfix: wielding an elevator while digging a door caused the elevator_top to be placed
           - leftover floating elevator_top nodes can be removed by placing a new travelnet:elevator underneath them and removing that afterwards
           - homedecor-doors are now opened and closed correctly as well

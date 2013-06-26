@@ -35,7 +35,7 @@ minetest.register_node("travelnet:elevator", {
 	     "travelnet_elevator_inside_bottom.png",   -- front view
 	     "travelnet_elevator_inside_bottom.png",  -- backward view
              },
-    inventory_image = "travelnet_inv.png",
+    inventory_image = "travelnet_elevator_inv.png",
 
     groups = {cracky=1,choppy=1,snappy=1},
 
@@ -129,23 +129,23 @@ minetest.register_node("travelnet:elevator_top", {
 	     "travelnet_elevator_inside_top.png",   -- front view
 	     "travelnet_elevator_inside_top.png",  -- backward view
              },
-    inventory_image = "travelnet_inv.png",
+    inventory_image = "travelnet_elevator_inv.png",
 
     light_source = 10,
 
     groups = {cracky=1,choppy=1,snappy=1,not_in_creative_inventory=1},
 })
 
-if( minetest.get_modpath("technic") ~= nil ) then
-        minetest.register_craft({
-                output = "travelnet:elevator",
-		recipe = {
-                        {"default:steel_ingot", "technic:motor", "default:steel_ingot", },
-                	{"default:steel_ingot", "technic:control_logic_unit", "default:steel_ingot", },
-                	{"default:steel_ingot", "moreores:copper_ingot", "default:steel_ingot", }
-                }
-        })
-else
+--if( minetest.get_modpath("technic") ~= nil ) then
+--        minetest.register_craft({
+--                output = "travelnet:elevator",
+--		recipe = {
+--                        {"default:steel_ingot", "technic:motor", "default:steel_ingot", },
+--                	{"default:steel_ingot", "technic:control_logic_unit", "default:steel_ingot", },
+--                	{"default:steel_ingot", "moreores:copper_ingot", "default:steel_ingot", }
+--                }
+--        })
+--else
 	minetest.register_craft({
 	        output = "travelnet:elevator",
 	        recipe = {
@@ -154,7 +154,7 @@ else
 			{"default:steel_ingot", "default:glass", "default:steel_ingot", }
 		        }
 	})
-end
+--end
 
 
 minetest.register_node("travelnet:elevator_door_steel_open", {
