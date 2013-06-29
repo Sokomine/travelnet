@@ -36,6 +36,7 @@ minetest.register_node("travelnet:elevator", {
 	     "travelnet_elevator_inside_bottom.png",  -- backward view
              },
     inventory_image = "travelnet_elevator_inv.png",
+    wield_image     = "travelnet_elevator_wield.png",
 
     groups = {cracky=1,choppy=1,snappy=1},
 
@@ -130,6 +131,7 @@ minetest.register_node("travelnet:elevator_top", {
 	     "travelnet_elevator_inside_top.png",  -- backward view
              },
     inventory_image = "travelnet_elevator_inv.png",
+    wield_image     = "travelnet_elevator_wield.png",
 
     light_source = 10,
 
