@@ -20,6 +20,7 @@
  Version: 2.0 (with elevators!)
     
  Changelog:
+ 05.08.13 - fixed possible crash when the node in front of the travelnet is unknown
  26.06.13 - added inventory image for elevator (created by VanessaE)
  21.06.13 - bugfix: wielding an elevator while digging a door caused the elevator_top to be placed
           - leftover floating elevator_top nodes can be removed by placing a new travelnet:elevator underneath them and removing that afterwards
@@ -388,7 +389,7 @@ travelnet.open_close_door = function( pos, player, mode )
    end
 
    local door_node = minetest.env:get_node( pos2 );
-   if( door_node ~= nil and door_node.name ~= 'ignore' and door_node.name ~= 'air' and minetest.registered_nodes[ door_node.name ].on_rightclick ~= nil) then
+   if( door_node ~= nil and door_node.name ~= 'ignore' and door_node.name ~= 'air' and minetest.registered_nodes[ door_node.name ] ~= nil and minetest.registered_nodes[ door_node.name ].on_rightclick ~= nil) then
 
       -- at least for homedecor, same facedir would mean "door closed"
 
