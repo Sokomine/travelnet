@@ -17,9 +17,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
- Version: 2.0 (with elevators!)
+ Version: 2.1 (with config file)
     
+ Please configure this mod in config.lua
+
  Changelog:
+ 19.11.13 - moved doors and travelnet definition into an extra file
+          - moved configuration to config.lua
  05.08.13 - fixed possible crash when the node in front of the travelnet is unknown
  26.06.13 - added inventory image for elevator (created by VanessaE)
  21.06.13 - bugfix: wielding an elevator while digging a door caused the elevator_top to be placed
@@ -48,7 +52,6 @@
           - target list is now centered if there are less than 9 targets
 --]]
 
-local MAX_STATIONS_PER_NETWORK = 24;
 
 minetest.register_privilege("travelnet_attach", { description = "allows to attach travelnet boxes to travelnets of other players", give_to_singleplayer = false});
 minetest.register_privilege("travelnet_remove", { description = "allows to dig travelnet boxes which belog to nets of other players", give_to_singleplayer = false});
@@ -57,9 +60,11 @@ travelnet = {};
 
 travelnet.targets = {};
 
--- set this to true if you want a simulated beam effect
-travelnet_effect_enabled = false;
-travelnet_sound_enabled = false;
+
+-- read the configuration
+dofile(minetest.get_modpath("travelnet").."/config.lua"); -- the normal, default travelnet
+
+
 
 -- TODO: save and restore ought to be library functions and not implemented in each individual mod!
 -- called whenever a station is added or removed
@@ -312,9 +317,10 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       minetest.chat_send_player(player_name, "There is no network named "..tostring( network_name ).." owned by "..tostring( owner_name )..". Aborting.");
       return;
 
-   elseif( not( minetest.check_player_privs(player_name, {travelnet_attach=true}))) then
+   elseif( not( minetest.check_player_privs(player_name, {travelnet_attach=true}))
+       and not( travelnet.allow_attach( player_name, owner_name, network_name ))) then
 
-      minetest.chat_send_player(player_name, "You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.");
+        minetest.chat_send_player(player_name, "You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.");
       return;
    end
 
@@ -341,9 +347,9 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    end
 
    -- we don't want too many stations in the same network because that would get confusing when displaying the targets
-   if( anz+1 > MAX_STATIONS_PER_NETWORK ) then
+   if( anz+1 > travelnet.MAX_STATIONS_PER_NETWORK ) then
       minetest.chat_send_player(player_name, "Error: Network '"..network_name.."' already contains the maximum number (="
-              ..(MAX_STATIONS_PER_NETWORK)..") of allowed stations per network. Please choose a diffrent/new network name.");
+              ..(travelnet.MAX_STATIONS_PER_NETWORK)..") of allowed stations per network. Please choose a diffrent/new network name.");
       return;
    end
      
@@ -484,14 +490,17 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    end
 
 
+   if( not( travelnet.allow_travel( name, owner_name, station_network, station_name, fields.target ))) then
+      return;
+   end
    minetest.chat_send_player(name, "Initiating transfer to station '"..( fields.target or "?").."'.'");
 
 
 
-   if( travelnet_sound_enabled ) then
+   if( travelnet.travelnet_sound_enabled ) then
       minetest.sound_play("128590_7037-lq.mp3", {pos = pos, gain = 1.0, max_hear_distance = 10,})
    end
-   if( travelnet_effect_enabled ) then 
+   if( travelnet.travelnet_effect_enabled ) then 
       minetest.env:add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
@@ -502,10 +511,10 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:moveto( target_pos, false);
 
-   if( travelnet_sound_enabled ) then
+   if( travelnet.travelnet_sound_enabled ) then
       minetest.sound_play("travelnet_travel.wav", {pos = target_pos, gain = 1.0, max_hear_distance = 10,})
    end
-   if( travelnet_effect_enabled ) then 
+   if( travelnet.travelnet_effect_enabled ) then 
       minetest.env:add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
@@ -589,7 +598,8 @@ travelnet.can_dig = function( pos, player, description )
    local name          = player:get_player_name();
 
    -- players with that priv can dig regardless of owner
-   if( minetest.check_player_privs(name, {travelnet_remove=true})) then
+   if( minetest.check_player_privs(name, {travelnet_remove=true})
+       or travelnet.allow_dig( player_name, owner_name, network_name )) then
       return true;
    end
 
@@ -609,99 +619,10 @@ end
 
 
 
-minetest.register_node("travelnet:travelnet", {
-
-    description = "Travelnet box",
-
-    drawtype = "nodebox",
-    sunlight_propagates = true,
-    paramtype = 'light',
-    paramtype2 = "facedir",
-
-    selection_box = {
-                type = "fixed",
-                fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
-    },
-
-    node_box = {
-	    type = "fixed",
-	    fixed = {
-
-                { 0.45, -0.5,-0.5,  0.5,  1.45, 0.5},
-                {-0.5 , -0.5, 0.45, 0.45, 1.45, 0.5}, 
-                {-0.5,  -0.5,-0.5 ,-0.45, 1.45, 0.5},
-
-                --groundplate to stand on
-                { -0.5,-0.5,-0.5,0.5,-0.45, 0.5}, 
-                --roof
-                { -0.5, 1.45,-0.5,0.5, 1.5, 0.5}, 
-
-                -- control panel
---                { -0.2, 0.6,  0.3, 0.2, 1.1,  0.5},
-
-            },
-    },
-    
-
-    tiles = {
-          
-             "default_clay.png",  -- view from top
-             "default_clay.png",  -- view from bottom
-             "travelnet_travelnet_side.png", -- left side
-             "travelnet_travelnet_side.png", -- right side
-             "travelnet_travelnet_back.png", -- front view
-             "travelnet_travelnet_front.png",  -- backward view
-             },
-    inventory_image = "travelnet_inv.png",
-
-    groups = {cracky=1,choppy=1,snappy=1},
-
-    light_source = 10,
-
-    after_place_node  = function(pos, placer, itemstack)
-	local meta = minetest.env:get_meta(pos);
-        meta:set_string("infotext",       "Travelnet-box (unconfigured)");
-        meta:set_string("station_name",   "");
-        meta:set_string("station_network","");
-        meta:set_string("owner",          placer:get_player_name() );
-        -- request initinal data
-        meta:set_string("formspec", 
-                            "size[12,10]"..
-                            "field[0.3,5.6;6,0.7;station_name;Name of this station:;]"..
-                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
-                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
-                            "button_exit[6.3,6.2;1.7,0.7;station_set;Store]" );
-    end,
-    
-    on_receive_fields = travelnet.on_receive_fields,
-    on_punch          = function(pos, node, puncher)
-                          travelnet.update_formspec(pos, puncher:get_player_name())
-    end,
-
-    can_dig = function( pos, player )
-                          return travelnet.can_dig( pos, player, 'travelnet box' )
-    end,
-
-    after_dig_node = function(pos, oldnode, oldmetadata, digger)
-			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
-    end,
-
-    -- taken from VanessaEs homedecor fridge
-    on_place = function(itemstack, placer, pointed_thing)
-
-       local pos = pointed_thing.above;
-       if( minetest.env:get_node({x=pos.x, y=pos.y+1, z=pos.z}).name ~= "air" ) then
-
-          minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
-          return;
-       end
-       return minetest.item_place(itemstack, placer, pointed_thing);
-    end,
-
-})
 
 
-minetest.register_entity( 'travelnet:effect', {
+if( travelnet.travelnet_effect_enabled ) then
+  minetest.register_entity( 'travelnet:effect', {
 
     hp_max = 1,
     physical = false,
@@ -729,22 +650,20 @@ minetest.register_entity( 'travelnet:effect', {
           self.object:remove();
        end
     end
-})
+  })
+end
 
 
-
-minetest.register_craft({
-        output = "travelnet:travelnet",
-        recipe = {
-                {"default:glass", "default:steel_ingot", "default:glass", },
-                {"default:glass", "default:mese",        "default:glass", },
-                {"default:glass", "default:steel_ingot", "default:glass", }
-        }
-})
-
-dofile(minetest.get_modpath("travelnet").."/elevator.lua");
+if( travelnet.travelnet_enabled ) then
+   dofile(minetest.get_modpath("travelnet").."/travelnet.lua"); -- the travelnet node definition
+end
+if( travelnet.elevator_enabled ) then
+   dofile(minetest.get_modpath("travelnet").."/elevator.lua");  -- allows up/down transfers only
+end
+if( travelnet.doors_enabled ) then
+   dofile(minetest.get_modpath("travelnet").."/doors.lua");     -- doors that open and close automaticly when the travelnet or elevator is used
+end
 
 
 -- upon server start, read the savefile
 travelnet.restore_data();
-
