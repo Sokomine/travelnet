@@ -15,6 +15,8 @@ travelnet.elevator_enabled         = true;
 -- if you set this to false, doors will be disabled
 travelnet.doors_enabled            = true;
 
+-- starts an abm which re-adds travelnet stations to networks in case the savefile got lost
+travelnet.abm_enabled              = false;
 
 -- change these if you want other receipes for travelnet or elevator
 travelnet.travelnet_recipe = {

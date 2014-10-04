@@ -17,11 +17,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
- Version: 2.1 (with config file)
+ Version: 2.2 (with optional abm for self-healing)
     
  Please configure this mod in config.lua
 
  Changelog:
+ 05.11.14 - Added an optional abm so that the travelnet network can heal itshelf in case of loss of the savefile.
+            If you want to use this, set
+                  travelnet.enable_abm = true
+            in config.lua and edit the interval in the abm to suit your needs.
  19.11.13 - moved doors and travelnet definition into an extra file
           - moved configuration to config.lua
  05.08.13 - fixed possible crash when the node in front of the travelnet is unknown
@@ -463,11 +467,17 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
      or not( travelnet.targets[ owner_name ][ station_network ] )) then
 
 
-      minetest.chat_send_player(name, "Error: There is something wrong with the configuration of this station. "..
+      if(     owner_name
+          and station_name
+          and station_network ) then
+            travelnet.add_target( station_name, station_network, pos, owner_name, meta, owner_name );
+      else
+         minetest.chat_send_player(name, "Error: There is something wrong with the configuration of this station. "..
                                       " DEBUG DATA: owner: "..(  owner_name or "?")..
                                       " station_name: "..(station_name or "?")..
                                       " station_network: "..(station_network or "?")..".");
-      return
+         return
+      end
    end
 
    local this_node = minetest.env:get_node( pos );
@@ -664,6 +674,10 @@ if( travelnet.doors_enabled ) then
    dofile(minetest.get_modpath("travelnet").."/doors.lua");     -- doors that open and close automaticly when the travelnet or elevator is used
 end
 
+if( travelnet.abm_enabled ) then
+   dofile(minetest.get_modpath("travelnet").."/restore_network_via_abm.lua"); -- restore travelnet data when players pass by broken networks
+end
 
 -- upon server start, read the savefile
 travelnet.restore_data();
+
