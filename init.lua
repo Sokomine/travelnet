@@ -22,7 +22,7 @@
  Please configure this mod in config.lua
 
  Changelog:
- 05.11.14 - Added an optional abm so that the travelnet network can heal itshelf in case of loss of the savefile.
+ 05.10.14 - Added an optional abm so that the travelnet network can heal itshelf in case of loss of the savefile.
             If you want to use this, set
                   travelnet.enable_abm = true
             in config.lua and edit the interval in the abm to suit your needs.
