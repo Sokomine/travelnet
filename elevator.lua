@@ -47,7 +47,7 @@ minetest.register_node("travelnet:elevator", {
     light_source = 10,
 
     after_place_node  = function(pos, placer, itemstack)
-	local meta = minetest.env:get_meta(pos);
+	local meta = minetest.get_meta(pos);
         meta:set_string("infotext",       "Elevator (unconfigured)");
         meta:set_string("station_name",   "");
         meta:set_string("station_network","");
@@ -62,7 +62,7 @@ minetest.register_node("travelnet:elevator", {
 
        local p = {x=pos.x, y=pos.y+1, z=pos.z}
        local p2 = minetest.dir_to_facedir(placer:get_look_dir())
-       minetest.env:add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
+       minetest.add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
     end,
     
     on_receive_fields = travelnet.on_receive_fields,
@@ -81,7 +81,7 @@ minetest.register_node("travelnet:elevator", {
     -- taken from VanessaEs homedecor fridge
     on_place = function(itemstack, placer, pointed_thing)
        local pos  = pointed_thing.above;
-       local node = minetest.env:get_node({x=pos.x, y=pos.y+1, z=pos.z});
+       local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z});
        -- leftover elevator_top nodes can be removed by placing a new elevator underneath
        if( node ~= nil and node.name ~= "air" and node.name ~= 'travelnet:elevator_top') then
           minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
@@ -92,7 +92,7 @@ minetest.register_node("travelnet:elevator", {
 
     on_destruct = function(pos)
             local p = {x=pos.x, y=pos.y+1, z=pos.z}
-	    minetest.env:remove_node(p)
+	    minetest.remove_node(p)
     end
 })
 

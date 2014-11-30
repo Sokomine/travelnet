@@ -28,7 +28,7 @@ minetest.register_node("travelnet:elevator_door_steel_open", {
 		},
 		drop = "travelnet:elevator_door_steel_closed",
                 on_rightclick = function(pos, node, puncher)
-                    minetest.env:add_node(pos, {name = "travelnet:elevator_door_steel_closed", param2 = node.param2})
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_steel_closed", param2 = node.param2})
                 end,
 })
 
@@ -55,7 +55,7 @@ minetest.register_node("travelnet:elevator_door_steel_closed", {
 			},
 		},
                 on_rightclick = function(pos, node, puncher)
-                    minetest.env:add_node(pos, {name = "travelnet:elevator_door_steel_open", param2 = node.param2})
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_steel_open", param2 = node.param2})
                 end,
 })
 
@@ -87,7 +87,7 @@ minetest.register_node("travelnet:elevator_door_glass_open", {
 		},
 		drop = "travelnet:elevator_door_glass_closed",
                 on_rightclick = function(pos, node, puncher)
-                    minetest.env:add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = node.param2})
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = node.param2})
                 end,
 })
 
@@ -114,7 +114,7 @@ minetest.register_node("travelnet:elevator_door_glass_closed", {
 			},
 		},
                 on_rightclick = function(pos, node, puncher)
-                    minetest.env:add_node(pos, {name = "travelnet:elevator_door_glass_open", param2 = node.param2})
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_glass_open", param2 = node.param2})
                 end,
 })
 
@@ -135,8 +135,8 @@ minetest.register_craft({
 			{"default:steel_ingot", "", "default:steel_ingot", }
 		        }
 	})
---      local old_node = minetest.env:get_node( pos );
---      minetest.env:add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = old_node.param2})
+--      local old_node = minetest.get_node( pos );
+--      minetest.add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = old_node.param2})
 
 
 
