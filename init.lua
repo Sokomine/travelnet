@@ -106,9 +106,9 @@ end
 
 travelnet.update_formspec = function( pos, puncher_name )
 
-   local meta = minetest.env:get_meta(pos);
+   local meta = minetest.get_meta(pos);
 
-   local this_node   = minetest.env:get_node( pos );
+   local this_node   = minetest.get_node( pos );
    local is_elevator = false;
 
    if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then
@@ -287,7 +287,7 @@ end
 travelnet.add_target = function( station_name, network_name, pos, player_name, meta, owner_name )
 
    -- if it is an elevator, determine the network name through x and z coordinates
-   local this_node   = minetest.env:get_node( pos );
+   local this_node   = minetest.get_node( pos );
    local is_elevator = false;
 
    if( this_node.name == 'travelnet:elevator' ) then
@@ -389,7 +389,7 @@ end
 -- allow doors to open
 travelnet.open_close_door = function( pos, player, mode )
 
-   local this_node = minetest.env:get_node( pos );
+   local this_node = minetest.get_node( pos );
    local pos2 = {x=pos.x,y=pos.y,z=pos.z};
 
    if(     this_node.param2 == 0 ) then pos2 = {x=pos.x,y=pos.y,z=(pos.z-1)};
@@ -398,7 +398,7 @@ travelnet.open_close_door = function( pos, player, mode )
    elseif( this_node.param2 == 3 ) then pos2 = {x=(pos.x+1),y=pos.y,z=pos.z};
    end
 
-   local door_node = minetest.env:get_node( pos2 );
+   local door_node = minetest.get_node( pos2 );
    if( door_node ~= nil and door_node.name ~= 'ignore' and door_node.name ~= 'air' and minetest.registered_nodes[ door_node.name ] ~= nil and minetest.registered_nodes[ door_node.name ].on_rightclick ~= nil) then
 
       -- at least for homedecor, same facedir would mean "door closed"
@@ -432,7 +432,7 @@ end
 
 
 travelnet.on_receive_fields = function(pos, formname, fields, player)
-   local meta = minetest.env:get_meta(pos);
+   local meta = minetest.get_meta(pos);
 
    local name = player:get_player_name();
 
@@ -480,7 +480,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       end
    end
 
-   local this_node = minetest.env:get_node( pos );
+   local this_node = minetest.get_node( pos );
    if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then 
       for k,v in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
          if( travelnet.targets[ owner_name ][ station_network ][ k ].nr  --..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)'
@@ -511,7 +511,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       minetest.sound_play("128590_7037-lq.mp3", {pos = pos, gain = 1.0, max_hear_distance = 10,})
    end
    if( travelnet.travelnet_effect_enabled ) then 
-      minetest.env:add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
+      minetest.add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
    -- close the doors at the sending station
@@ -525,12 +525,12 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       minetest.sound_play("travelnet_travel.wav", {pos = target_pos, gain = 1.0, max_hear_distance = 10,})
    end
    if( travelnet.travelnet_effect_enabled ) then 
-      minetest.env:add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
+      minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
 
    -- check if the box has at the other end has been removed.
-   local node2 = minetest.env:get_node(  target_pos );
+   local node2 = minetest.get_node(  target_pos );
    if( node2 ~= nil and node2.name ~= 'ignore' and node2.name ~= 'travelnet:travelnet' and node2.name ~= 'travelnet:elevator') then
 
       -- provide information necessary to identify the removed box
@@ -613,7 +613,7 @@ travelnet.can_dig = function( pos, player, description )
       return true;
    end
 
-   local meta          = minetest.env:get_meta( pos );
+   local meta          = minetest.get_meta( pos );
    local owner         = meta:get_string('owner');
 
    if( not( meta ) or not( owner) or owner=='') then
