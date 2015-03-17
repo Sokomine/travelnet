@@ -279,6 +279,7 @@ travelnet.update_formspec = function( pos, puncher_name )
                                 "' (owned by "..tostring( owner_name )..") ready for usage. Right-click to travel, punch to update.");
 
    minetest.chat_send_player(puncher_name, "The target list of this box on the travelnet has been updated.");
+   return true
 end
 
 
@@ -431,7 +432,7 @@ travelnet.open_close_door = function( pos, player, mode )
 end
 
 
-travelnet.on_receive_fields = function(pos, formname, fields, player)
+travelnet.on_receive_fields = function(pos, _, fields, player)
    local meta = minetest.get_meta(pos);
 
    local name = player:get_player_name();
