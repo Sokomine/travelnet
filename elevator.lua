@@ -3,46 +3,42 @@
 -- >utor: Sokomine
 
 minetest.register_node("travelnet:elevator", {
-    description = "Elevator",
+	description = "Elevator",
+	drawtype = "mesh",
+	mesh = "travelnet_elevator.obj",
+	sunlight_propagates = true,
+	paramtype = 'light',
+	paramtype2 = "facedir",
+	wield_scale = {x=0.6, y=0.6, z=0.6},
 
-    drawtype = "nodebox",
-    sunlight_propagates = true,
-    paramtype = 'light',
-    paramtype2 = "facedir",
+	selection_box = {
+		type = "fixed",
+		fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
+	},
 
-    selection_box = {
-                type = "fixed",
-                fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
-    },
+	collision_box = {
+		type = "fixed",
+		fixed = {
 
-    node_box = {
-	    type = "fixed",
-	    fixed = {
+			{ 0.48, -0.5,-0.5,  0.5,  0.5, 0.5},
+			{-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5}, 
+			{-0.5,  -0.5,-0.5 ,-0.48, 0.5, 0.5},
 
-                { 0.48, -0.5,-0.5,  0.5,  0.5, 0.5},
-                {-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5}, 
-                {-0.5,  -0.5,-0.5 ,-0.48, 0.5, 0.5},
+			--groundplate to stand on
+			{ -0.5,-0.5,-0.5,0.5,-0.48, 0.5}, 
+		},
+	},
 
-                --groundplate to stand on
-                { -0.5,-0.5,-0.5,0.5,-0.48, 0.5}, 
-            },
-    },
-    
-
-    tiles = {
-          
-             "travelnet_elevator_inside_floor.png",  -- view from top
-             "default_stone.png",  -- view from bottom
-	     "travelnet_elevator_inside_bottom.png", -- left side
-	     "travelnet_elevator_inside_bottom.png", -- right side
-	     "travelnet_elevator_inside_bottom.png",   -- front view
-	     "travelnet_elevator_inside_bottom.png",  -- backward view
-             },
-    inventory_image = "travelnet_elevator_inv.png",
-    wield_image     = "travelnet_elevator_wield.png",
-
-    groups = {cracky=1,choppy=1,snappy=1},
-
+	tiles = {
+		"travelnet_elevator_front.png",
+		"travelnet_elevator_inside_controls.png",
+		"travelnet_elevator_sides_outside.png",
+		"travelnet_elevator_inside_ceiling.png",
+		"travelnet_elevator_inside_floor.png",
+		"default_steel_block.png"
+	},
+	inventory_image = "travelnet_elevator_inv.png",
+	groups = {cracky=1,choppy=1,snappy=1},
 
     light_source = 10,
 
@@ -96,50 +92,7 @@ minetest.register_node("travelnet:elevator", {
     end
 })
 
-minetest.register_node("travelnet:elevator_top", {
-    description = "Elevator Top",
-
-    drawtype = "nodebox",
-    sunlight_propagates = true,
-    paramtype = 'light',
-    paramtype2 = "facedir",
-
-    selection_box = {
-                type = "fixed",
-                fixed = { 0, 0, 0,  0, 0, 0 }
---                fixed = { -0.5, -0.5, -0.5,  0.5, 0.5, 0.5 }
-    },
-
-    node_box = {
-	    type = "fixed",
-	    fixed = {
-
-                { 0.48, -0.5,-0.5,  0.5,  0.5, 0.5},
-                {-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5}, 
-                {-0.5,  -0.5,-0.5 ,-0.48, 0.5, 0.5},
-
-                --top ceiling
-                { -0.5, 0.48,-0.5,0.5, 0.5, 0.5}, 
-            },
-    },
-    
-
-    tiles = {
-          
-             "default_stone.png",  -- view from top
-             "travelnet_elevator_inside_ceiling.png",  -- view from bottom
-	     "travelnet_elevator_inside_top_control.png", -- left side
-	     "travelnet_elevator_inside_top.png", -- right side
-	     "travelnet_elevator_inside_top.png",   -- front view
-	     "travelnet_elevator_inside_top.png",  -- backward view
-             },
-    inventory_image = "travelnet_elevator_inv.png",
-    wield_image     = "travelnet_elevator_wield.png",
-
-    light_source = 10,
-
-    groups = {cracky=1,choppy=1,snappy=1,not_in_creative_inventory=1},
-})
+minetest.register_alias("travelnet:elevator_top", "air")
 
 --if( minetest.get_modpath("technic") ~= nil ) then
 --        minetest.register_craft({

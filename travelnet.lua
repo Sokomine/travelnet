@@ -5,47 +5,45 @@
 -- Autor: Sokomine
 minetest.register_node("travelnet:travelnet", {
 
-    description = "Travelnet box",
+	description = "Travelnet box",
 
-    drawtype = "nodebox",
-    sunlight_propagates = true,
-    paramtype = 'light',
-    paramtype2 = "facedir",
+	drawtype = "mesh",
+	mesh = "travelnet.obj",
+	sunlight_propagates = true,
+	paramtype = 'light',
+	paramtype2 = "facedir",
+	wield_scale = {x=0.6, y=0.6, z=0.6},
+	selection_box = {
+		type = "fixed",
+		fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
+	},
 
-    selection_box = {
-                type = "fixed",
-                fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
-    },
+	collision_box = {
+		type = "fixed",
+		fixed = {
 
-    node_box = {
-	    type = "fixed",
-	    fixed = {
+			{ 0.45, -0.5,-0.5,  0.5,  1.45, 0.5},
+			{-0.5 , -0.5, 0.45, 0.45, 1.45, 0.5}, 
+			{-0.5,  -0.5,-0.5 ,-0.45, 1.45, 0.5},
 
-                { 0.45, -0.5,-0.5,  0.5,  1.45, 0.5},
-                {-0.5 , -0.5, 0.45, 0.45, 1.45, 0.5}, 
-                {-0.5,  -0.5,-0.5 ,-0.45, 1.45, 0.5},
+			--groundplate to stand on
+			{ -0.5,-0.5,-0.5,0.5,-0.45, 0.5}, 
+			--roof
+			{ -0.5, 1.45,-0.5,0.5, 1.5, 0.5}, 
 
-                --groundplate to stand on
-                { -0.5,-0.5,-0.5,0.5,-0.45, 0.5}, 
-                --roof
-                { -0.5, 1.45,-0.5,0.5, 1.5, 0.5}, 
+			-- control panel
+			--                { -0.2, 0.6,  0.3, 0.2, 1.1,  0.5},
 
-                -- control panel
---                { -0.2, 0.6,  0.3, 0.2, 1.1,  0.5},
+		},
+	},
 
-            },
-    },
-    
-
-    tiles = {
-          
-             "default_clay.png",  -- view from top
-             "default_clay.png",  -- view from bottom
-             "travelnet_travelnet_side.png", -- left side
-             "travelnet_travelnet_side.png", -- right side
-             "travelnet_travelnet_back.png", -- front view
-             "travelnet_travelnet_front.png",  -- backward view
-             },
+	tiles = {
+		"travelnet_travelnet_front.png",  -- backward view
+		"travelnet_travelnet_back.png", -- front view
+		"travelnet_travelnet_side.png", -- sides :)
+		"default_steel_block.png",  -- view from top
+		"default_clay.png",  -- view from bottom
+	},
     inventory_image = "travelnet_inv.png",
 
     groups = {cracky=1,choppy=1,snappy=1},
