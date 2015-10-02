@@ -172,7 +172,7 @@ travelnet.update_formspec = function( pos, puncher_name )
 
 
       local zeit = meta:get_int("timestamp");
-      if( not( zeit) or zeit<100000 ) then
+      if( not( zeit) or type(zeit)~="number" or zeit<100000 ) then
          zeit = os.time();
       end
 
@@ -212,6 +212,9 @@ travelnet.update_formspec = function( pos, puncher_name )
       -- find ground level
       local vgl_timestamp = 999999999999;
       for index,k in ipairs( stations ) do
+         if( not( travelnet.targets[ owner_name ][ station_network ][ k ].timestamp )) then
+            travelnet.targets[ owner_name ][ station_network ][ k ].timestamp = os.time();
+         end
          if( travelnet.targets[ owner_name ][ station_network ][ k ].timestamp < vgl_timestamp ) then
             vgl_timestamp = travelnet.targets[ owner_name ][ station_network ][ k ].timestamp;       
             ground_level  = index;
