@@ -483,6 +483,19 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       end
    end
 
+   if(  not( owner_name )
+     or not( station_network )
+     or not( travelnet.targets )
+     or not( travelnet.targets[ owner_name ] )
+     or not( travelnet.targets[ owner_name ][ station_network ] )) then
+      minetest.chat_send_player(name, "Error: This travelnet is lacking data and/or improperly configured.");
+      print( "ERROR: The travelnet at "..minetest.pos_to_string( pos ).." has a problem: "..
+                                      " DATA: owner: "..(  owner_name or "?")..
+                                      " station_name: "..(station_name or "?")..
+                                      " station_network: "..(station_network or "?")..".");
+      return;
+   end
+
    local this_node = minetest.get_node( pos );
    if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then 
       for k,v in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
