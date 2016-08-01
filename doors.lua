@@ -135,6 +135,36 @@ minetest.register_craft({
 			{"default:steel_ingot", "", "default:steel_ingot", }
 		        }
 	})
+
+-- Make doors reacts to mesecons
+if minetest.get_modpath("mesecons") then
+    local mesecons = {effector = {
+		action_on = function(pos, node)
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_glass_open", param2 = node.param2})
+                end,
+		action_off = function(pos, node)
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = node.param2})
+                end,
+		rules = mesecon.rules.pplate
+	}}
+
+    minetest.override_item("travelnet:elevator_door_glass_closed", { mesecons = mesecons })
+    minetest.override_item("travelnet:elevator_door_glass_open", { mesecons = mesecons })
+
+    local mesecons = {effector = {
+		action_on = function(pos, node)
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_steel_open", param2 = node.param2})
+                end,
+		action_off = function(pos, node)
+                    minetest.add_node(pos, {name = "travelnet:elevator_door_steel_closed", param2 = node.param2})
+                end,
+		rules = mesecon.rules.pplate
+	}}
+
+    minetest.override_item("travelnet:elevator_door_steel_closed", { mesecons = mesecons })
+    minetest.override_item("travelnet:elevator_door_steel_open", { mesecons = mesecons })
+end
+
 --      local old_node = minetest.get_node( pos );
 --      minetest.add_node(pos, {name = "travelnet:elevator_door_glass_closed", param2 = old_node.param2})
 
