@@ -185,12 +185,19 @@ travelnet.update_formspec = function( pos, puncher_name )
 
 
    -- add name of station + network + owner + update-button
-   local formspec = "size[12,10]"..
+   local zusatzstr = "";
+   local trheight = "10";
+   if( this_node and this_node.name=="locked_travelnet:travelnet" ) then
+      zusatzstr = "field[0.3,11;6,0.7;locks_sent_lock_command;Locked travelnet. Type /help for help:;]";
+      trheight = "11.5";
+   end
+   local formspec = "size[12,"..trheight.."10]"..
                             "label[3.3,0.0;Travelnet-Box:]".."label[6.3,0.0;Punch box to update target list.]"..
                             "label[0.3,0.4;Name of this station:]".."label[6.3,0.4;"..(station_name or "?").."]"..
                             "label[0.3,0.8;Assigned to Network:]" .."label[6.3,0.8;"..(station_network or "?").."]"..
                             "label[0.3,1.2;Owned by:]"            .."label[6.3,1.2;"..(owner_name or "?").."]"..
-                            "label[3.3,1.6;Click on target to travel there:]";
+                            "label[3.3,1.6;Click on target to travel there:]"..
+			    zusatzstr;
 --                            "button_exit[5.3,0.3;8,0.8;do_update;Punch box to update destination list. Click on target to travel there.]"..
    local x = 0;
    local y = 0;
