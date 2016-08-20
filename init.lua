@@ -191,7 +191,7 @@ travelnet.update_formspec = function( pos, puncher_name )
       zusatzstr = "field[0.3,11;6,0.7;locks_sent_lock_command;Locked travelnet. Type /help for help:;]";
       trheight = "11.5";
    end
-   local formspec = "size[12,"..trheight.."10]"..
+   local formspec = "size[12,"..trheight.."]"..
                             "label[3.3,0.0;Travelnet-Box:]".."label[6.3,0.0;Punch box to update target list.]"..
                             "label[0.3,0.4;Name of this station:]".."label[6.3,0.4;"..(station_name or "?").."]"..
                             "label[0.3,0.8;Assigned to Network:]" .."label[6.3,0.8;"..(station_network or "?").."]"..
