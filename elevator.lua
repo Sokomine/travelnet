@@ -48,7 +48,7 @@ minetest.register_node("travelnet:elevator", {
         meta:set_string("station_name",   "");
         meta:set_string("station_network","");
         meta:set_string("owner",          placer:get_player_name() );
-        -- request initinal data
+        -- request initial data
         meta:set_string("formspec", 
                             "size[12,10]"..
                             "field[0.3,5.6;6,0.7;station_name;Name of this station:;]"..

@@ -22,6 +22,8 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 30.08.16 - Attaching a travelnet box to a non-existant network of another player is possible (requested by OldCoder).
+            Still requires the travelnet_attach-priv.
  05.10.14 - Added an optional abm so that the travelnet network can heal itshelf in case of loss of the savefile.
             If you want to use this, set
                   travelnet.enable_abm = true
@@ -325,16 +327,15 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    elseif( is_elevator ) then -- elevator networks
       owner_name = player_name;
 
-   elseif( not( travelnet.targets[ owner_name ] )
-        or not( travelnet.targets[ owner_name ][ network_name ] )) then
+   elseif( not( minetest.check_player_privs(player_name, {interact=true}))) then
 
-      minetest.chat_send_player(player_name, "There is no network named "..tostring( network_name ).." owned by "..tostring( owner_name )..". Aborting.");
+      minetest.chat_send_player(player_name, "There is no player with interact privilege named '"..tostring( player_name ).."'. Aborting.");
       return;
 
    elseif( not( minetest.check_player_privs(player_name, {travelnet_attach=true}))
        and not( travelnet.allow_attach( player_name, owner_name, network_name ))) then
 
-        minetest.chat_send_player(player_name, "You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.");
+       minetest.chat_send_player(player_name, "You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.");
       return;
    end
 
