@@ -22,6 +22,8 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 30.08.16 - If the station the traveller just travelled to no longer exists, the player is sent back to the
+            station where he/she came from.
  30.08.16 - Attaching a travelnet box to a non-existant network of another player is possible (requested by OldCoder).
             Still requires the travelnet_attach-priv.
  05.10.14 - Added an optional abm so that the travelnet network can heal itshelf in case of loss of the savefile.
@@ -563,6 +565,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
                                        station_network = station_network }};
 
       travelnet.remove_box( target_pos, nil, oldmetadata, player );
+      -- send the player back as there's no receiving travelnet
+      player:moveto( pos, false );
 
    -- do this only on servers where the function exists
    elseif( player.set_look_yaw ) then
