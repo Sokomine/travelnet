@@ -150,9 +150,9 @@ travelnet.update_formspec = function( pos, puncher_name )
       -- request initinal data
       meta:set_string("formspec", 
                             "size[12,10]"..
-                            "field[0.3,7.6;9,0.9;station_name;Name of this station:;"..(station_name or "?").."]"..
-                            "field[0.3,8.6;9,0.9;station_network;Assign to Network:;"..(station_network or "?").."]"..
-                            "field[0.3,9.6;9,0.9;owner;Owned by:;"..(owner_name or "?").."]"..
+                            "field[0.3,7.6;9,0.9;station_name;Name of this station:;"..minetest.formspec_escape(station_name or "?").."]"..
+                            "field[0.3,8.6;9,0.9;station_network;Assign to Network:;"..minetest.formspec_escape(station_network or "?").."]"..
+                            "field[0.3,9.6;9,0.9;owner;Owned by:;"..minetest.formspec_escape(owner_name or "?").."]"..
                             "button_exit[6.3,8.2;1.7,0.7;station_set;Store]" );
 
       minetest.chat_send_player(puncher_name, "Error: Update failed! Resetting this box on the travelnet.");
@@ -197,9 +197,9 @@ travelnet.update_formspec = function( pos, puncher_name )
    end
    local formspec = "size[12,"..trheight.."]"..
                             "label[3.3,0.0;Travelnet-Box:]".."label[6.3,0.0;Punch box to update target list.]"..
-                            "label[0.3,0.4;Name of this station:]".."label[6.3,0.4;"..(station_name or "?").."]"..
-                            "label[0.3,0.8;Assigned to Network:]" .."label[6.3,0.8;"..(station_network or "?").."]"..
-                            "label[0.3,1.2;Owned by:]"            .."label[6.3,1.2;"..(owner_name or "?").."]"..
+                            "label[0.3,0.4;Name of this station:]".."label[6.3,0.4;"..minetest.formspec_escape(station_name or "?").."]"..
+                            "label[0.3,0.8;Assigned to Network:]" .."label[6.3,0.8;"..minetest.formspec_escape(station_network or "?").."]"..
+                            "label[0.3,1.2;Owned by:]"            .."label[6.3,1.2;"..minetest.formspec_escape(owner_name or "?").."]"..
                             "label[3.3,1.6;Click on target to travel there:]"..
 			    zusatzstr;
 --                            "button_exit[5.3,0.3;8,0.8;do_update;Punch box to update destination list. Click on target to travel there.]"..
@@ -386,8 +386,8 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
       meta:set_string("formspec", 
                      "size[12,10]"..
-                     "field[0.3,0.6;6,0.7;station_name;Station:;"..   meta:get_string("station_name").."]"..
-                     "field[0.3,3.6;6,0.7;station_network;Network:;"..meta:get_string("station_network").."]" );
+                     "field[0.3,0.6;6,0.7;station_name;Station:;"..   minetest.formspec_escape(meta:get_string("station_name")).."]"..
+                     "field[0.3,3.6;6,0.7;station_network;Network:;"..minetest.formspec_escape(meta:get_string("station_network")).."]" );
 
       -- display a list of all stations that can be reached from here
       travelnet.update_formspec( pos, player_name );
