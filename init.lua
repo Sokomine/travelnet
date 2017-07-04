@@ -184,7 +184,7 @@ travelnet.update_formspec = function( pos, puncher_name )
       travelnet.targets[ owner_name ][ station_network ][ station_name ] = {pos=pos, timestamp=zeit };
 
       minetest.chat_send_player(owner_name, "Station '"..station_name.."' has been reattached to the network '"..station_network.."'.");
-
+      travelnet.save_data();
    end
 
 
