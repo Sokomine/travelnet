@@ -22,6 +22,7 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 22.07.17 - Fixed bug with locked travelnets beeing removed from the network due to not beeing recognized.
  30.08.16 - If the station the traveller just travelled to no longer exists, the player is sent back to the
             station where he/she came from.
  30.08.16 - Attaching a travelnet box to a non-existant network of another player is possible (requested by OldCoder).
@@ -557,7 +558,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
    -- check if the box has at the other end has been removed.
    local node2 = minetest.get_node(  target_pos );
-   if( node2 ~= nil and node2.name ~= 'ignore' and node2.name ~= 'travelnet:travelnet' and node2.name ~= 'travelnet:elevator') then
+   if( node2 ~= nil and node2.name ~= 'ignore' and node2.name ~= 'travelnet:travelnet' and node2.name ~= 'travelnet:elevator' and node2.name ~= "locked_travelnet:travelnet" and node2.name ~= "travelnet:travelnet_private") then
 
       -- provide information necessary to identify the removed box
       local oldmetadata = { fields = { owner           = owner_name,
