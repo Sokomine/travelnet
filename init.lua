@@ -24,6 +24,8 @@
  Changelog:
  16.07.17 - Merged several PR from others (Typo, screenshot, documentation, mesecon support, bugfix).
             Added buttons to move stations up or down in the list, independent on when they where added.
+            Fixed undeclared globals.
+            Changed deprecated functions set_look_yaw/pitch to current functions.
  22.07.17 - Fixed bug with locked travelnets beeing removed from the network due to not beeing recognized.
  30.08.16 - If the station the traveller just travelled to no longer exists, the player is sent back to the
             station where he/she came from.
@@ -259,13 +261,14 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
             or (minetest.check_player_privs(puncher_name, {travelnet_attach=true})))
      ) then
 
+      local current_pos = -1;
       for index,k in ipairs( stations ) do
          if( k==station_name ) then
             current_pos = index;
          end
       end
 
-      swap_with_pos = -1;
+      local swap_with_pos = -1;
       if( fields.move_up ) then
          swap_with_pos = current_pos - 1;
       else
@@ -630,7 +633,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       player:moveto( pos, false );
 
    -- do this only on servers where the function exists
-   elseif( player.set_look_yaw ) then
+   elseif( player.set_look_horizontal ) then
 
       -- rotate the player so that he/she can walk straight out of the box
       local yaw    = 0;
@@ -645,8 +648,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          yaw = 270;
       end
        
-      player:set_look_yaw( math.rad( yaw )); -- this is only supported in recent versions of MT
-      player:set_look_pitch( math.rad( 0 )); -- this is only supported in recent versions of MT
+      player:set_look_horizontal( math.rad( yaw ));
+      player:set_look_vertical( math.rad( 0 ));
    end
 
    travelnet.open_close_door( target_pos, player, 2 );
@@ -695,15 +698,15 @@ travelnet.can_dig = function( pos, player, description )
       return false;
    end
    local name          = player:get_player_name();
+   local meta          = minetest.get_meta( pos );
+   local owner         = meta:get_string('owner');
+   local network_name  = meta:get_string( "station_network" );
 
    -- players with that priv can dig regardless of owner
    if( minetest.check_player_privs(name, {travelnet_remove=true})
-       or travelnet.allow_dig( player_name, owner_name, network_name )) then
+       or travelnet.allow_dig( name, owner, network_name )) then
       return true;
    end
-
-   local meta          = minetest.get_meta( pos );
-   local owner         = meta:get_string('owner');
 
    if( not( meta ) or not( owner) or owner=='') then
       minetest.chat_send_player(name, "This "..description.." has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.");
