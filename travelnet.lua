@@ -67,7 +67,7 @@ minetest.register_node("travelnet:travelnet", {
     
     on_receive_fields = travelnet.on_receive_fields,
     on_punch          = function(pos, node, puncher)
-                          travelnet.update_formspec(pos, puncher:get_player_name())
+                          travelnet.update_formspec(pos, puncher:get_player_name(), nil)
     end,
 
     can_dig = function( pos, player )

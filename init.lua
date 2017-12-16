@@ -22,6 +22,8 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 16.07.17 - Merged several PR from others (Typo, screenshot, documentation, mesecon support, bugfix).
+            Added buttons to move stations up or down in the list, independent on when they where added.
  22.07.17 - Fixed bug with locked travelnets beeing removed from the network due to not beeing recognized.
  30.08.16 - If the station the traveller just travelled to no longer exists, the player is sent back to the
             station where he/she came from.
@@ -109,7 +111,7 @@ end
 
 
 
-travelnet.update_formspec = function( pos, puncher_name )
+travelnet.update_formspec = function( pos, puncher_name, fields )
 
    local meta = minetest.get_meta(pos);
 
@@ -246,6 +248,55 @@ travelnet.update_formspec = function( pos, puncher_name )
                                                  travelnet.targets[ owner_name ][ station_network ][ b ].timestamp  end);
    end
 
+   -- does the player want to move this station one position up in the list?
+   -- only the owner and players with the travelnet_attach priv can change the order of the list
+   -- Note: With elevators, only the "G"(round) marking is actually moved
+   if( fields
+       and (fields.move_up or fields.move_down)
+       and owner_name
+       and owner_name ~= ""
+       and ((owner_name == puncher_name)
+            or (minetest.check_player_privs(puncher_name, {travelnet_attach=true})))
+     ) then
+
+      for index,k in ipairs( stations ) do
+         if( k==station_name ) then
+            current_pos = index;
+         end
+      end
+
+      swap_with_pos = -1;
+      if( fields.move_up ) then
+         swap_with_pos = current_pos - 1;
+      else
+         swap_with_pos = current_pos + 1;
+      end
+      -- handle errors
+      if(     swap_with_pos < 1) then
+         minetest.chat_send_player(puncher_name, "This station is already the first one on the list.");
+      elseif( swap_with_pos > #stations ) then
+         minetest.chat_send_player(puncher_name, "This station is already the last one on the list.");
+      else
+         -- swap the actual data by which the stations are sorted
+         local old_timestamp = travelnet.targets[ owner_name ][ station_network ][ stations[swap_with_pos]].timestamp;
+         travelnet.targets[    owner_name ][ station_network ][ stations[swap_with_pos]].timestamp = 
+            travelnet.targets[ owner_name ][ station_network ][ stations[current_pos  ]].timestamp;
+         travelnet.targets[    owner_name ][ station_network ][ stations[current_pos  ]].timestamp = 
+            old_timestamp;
+
+         -- for elevators, only the "G"(round) marking is moved; no point in swapping stations
+         if( not( is_elevator )) then
+            -- actually swap the stations
+            local old_val = stations[ swap_with_pos ];
+            stations[ swap_with_pos ] = stations[ current_pos ];
+            stations[ current_pos   ] = old_val;
+         end
+
+         -- store the changed order
+         travelnet.save_data();
+      end
+   end
+
    -- if there are only 8 stations (plus this one), center them in the formspec
    if( #stations < 10 ) then
       x = 4;
@@ -287,6 +338,10 @@ travelnet.update_formspec = function( pos, puncher_name )
          --x = x+4;
       end
    end
+   formspec = formspec..
+         "label[8.0,1.6;Position in list:]"..
+         "button_exit[9.6,1.6;1.4,0.5;move_up;move up]"..
+         "button_exit[10.9,1.6;1.4,0.5;move_down;move down]";
 
    meta:set_string( "formspec", formspec );
 
@@ -391,7 +446,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
                      "field[0.3,3.6;6,0.7;station_network;Network:;"..meta:get_string("station_network").."]" );
 
       -- display a list of all stations that can be reached from here
-      travelnet.update_formspec( pos, player_name );
+      travelnet.update_formspec( pos, player_name, nil );
 
       -- save the updated network data in a savefile over server restart
       travelnet.save_data();
@@ -462,6 +517,11 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       return;
    end
 
+   -- the owner or players with the travelnet_attach priv can move stations up or down in the list
+   if( fields.move_up or fields.move_down) then
+      travelnet.update_formspec( pos, name, fields );
+      return;
+   end
 
    if( not( fields.target )) then
       minetest.chat_send_player(name, "Please click on the target you want to travel to.");
@@ -522,7 +582,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if( not( travelnet.targets[ owner_name ][ station_network ][ fields.target ] )) then
 
       minetest.chat_send_player(name, "Station '"..( fields.target or "?").." does not exist (anymore?) on this network.");
-      travelnet.update_formspec( pos, name );
+      travelnet.update_formspec( pos, name, nil );
       return;
    end
 
