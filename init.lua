@@ -24,6 +24,8 @@
  Changelog:
  17.07.17 - Added more detailled licence information.
             TNT and DungeonMasters ought to leave travelnets and elevators untouched now.
+            Added function to register elevator doors.
+            Added elevator doors made out of tin ingots.
  16.07.17 - Merged several PR from others (Typo, screenshot, documentation, mesecon support, bugfix).
             Added buttons to move stations up or down in the list, independent on when they where added.
             Fixed undeclared globals.
