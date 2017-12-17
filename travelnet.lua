@@ -78,6 +78,10 @@ minetest.register_node("travelnet:travelnet", {
 			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
     end,
 
+    -- TNT and overenthusiastic DMs do not destroy travelnets
+    on_blast = function(pos, intensity)
+    end,
+
     -- taken from VanessaEs homedecor fridge
     on_place = function(itemstack, placer, pointed_thing)
 

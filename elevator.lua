@@ -74,6 +74,10 @@ minetest.register_node("travelnet:elevator", {
 			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
     end,
 
+    -- TNT and overenthusiastic DMs do not destroy elevators either
+    on_blast = function(pos, intensity)
+    end,
+
     -- taken from VanessaEs homedecor fridge
     on_place = function(itemstack, placer, pointed_thing)
        local pos  = pointed_thing.above;
