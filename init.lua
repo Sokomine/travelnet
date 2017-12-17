@@ -28,6 +28,7 @@
             Added elevator doors made out of tin ingots.
             Provide information about the nearest elevator network when placing a new elevator. This
               ought to make it easier to find the right spot.
+            Improved formspec.
  16.07.17 - Merged several PR from others (Typo, screenshot, documentation, mesecon support, bugfix).
             Added buttons to move stations up or down in the list, independent on when they where added.
             Fixed undeclared globals.
@@ -119,8 +120,39 @@ end
 
 
 
-travelnet.update_formspec = function( pos, puncher_name, fields )
+travelnet.reset_formspec = function( meta )
+      if( not( meta )) then
+         return;
+      end
+      meta:set_string("infotext",       "Travelnet-box (unconfigured)");
+      meta:set_string("station_name",   "");
+      meta:set_string("station_network","");
+      meta:set_string("owner",          "");
+      -- some players seem to be confused with entering network names at first; provide them
+      -- with a default name
+      if( not( station_network ) or station_network == "" ) then
+         station_network = "net1";
+      end
+      -- request initinal data
+      meta:set_string("formspec",
+		"size[10,6.0]"..
+		"label[2.0,0.0;--> Configure this travelnet station <--]"..
+		"field[0.3,1.2;9,0.9;station_name;Name of this station:;"..
+			minetest.formspec_escape(station_name or "").."]"..
+		"label[0.3,1.5;How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"...]"..
 
+		"field[0.3,2.8;9,0.9;station_network;Assign to Network:;"..
+			minetest.formspec_escape(station_network or "").."]"..
+		"label[0.3,3.1;You can have more than one network. If unsure, use \""..tostring(station_network).."\".]"..
+		"field[0.3,4.4;9,0.9;owner;Owned by:;]"..
+		"label[0.3,4.7;Unless you know what you are doing, leave this empty.]"..
+		"button_exit[1.3,5.3;1.7,0.7;station_help_setup;Help]"..
+		"button_exit[3.8,5.3;1.7,0.7;station_set;Save]"..
+		"button_exit[6.3,5.3;1.7,0.7;station_exit;Exit]");
+end
+
+
+travelnet.update_formspec = function( pos, puncher_name, fields )
    local meta = minetest.get_meta(pos);
 
    local this_node   = minetest.get_node( pos );
@@ -154,17 +186,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 -- minetest.chat_send_player(puncher_name, "data: "..minetest.serialize(  travelnet.targets ));
 
 
-      meta:set_string("infotext",       "Travelnet-box (unconfigured)");
-      meta:set_string("station_name",   "");
-      meta:set_string("station_network","");
-      meta:set_string("owner",          "");
-      -- request initinal data
-      meta:set_string("formspec", 
-                            "size[12,10]"..
-                            "field[0.3,7.6;9,0.9;station_name;Name of this station:;"..minetest.formspec_escape(station_name or "?").."]"..
-                            "field[0.3,8.6;9,0.9;station_network;Assign to Network:;"..minetest.formspec_escape(station_network or "?").."]"..
-                            "field[0.3,9.6;9,0.9;owner;Owned by:;"..minetest.formspec_escape(owner_name or "?").."]"..
-                            "button_exit[6.3,8.2;1.7,0.7;station_set;Store]" );
+      travelnet.reset_formspec( meta );
 
       minetest.chat_send_player(puncher_name, "Error: Update failed! Resetting this box on the travelnet.");
       return;
@@ -513,6 +535,18 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local meta = minetest.get_meta(pos);
 
    local name = player:get_player_name();
+
+   -- the player wants to quit/exit the formspec; do not save/update anything
+   if( fields and fields.station_exit and fields.station_exit ~= "" ) then
+      return;
+   end
+
+   -- show help text
+   if( fields and fields.station_help_setup and fields.station_help_setup ~= "") then
+-- TODO: actually add help page
+      minetest.chat_send_player( name, "If only there would be any help...");
+      return;
+   end
 
    -- if the box has not been configured yet
    if( meta:get_string("station_network")=="" ) then

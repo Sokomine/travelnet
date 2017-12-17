@@ -52,17 +52,8 @@ minetest.register_node("travelnet:travelnet", {
 
     after_place_node  = function(pos, placer, itemstack)
 	local meta = minetest.get_meta(pos);
-        meta:set_string("infotext",       "Travelnet-box (unconfigured)");
-        meta:set_string("station_name",   "");
-        meta:set_string("station_network","");
+	travelnet.reset_formspec( meta );
         meta:set_string("owner",          placer:get_player_name() );
-        -- request initinal data
-        meta:set_string("formspec", 
-                            "size[12,10]"..
-                            "field[0.3,5.6;6,0.7;station_name;Name of this station:;]"..
-                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
-                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
-                            "button_exit[6.3,6.2;1.7,0.7;station_set;Store]" );
     end,
     
     on_receive_fields = travelnet.on_receive_fields,
