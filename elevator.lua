@@ -2,6 +2,89 @@
 -- The network name is determined automaticly from the position (x/z coordinates).
 -- >utor: Sokomine
 
+travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
+	if( not( pos ) or not(pos.x) or not(pos.z) or not( owner_name )) then
+		return;
+	end
+
+	if( not( travelnet.targets[ owner_name ] )) then
+		minetest.chat_send_player( owner_name, "Congratulations! This is your first elevator."..
+			"You can build an elevator network by placing further elevators somewhere above "..
+			"or below this one. Just make sure that the x and z coordinate are the same.");
+		return;
+	end
+
+	local network_name = tostring( pos.x )..','..tostring( pos.z );
+	-- will this be an elevator that will be added to an existing network?
+	if( travelnet.targets[ owner_name ][ network_name ]
+	  -- does the network have any members at all?
+	  and next( travelnet.targets[ owner_name ][ network_name ], nil )) then
+		minetest.chat_send_player( owner_name, "This elevator will automaticly connect to the "..
+			"other elevators you have placed at diffrent heights. Just enter a station name "..
+			"and click on \"store\" to set it up. Or just punch it to set the height as station "..
+			"name.");
+		return;
+	end
+
+	local nearest_name = "";
+	local nearest_dist = 100000000;
+	local nearest_dist_x = 0;
+	local nearest_dist_z = 0;
+	for network_name, data in pairs( travelnet.targets[ owner_name ] ) do
+		local station_name = next( data, nil );
+		if( station_name and data[ station_name ][ "nr" ] and data[ station_name ].pos) then
+			local station_pos = data[ station_name ].pos;
+			local dist = math.ceil(math.sqrt(
+					  ( station_pos.x - pos.x ) * ( station_pos.x - pos.x )
+					+ ( station_pos.z - pos.z ) * ( station_pos.z - pos.z )));
+			-- find the nearest one; store network_name and (minimal) distance
+			if( dist < nearest_dist ) then
+				nearest_dist = dist;
+				nearest_dist_x = station_pos.x - pos.x;
+				nearest_dist_z = station_pos.z - pos.z;
+				nearest_name = network_name;
+			end
+		end
+	end
+	if( nearest_name ~= "" ) then
+		local text = "Your nearest elevator network is located ";
+		-- in front of/behind
+		if(    (param2==0 and nearest_dist_z>=0)or (param2==2 and nearest_dist_z<=0)) then
+			text = text..tostring( math.abs(nearest_dist_z )).." m behind this elevator and ";
+		elseif((param2==1 and nearest_dist_x>=0)or (param2==3 and nearest_dist_x<=0)) then
+			text = text..tostring( math.abs(nearest_dist_x )).." m behind this elevator and ";
+		elseif((param2==0 and nearest_dist_z< 0)or (param2==2 and nearest_dist_z> 0)) then
+			text = text..tostring( math.abs(nearest_dist_z )).." m in front of this elevator and ";
+		elseif((param2==1 and nearest_dist_x< 0)or (param2==3 and nearest_dist_x> 0)) then
+			text = text..tostring( math.abs(nearest_dist_x )).." m in front of this elevator and ";
+		else text = text.." ERROR ";
+		end
+
+		-- right/left
+		if(    (param2==0 and nearest_dist_x< 0)or (param2==2 and nearest_dist_x> 0)) then
+			text = text..tostring( math.abs(nearest_dist_x )).." m to the left";
+		elseif((param2==1 and nearest_dist_z>=0)or (param2==3 and nearest_dist_z<=0)) then
+			text = text..tostring( math.abs(nearest_dist_z )).." m to the left";
+		elseif((param2==0 and nearest_dist_x>=0)or (param2==2 and nearest_dist_x<=0)) then
+			text = text..tostring( math.abs(nearest_dist_x )).." m to the right";
+		elseif((param2==1 and nearest_dist_z< 0)or (param2==3 and nearest_dist_z> 0)) then
+			text = text..tostring( math.abs(nearest_dist_z )).." m to the right";
+		else text = text.." ERROR ";
+		end
+
+		minetest.chat_send_player( owner_name, text..
+			", located at x="..tostring( pos.x+nearest_dist_x)..
+			", z="..tostring( pos.z+nearest_dist_z)..
+			" This elevator here will start a new shaft/network." );
+	else
+		minetest.chat_send_player( owner_name, "This is your first elevator. It differs from "..
+			"travelnet networks by only allowing movement in vertical direction (up or down). "..
+			"All further elevators which you will place at the same x,z coordinates at differnt "..
+			"heights will be able to connect to this elevator.");
+	end
+end
+
+
 minetest.register_node("travelnet:elevator", {
 	description = "Elevator",
 	drawtype = "mesh",
@@ -59,6 +142,7 @@ minetest.register_node("travelnet:elevator", {
        local p = {x=pos.x, y=pos.y+1, z=pos.z}
        local p2 = minetest.dir_to_facedir(placer:get_look_dir())
        minetest.add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
+       travelnet.show_nearest_elevator( pos, placer:get_player_name(), p2 );
     end,
     
     on_receive_fields = travelnet.on_receive_fields,
