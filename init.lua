@@ -118,6 +118,72 @@ travelnet.restore_data = function()
 end
 
 
+-- punching the travelnet updates its formspec and shows it to the player;
+-- however, that would be very annoying when actually trying to dig the thing.
+-- Thus, check if the player is wielding a tool that can dig nodes of the
+-- group cracky
+travelnet.check_if_trying_to_dig = function( puncher, node )
+	-- if in doubt: show formspec
+	if( not( puncher) or not( puncher:get_wielded_item())) then
+		return false;
+	end
+	local tool_capabilities = puncher:get_wielded_item():get_tool_capabilities();
+	if( not( tool_capabilities )
+	 or not( tool_capabilities["groupcaps"])
+	 or not( tool_capabilities["groupcaps"]["cracky"])) then
+		return false;
+	end
+	-- tools which can dig cracky items can start digging immediately
+	return true;
+end
+
+-- minetest.chat_send_player is sometimes not so well visible
+travelnet.show_message = function( pos, player_name, title, message )
+	if( not( pos ) or not( player_name ) or not( message )) then
+		return;
+	end
+	local formspec = "size[8,3]"..
+		"label[3,0;"..minetest.formspec_escape( title or "Error").."]"..
+		-- TODO: make nicer
+		"label[0,1;"..minetest.formspec_escape( message or "! no message !").."]"..
+		"button_exit[3.5,2;1.0,0.5;back;Back]"..
+		"button_exit[6.8,2;1.0,0.5;station_exit;Exit]"..
+		"field[20,20;0.1,0.1;pos2str;Pos;".. minetest.pos_to_string( pos ).."]";
+	minetest.show_formspec(player_name, "travelnet:show", formspec);
+end
+
+-- show the player the formspec he would see when right-clicking the node;
+-- needs to be simulated this way as calling on_rightclick would not do
+travelnet.show_current_formspec = function( pos, meta, player_name )
+	if( not( pos ) or not( meta ) or not( player_name )) then
+		return;
+	end
+	-- we need to supply the position of the travelnet box
+	formspec = meta:get_string("formspec")..
+		"field[20,20;0.1,0.1;pos2str;Pos;".. minetest.pos_to_string( pos ).."]";
+	-- show the formspec manually
+	minetest.show_formspec(player_name, "travelnet:show", formspec);
+end
+
+-- a player clicked on something in the formspec he was manually shown
+-- (back from help page, moved travelnet up or down etc.)
+travelnet.form_input_handler = function( player, formname, fields)
+        if(formname == "travelnet:show" and fields and fields.pos2str) then
+		local pos = minetest.string_to_pos( fields.pos2str );
+		-- back button leads back to the main menu
+		if( fields.back and fields.back ~= "" ) then
+			return travelnet.show_current_formspec( pos,
+					minetest.get_meta( pos ), player:get_player_name());
+		end
+		return travelnet.on_receive_fields(pos, formname, fields, player);
+        end
+end
+
+-- most formspecs the travelnet uses are stored in the travelnet node itself,
+-- but some may require some "back"-button functionality (i.e. help page,
+-- move up/down etc.)
+minetest.register_on_player_receive_fields( travelnet.form_input_handler );
+
 
 
 travelnet.reset_formspec = function( meta )
@@ -187,8 +253,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
 
       travelnet.reset_formspec( meta );
-
-      minetest.chat_send_player(puncher_name, "Error: Update failed! Resetting this box on the travelnet.");
+      travelnet.show_message( pos, puncher_name, "Error", "Update failed! Resetting this box on the travelnet." );
       return;
    end
 
@@ -304,9 +369,11 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
       end
       -- handle errors
       if(     swap_with_pos < 1) then
-         minetest.chat_send_player(puncher_name, "This station is already the first one on the list.");
+         travelnet.show_message( pos, puncher_name, "Info", "This station is already the first one on the list.");
+         return;
       elseif( swap_with_pos > #stations ) then
-         minetest.chat_send_player(puncher_name, "This station is already the last one on the list.");
+         travelnet.show_message( pos, puncher_name, "Info", "This station is already the last one on the list.");
+         return;
       else
          -- swap the actual data by which the stations are sorted
          local old_timestamp = travelnet.targets[ owner_name ][ station_network ][ stations[swap_with_pos]].timestamp;
@@ -371,6 +438,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
    end
    formspec = formspec..
          "label[8.0,1.6;Position in list:]"..
+         "button_exit[11.3,0.0;1.0,0.5;station_exit;Exit]"..
          "button_exit[9.6,1.6;1.4,0.5;move_up;move up]"..
          "button_exit[10.9,1.6;1.4,0.5;move_down;move down]";
 
@@ -379,7 +447,8 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
    meta:set_string( "infotext", "Station '"..tostring( station_name ).."' on travelnet '"..tostring( station_network )..
                                 "' (owned by "..tostring( owner_name )..") ready for usage. Right-click to travel, punch to update.");
 
-   minetest.chat_send_player(puncher_name, "The target list of this box on the travelnet has been updated.");
+   -- show the player the updated formspec
+   travelnet.show_current_formspec( pos, meta, puncher_name );
 end
 
 
@@ -401,12 +470,13 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    end
 
    if( station_name == "" or not(station_name )) then
-      minetest.chat_send_player(player_name, "Please provide a name for this station.");
+      travelnet.show_message( pos, player_name, "Error", "Please provide a name for this station." );
       return;
    end
 
    if( network_name == "" or not( network_name )) then
-      minetest.chat_send_player(player_name, "Please provide the name of the network this station ought to be connected to.");
+      travelnet.show_message( pos, player_name, "Error",
+	"Please provide the name of the network this station ought to be connected to." );
       return;
    end
 
@@ -418,13 +488,16 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
    elseif( not( minetest.check_player_privs(player_name, {interact=true}))) then
 
-      minetest.chat_send_player(player_name, "There is no player with interact privilege named '"..tostring( player_name ).."'. Aborting.");
+      travelnet.show_message( pos, player_name, "Error",
+	"There is no player with interact privilege named '"..tostring( player_name ).."'. Aborting.");
       return;
 
    elseif( not( minetest.check_player_privs(player_name, {travelnet_attach=true}))
        and not( travelnet.allow_attach( player_name, owner_name, network_name ))) then
 
-       minetest.chat_send_player(player_name, "You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.");
+      travelnet.show_message( pos, player_name, "Error",
+	"You do not have the travelnet_attach priv which is required to attach your box to "..
+	"the network of someone else. Aborting.");
       return;
    end
 
@@ -443,7 +516,8 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    for k,v in pairs( travelnet.targets[ owner_name ][ network_name ] ) do
 
       if( k == station_name ) then
-         minetest.chat_send_player(player_name, "Error: A station named '"..station_name.."' already exists on this network. Please choose a diffrent name!");
+         travelnet.show_message( pos, player_name, "Error",
+	    "A station named '"..station_name.."' already exists on this network. Please choose a diffrent name!");
          return;
       end
 
@@ -452,8 +526,10 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
    -- we don't want too many stations in the same network because that would get confusing when displaying the targets
    if( anz+1 > travelnet.MAX_STATIONS_PER_NETWORK ) then
-      minetest.chat_send_player(player_name, "Error: Network '"..network_name.."' already contains the maximum number (="
-              ..(travelnet.MAX_STATIONS_PER_NETWORK)..") of allowed stations per network. Please choose a diffrent/new network name.");
+      travelnet.show_message( pos, player_name, "Error",
+	"Network '"..network_name.."' already contains the maximum number (="..
+	(travelnet.MAX_STATIONS_PER_NETWORK)..") of allowed stations per network. "..
+	"Please choose a diffrent/new network name.");
       return;
    end
      
@@ -532,6 +608,9 @@ end
 
 
 travelnet.on_receive_fields = function(pos, formname, fields, player)
+   if( not( pos )) then
+      return;
+   end
    local meta = minetest.get_meta(pos);
 
    local name = player:get_player_name();
@@ -543,8 +622,13 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
    -- show help text
    if( fields and fields.station_help_setup and fields.station_help_setup ~= "") then
+      -- simulate right-click
+      local node = minetest.get_node( pos );
+      if( node and node.name and minetest.registered_nodes[ node.name ] ) then
+         travelnet.show_message( pos, name, "--> Help <--",
 -- TODO: actually add help page
-      minetest.chat_send_player( name, "If only there would be any help...");
+		"If only there would be any help for "..tostring( node.name ).."..");
+      end
       return;
    end
 
