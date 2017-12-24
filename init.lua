@@ -144,10 +144,9 @@ travelnet.show_message = function( pos, player_name, title, message )
 	end
 	local formspec = "size[8,3]"..
 		"label[3,0;"..minetest.formspec_escape( title or "Error").."]"..
-		-- TODO: make nicer
-		"label[0,1;"..minetest.formspec_escape( message or "! no message !").."]"..
-		"button_exit[3.5,2;1.0,0.5;back;Back]"..
-		"button_exit[6.8,2;1.0,0.5;station_exit;Exit]"..
+		"textlist[0,0.5;8,1.5;;"..minetest.formspec_escape( message or "- nothing -")..";]"..
+		"button_exit[3.5,2.5;1.0,0.5;back;Back]"..
+		"button_exit[6.8,2.5;1.0,0.5;station_exit;Exit]"..
 		"field[20,20;0.1,0.1;pos2str;Pos;".. minetest.pos_to_string( pos ).."]";
 	minetest.show_formspec(player_name, "travelnet:show", formspec);
 end
