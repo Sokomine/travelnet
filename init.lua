@@ -24,6 +24,7 @@
  Changelog:
  24.12.17 - Added support for localization through intllib.
             Added localization for German (de).
+            Door opening/closing can now handle more general doors.
  17.07.17 - Added more detailled licence information.
             TNT and DungeonMasters ought to leave travelnets and elevators untouched now.
             Added function to register elevator doors.
@@ -593,8 +594,7 @@ travelnet.open_close_door = function( pos, player, mode )
       -- at least for homedecor, same facedir would mean "door closed"
 
       -- do not close the elevator door if it is already closed
-      if( mode==1 and ( door_node.name == 'travelnet:elevator_door_glass_closed'
-                     or door_node.name == 'travelnet:elevator_door_steel_closed' 
+      if( mode==1 and ( string.sub( door_node.name, -7 ) == '_closed'
                      -- handle doors that change their facedir
                      or ( door_node.param2 == this_node.param2
                       and door_node.name ~= 'travelnet:elevator_door_glass_open'
@@ -602,8 +602,7 @@ travelnet.open_close_door = function( pos, player, mode )
          return;
       end
       -- do not open the doors if they are already open (works only on elevator-doors; not on doors in general)
-      if( mode==2 and ( door_node.name == 'travelnet:elevator_door_glass_open'
-                     or door_node.name == 'travelnet:elevator_door_steel_open'
+      if( mode==2 and ( string.sub( door_node.name, -5 ) == '_open'
                      -- handle doors that change their facedir
                      or ( door_node.param2 ~= this_node.param2 
                       and door_node.name ~= 'travelnet:elevator_door_glass_closed'
