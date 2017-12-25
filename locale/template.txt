@@ -1,0 +1,92 @@
+# Template
+
+### config.lua ###
+
+### init.lua ###
+
+allows to attach travelnet boxes to travelnets of other players =
+allows to dig travelnet boxes which belog to nets of other players =
+
+[Mod travelnet] Error: Savefile '%s' could not be written. =
+[Mod travelnet] Error: Savefile '%s' not found. =
+
+Back =
+Exit =
+
+Travelnet-box (unconfigured) =
+
+Configure this travelnet station =
+Name of this station =
+How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"... =
+Assign to Network: =
+You can have more than one network. If unsure, use \"%s\" =
+Owned by: =
+Unless you know what you are doing, leave this empty. =
+Help =
+Save =
+Update failed! Resetting this box on the travelnet. =
+Station '%s' =
+has been reattached to the network '%s'. =
+Locked travelnet. Type /help for help: =
+Punch box to update target list. =
+Travelnet-Box =
+Name of this station: =
+Assigned to Network: =
+Click on target to travel there: =
+G =
+This station is already the first one on the list. =
+This station is already the last one on the list. =
+Position in list: =
+move up =
+move down =
+on travelnet '%s' =
+owned by %s =
+ready for usage. Right-click to travel, punch to update. =
+at %s m =
+Error =
+Please provide a name for this station. =
+Please provide the name of the network this station ought to be connected to. =
+There is no player with interact privilege named '%s'. Aborting. =
+You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting. =
+A station named '%s' already exists on this network. Please choose a diffrent name! =
+Network '%s' =
+already contains the maximum number (=%s) of allowed stations per network. Please choose a diffrent/new network name. =
+has been added to the network '%s' =
+, which now consists of %s station(s). =
+Station: =
+Network: =
+No help available yet. =
+Please click on the target you want to travel to. =
+There is something wrong with the configuration of this station. =
+This travelnet is lacking data and/or improperly configured. =
+does not exist (anymore?) on this network. =
+Initiating transfer to station '%s'. =
+Could not find information about the station that is to be removed. =
+Could not find the station that is to be removed. =
+has been REMOVED from the network '%s'. =
+This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner. =
+This %s belongs to %s. You can't remove it. =
+
+
+### travelnet.lua ###
+Not enough vertical space to place the travelnet box! =
+
+
+### elevator.lua ###
+Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same. =
+This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on \"store\" to set it up. Or just punch it to set the height as station name. =
+Your nearest elevator network is located =
+m behind this elevator and =
+m in front of this elevator and =
+m to the left =
+m to the right =
+, located at x =
+This elevator here will start a new shaft/network. =
+This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at differnt heights will be able to connect to this elevator. =
+Elevator =
+Elevator (unconfigured) =
+
+
+### doors.lua ###
+elevator door (open) =
+elevator door (closed) =

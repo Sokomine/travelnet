@@ -1,6 +1,7 @@
 -- This version of the travelnet box allows to move up or down only.
 -- The network name is determined automaticly from the position (x/z coordinates).
 -- >utor: Sokomine
+local S = travelnet.S;
 
 travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	if( not( pos ) or not(pos.x) or not(pos.z) or not( owner_name )) then
@@ -8,9 +9,9 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	end
 
 	if( not( travelnet.targets[ owner_name ] )) then
-		minetest.chat_send_player( owner_name, "Congratulations! This is your first elevator."..
+		minetest.chat_send_player( owner_name, S("Congratulations! This is your first elevator."..
 			"You can build an elevator network by placing further elevators somewhere above "..
-			"or below this one. Just make sure that the x and z coordinate are the same.");
+			"or below this one. Just make sure that the x and z coordinate are the same."));
 		return;
 	end
 
@@ -19,10 +20,10 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	if( travelnet.targets[ owner_name ][ network_name ]
 	  -- does the network have any members at all?
 	  and next( travelnet.targets[ owner_name ][ network_name ], nil )) then
-		minetest.chat_send_player( owner_name, "This elevator will automaticly connect to the "..
+		minetest.chat_send_player( owner_name, S("This elevator will automaticly connect to the "..
 			"other elevators you have placed at diffrent heights. Just enter a station name "..
 			"and click on \"store\" to set it up. Or just punch it to set the height as station "..
-			"name.");
+			"name."));
 		return;
 	end
 
@@ -47,46 +48,47 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 		end
 	end
 	if( nearest_name ~= "" ) then
-		local text = "Your nearest elevator network is located ";
+		local text = S("Your nearest elevator network is located").." ";
 		-- in front of/behind
 		if(    (param2==0 and nearest_dist_z>=0)or (param2==2 and nearest_dist_z<=0)) then
-			text = text..tostring( math.abs(nearest_dist_z )).." m behind this elevator and ";
+			text = text..tostring( math.abs(nearest_dist_z )).." "..S("m behind this elevator and");
 		elseif((param2==1 and nearest_dist_x>=0)or (param2==3 and nearest_dist_x<=0)) then
-			text = text..tostring( math.abs(nearest_dist_x )).." m behind this elevator and ";
+			text = text..tostring( math.abs(nearest_dist_x )).." "..S("m behind this elevator and");
 		elseif((param2==0 and nearest_dist_z< 0)or (param2==2 and nearest_dist_z> 0)) then
-			text = text..tostring( math.abs(nearest_dist_z )).." m in front of this elevator and ";
+			text = text..tostring( math.abs(nearest_dist_z )).." "..S("m in front of this elevator and");
 		elseif((param2==1 and nearest_dist_x< 0)or (param2==3 and nearest_dist_x> 0)) then
-			text = text..tostring( math.abs(nearest_dist_x )).." m in front of this elevator and ";
-		else text = text.." ERROR ";
+			text = text..tostring( math.abs(nearest_dist_x )).." "..S("m in front of this elevator and");
+		else text = text..S(" ERROR");
 		end
+		text = text.." ";
 
 		-- right/left
 		if(    (param2==0 and nearest_dist_x< 0)or (param2==2 and nearest_dist_x> 0)) then
-			text = text..tostring( math.abs(nearest_dist_x )).." m to the left";
+			text = text..tostring( math.abs(nearest_dist_x )).." "..S("m to the left");
 		elseif((param2==1 and nearest_dist_z>=0)or (param2==3 and nearest_dist_z<=0)) then
-			text = text..tostring( math.abs(nearest_dist_z )).." m to the left";
+			text = text..tostring( math.abs(nearest_dist_z )).." "..S("m to the left");
 		elseif((param2==0 and nearest_dist_x>=0)or (param2==2 and nearest_dist_x<=0)) then
-			text = text..tostring( math.abs(nearest_dist_x )).." m to the right";
+			text = text..tostring( math.abs(nearest_dist_x )).." "..S("m to the right");
 		elseif((param2==1 and nearest_dist_z< 0)or (param2==3 and nearest_dist_z> 0)) then
-			text = text..tostring( math.abs(nearest_dist_z )).." m to the right";
-		else text = text.." ERROR ";
+			text = text..tostring( math.abs(nearest_dist_z )).." "..S("m to the right");
+		else text = text..S(" ERROR");
 		end
 
 		minetest.chat_send_player( owner_name, text..
-			", located at x="..tostring( pos.x+nearest_dist_x)..
+			S(", located at x").."="..tostring( pos.x+nearest_dist_x)..
 			", z="..tostring( pos.z+nearest_dist_z)..
-			" This elevator here will start a new shaft/network." );
+			". "..S("This elevator here will start a new shaft/network."));
 	else
-		minetest.chat_send_player( owner_name, "This is your first elevator. It differs from "..
+		minetest.chat_send_player( owner_name, S("This is your first elevator. It differs from "..
 			"travelnet networks by only allowing movement in vertical direction (up or down). "..
 			"All further elevators which you will place at the same x,z coordinates at differnt "..
-			"heights will be able to connect to this elevator.");
+			"heights will be able to connect to this elevator."));
 	end
 end
 
 
 minetest.register_node("travelnet:elevator", {
-	description = "Elevator",
+	description = S("Elevator"),
 	drawtype = "mesh",
 	mesh = "travelnet_elevator.obj",
 	sunlight_propagates = true,
@@ -127,17 +129,17 @@ minetest.register_node("travelnet:elevator", {
 
     after_place_node  = function(pos, placer, itemstack)
 	local meta = minetest.get_meta(pos);
-        meta:set_string("infotext",       "Elevator (unconfigured)");
+        meta:set_string("infotext",       S("Elevator (unconfigured)"));
         meta:set_string("station_name",   "");
         meta:set_string("station_network","");
         meta:set_string("owner",          placer:get_player_name() );
         -- request initial data
         meta:set_string("formspec", 
                             "size[12,10]"..
-                            "field[0.3,5.6;6,0.7;station_name;Name of this station:;]"..
+                            "field[0.3,5.6;6,0.7;station_name;"..S("Name of this station:")..";]"..
 --                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
 --                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
-                            "button_exit[6.3,6.2;1.7,0.7;station_set;Store]" );
+                            "button_exit[6.3,6.2;1.7,0.7;station_set;"..S("Store").."]" );
 
        local p = {x=pos.x, y=pos.y+1, z=pos.z}
        local p2 = minetest.dir_to_facedir(placer:get_look_dir())
@@ -170,7 +172,7 @@ minetest.register_node("travelnet:elevator", {
        local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z});
        -- leftover elevator_top nodes can be removed by placing a new elevator underneath
        if( node ~= nil and node.name ~= "air" and node.name ~= 'travelnet:elevator_top') then
-          minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
+          minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
           return;
        end
        return minetest.item_place(itemstack, placer, pointed_thing);

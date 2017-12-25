@@ -1,0 +1,92 @@
+# Template
+
+### config.lua ###
+
+### init.lua ###
+
+allows to attach travelnet boxes to travelnets of other players = erlaubt es, Stationen zu den Reisenetzwerken anderer Spieler hinzuzufügen
+allows to dig travelnet boxes which belog to nets of other players = erlaubt es, die Reisenetz-Stationen anderer Spieler zu entfernen
+
+[Mod travelnet] Error: Savefile '%s' could not be written. = [Mod travelnet] Fehler: Sicherungsdatei '%s' konnte nicht geschrieben werden.
+[Mod travelnet] Error: Savefile '%s' not found. = [Mod travelnet] Fehler: Sicherungsdatei '%s' nicht gefunden.
+
+Back = Zurück
+Exit = Ende
+
+Travelnet-box (unconfigured) = Reisenetz-Box (nicht konfiguriert)
+
+Configure this travelnet station = Konfiguration dieser Reisenetz-Box
+Name of this station = Name dieser Reisenetz-Box
+How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"... = Wie willst du diesen Ort nennen? Beispiel: \"mein erstes Haus\", \"Mine\", \"Laden\"...
+Assign to Network: = Station dem folgendem Netzwerk zuweisen:
+You can have more than one network. If unsure, use \"%s\" = Du kannst mehrere Netzwerke anlegen. Falls du nicht weißt, was du tun sollst, wähle \"%s\"
+Owned by: = Besitzer:
+Unless you know what you are doing, leave this empty. = Wenn du nicht weißt, wozu dieses Feld dient, laß es leer.
+Help = Hilfe
+Save = Speichern
+Update failed! Resetting this box on the travelnet. = Aktualisierung gescheitert. Konfiguration der Reisenetz-Box wird zurückgesetzt.
+Station '%s' = Station '%s'
+has been reattached to the network '%s'. = wurde dem Netzwerk '%s' wieder hinzugefügt.
+Locked travelnet. Type /help for help: = Abgeschlossene Reisenetz-Box. Tippe /help für Hilfe:
+Punch box to update target list. = Reisenetz-Box mit Linksklick aktualisieren.
+Travelnet-Box = Reisenetz-Box
+Name of this station: = Name dieser Station:
+Assigned to Network: = Zugehöriges Netzwerk:
+Click on target to travel there: = Klicke auf das Ziel um dorthin zu reisen:
+G = E
+This station is already the first one on the list. = Diese Reisenetz-Box ist bereits die erste auf der Liste.
+This station is already the last one on the list. = Diese Reisenetz-Box ist bereits die letzte auf der Liste.
+Position in list: = Listenposition:
+move up = hoch
+move down = runter
+on travelnet '%s' = im Reisenetzwerk '%s'
+owned by %s = Eigentum von %s
+ready for usage. Right-click to travel, punch to update. = bereit für die Nutzung. Rechtsklick um zu Reisen, Linksklick für Update.
+at %s m = in %s m Höhe
+Error = Fehler
+Please provide a name for this station. = Bitte gib einen Namen für diese Reisenetz-Box an.
+Please provide the name of the network this station ought to be connected to. = Bitte gib einen Namen für das Netzwerk an zu dem diese Reisenetz-Box gehören soll.
+There is no player with interact privilege named '%s'. Aborting. = Es gibt keinen Spieler mit interact-Recht names '%s'. Abbruch.
+You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting. = Dir fehlt das travelnet_attach-Recht, welches für das Hinzufügen von Reisenetz-Boxen zu Netzwerken nötig ist, die anderen Spielern gehören. Abbruch.
+A station named '%s' already exists on this network. Please choose a diffrent name! = Eine Reisenetz-Box namens '%s' existiert bereits in diesem Netzwerk. Abbruch.
+Network '%s' = Netzwerk '%s'
+already contains the maximum number (=%s) of allowed stations per network. Please choose a diffrent/new network name. = enthält bereits die maixmale Anzahl (=%s) erlaubert Stationen pro Netzwerk. Bitte wähle ein anderes bzw. neues Netzwerk.
+has been added to the network '%s' = wurde an das Netzwerk '%s' angeschlossen.
+, which now consists of %s station(s). = , das nun aus %s Station(en) besteht.
+Station: = Station:
+Network: = Netzwerk:
+No help available yet. = Noch keine Hilfe eingebaut.
+Please click on the target you want to travel to. = Bitte klicke auf das Ziel zu dem du reisen willst.
+There is something wrong with the configuration of this station. = Die Konfiguration dieser Reisenetz-Box ist fehlerhaft.
+This travelnet is lacking data and/or improperly configured. = Diese Reisenetz-Box ist fehlerhaft oder unvollständig konfiguriert.
+does not exist (anymore?) on this network. = gibt es nicht (mehr?) in diesem Netzwerk.
+Initiating transfer to station '%s'. = leite Reise zur Station '%s' ein.
+Could not find information about the station that is to be removed. = Konnte keine Informationen über die zu entfernende Station finden.
+Could not find the station that is to be removed. = Konnte die zu entfernende Station nicht finden.
+has been REMOVED from the network '%s'. = wurde vom Netzwerk '%s' ENTFERNT.
+This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner. = Diese Reisenetz-Box wurde noch nicht konfiguriert. Bitte konfiguriere sie um sie in Besitz zu nehmen. Anschließend kannst du sie auch wieder entfernen da du dann der Besitzer bist.
+This %s belongs to %s. You can't remove it. = Diese Reisenetz-Box gehört %s. Du kannst sie nicht entfernen.
+
+
+### travelnet.lua ###
+Not enough vertical space to place the travelnet box! = Nicht genug Platz (vertikal) um die Reisenetz-Box zu setzen!
+
+
+### elevator.lua ###
+Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same. =
+This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on \"store\" to set it up. Or just punch it to set the height as station name. = Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf \"Speichern\" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
+Your nearest elevator network is located = Dein nächstgelegenes Aufzugs-Netzwerk befindet sich
+m behind this elevator and = m hinter diesem Aufzug und
+m in front of this elevator and = m vor diesem Aufzug und
+m to the left = m links
+m to the right = m rechts
+, located at x = , an Position x
+This elevator here will start a new shaft/network. = Dieser Aufzug hier wird einen neuen Schaft bzw. ein neues Netzwerk erstellen.
+This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at differnt heights will be able to connect to this elevator. = Dies ist dein erster Aufzug. Der Aufzug unterscheidet sich von Reisenetz-Boxen insofern als daß er nur Reisen in vertikaler Richtung (hoch und runter) erlaubt. Alle folgenden Aufzüge, die du an die selben x,z Koordinaten auf verschiedenen Höhenpositionen setzen wirst, werden sich automatisch mit diesem Aufzug verbinden.
+Elevator = Aufzug
+Elevator (unconfigured) = Aufzug (nicht konfiguriert)
+
+
+### doors.lua ###
+elevator door (open) = Aufzugstür (offen)
+elevator door (closed) = Aufzugstür (geschlossen)

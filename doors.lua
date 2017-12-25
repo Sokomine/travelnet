@@ -2,11 +2,12 @@
 -- All doors (not only these here) in front of a travelnet or elevator are opened automaticly when a player arrives
 -- and are closed when a player departs from the travelnet or elevator.
 -- Autor: Sokomine
+local S = travelnet.S;
 
 travelnet.register_door = function( node_base_name, def_tiles, material )
 
 	minetest.register_node( node_base_name.."_open", {
-		description = "elevator door (open)",
+		description = S("elevator door (open)"),
 		drawtype = "nodebox",
                 -- top, bottom, side1, side2, inner, outer
 		tiles = def_tiles,
@@ -36,7 +37,7 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 	})
 
 	minetest.register_node(node_base_name.."_closed", {
-		description = "elevator door (closed)",
+		description = S("elevator door (closed)"),
 		drawtype = "nodebox",
                 -- top, bottom, side1, side2, inner, outer
 		tiles = def_tiles,

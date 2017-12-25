@@ -3,9 +3,11 @@
 --   digging of such a travelnet is limited to the owner and to people with the travelnet_remove priv (useful for admins to clean up)
 -- (this can be overrided in config.lua)
 -- Author: Sokomine
+local S = travelnet.S;
+
 minetest.register_node("travelnet:travelnet", {
 
-	description = "Travelnet box",
+	description = S("Travelnet-Box"),
 
 	drawtype = "mesh",
 	mesh = "travelnet.obj",
@@ -81,7 +83,7 @@ minetest.register_node("travelnet:travelnet", {
        local pos = pointed_thing.above;
        if( minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name ~= "air" ) then
 
-          minetest.chat_send_player( placer:get_player_name(), 'Not enough vertical space to place the travelnet box!' )
+          minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
           return;
        end
        return minetest.item_place(itemstack, placer, pointed_thing);
