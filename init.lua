@@ -22,6 +22,8 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 22.09.18 - If in creative mode, wield a diamond pick to dig the station. This avoids
+            conflicts with too fast punches.
  24.12.17 - Added support for localization through intllib.
             Added localization for German (de).
             Door opening/closing can now handle more general doors.
@@ -136,6 +138,13 @@ end
 travelnet.check_if_trying_to_dig = function( puncher, node )
 	-- if in doubt: show formspec
 	if( not( puncher) or not( puncher:get_wielded_item())) then
+		return false;
+	end
+	-- show menu when in creative mode
+        if(   creative
+	  and creative.is_enabled_for(puncher:get_player_name())
+          and (not(puncher:get_wielded_item())
+                or puncher:get_wielded_item():get_name()~="default:pick_diamond")) then
 		return false;
 	end
 	local tool_capabilities = puncher:get_wielded_item():get_tool_capabilities();
@@ -844,6 +853,15 @@ travelnet.can_dig = function( pos, player, description )
    local meta          = minetest.get_meta( pos );
    local owner         = meta:get_string('owner');
    local network_name  = meta:get_string( "station_network" );
+
+   -- in creative mode, accidental digging could happen too easily when trying to update the net
+   if(creative and creative.is_enabled_for(player:get_player_name())) then
+     -- only a diamond pick can dig the travelnet
+     if( not(player:get_wielded_item())
+          or player:get_wielded_item():get_name()~="default:pick_diamond") then
+        return false;
+     end
+   end
 
    -- players with that priv can dig regardless of owner
    if( minetest.check_player_privs(name, {travelnet_remove=true})
