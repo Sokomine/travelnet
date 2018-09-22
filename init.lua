@@ -22,6 +22,7 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 22.09.18 - Move up/move down no longer close the formspec.
  22.09.18 - If in creative mode, wield a diamond pick to dig the station. This avoids
             conflicts with too fast punches.
  24.12.17 - Added support for localization through intllib.
@@ -459,8 +460,8 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
    formspec = formspec..
          "label[8.0,1.6;"..S("Position in list:").."]"..
          "button_exit[11.3,0.0;1.0,0.5;station_exit;"..S("Exit").."]"..
-         "button_exit[9.6,1.6;1.4,0.5;move_up;"..S("move up").."]"..
-         "button_exit[10.9,1.6;1.4,0.5;move_down;"..S("move down").."]";
+         "button[9.6,1.6;1.4,0.5;move_up;"..S("move up").."]"..
+         "button[10.9,1.6;1.4,0.5;move_down;"..S("move down").."]";
 
    meta:set_string( "formspec", formspec );
 
