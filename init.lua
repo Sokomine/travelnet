@@ -144,8 +144,9 @@ travelnet.check_if_trying_to_dig = function( puncher, node )
 	-- show menu when in creative mode
         if(   creative
 	  and creative.is_enabled_for(puncher:get_player_name())
-          and (not(puncher:get_wielded_item())
-                or puncher:get_wielded_item():get_name()~="default:pick_diamond")) then
+--          and (not(puncher:get_wielded_item())
+--                or puncher:get_wielded_item():get_name()~="default:pick_diamond")) then
+		) then
 		return false;
 	end
 	local tool_capabilities = puncher:get_wielded_item():get_tool_capabilities();
