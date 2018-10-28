@@ -9,6 +9,7 @@ allows to dig travelnet boxes which belog to nets of other players = erlaubt es,
 
 [Mod travelnet] Error: Savefile '%s' could not be written. = [Mod travelnet] Fehler: Sicherungsdatei '%s' konnte nicht geschrieben werden.
 [Mod travelnet] Error: Savefile '%s' not found. = [Mod travelnet] Fehler: Sicherungsdatei '%s' nicht gefunden.
+[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'. = [Mod travelnet] Fehler: Sicherungsdatei '%s' ist beschädigt. Backup wurde unter '%s' gespeichert.
 
 Back = Zurück
 Exit = Ende

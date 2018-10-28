@@ -78,6 +78,10 @@
           - target list is now centered if there are less than 9 targets
 --]]
 
+-- Required to save the travelnet data properly in all cases
+if not minetest.safe_file_write then
+	error("[Mod travelnet] Your Minetest version is no longer supported. (version < 0.4.17)")
+end
 
 travelnet = {};
 
@@ -98,37 +102,43 @@ minetest.register_privilege("travelnet_remove", { description = S("allows to dig
 -- read the configuration
 dofile(minetest.get_modpath("travelnet").."/config.lua"); -- the normal, default travelnet
 
-
+travelnet.mod_data_path = minetest.get_worldpath().."/mod_travelnet.data"
 
 -- TODO: save and restore ought to be library functions and not implemented in each individual mod!
 -- called whenever a station is added or removed
 travelnet.save_data = function()
    
    local data = minetest.serialize( travelnet.targets );
-   local path = minetest.get_worldpath().."/mod_travelnet.data";
 
-   local file = io.open( path, "w" );
-   if( file ) then
-      file:write( data );
-      file:close();
-   else
-      print(S("[Mod travelnet] Error: Savefile '%s' could not be written."):format(tostring(path)));
+   local success = minetest.safe_file_write( travelnet.mod_data_path, data );
+   if( not success ) then
+      print(S("[Mod travelnet] Error: Savefile '%s' could not be written.")
+         :format(travelnet.mod_data_path));
    end
 end
 
 
 travelnet.restore_data = function()
-
-   local path = minetest.get_worldpath().."/mod_travelnet.data";
    
-   local file = io.open( path, "r" );
-   if( file ) then
-      local data = file:read("*all");
-      travelnet.targets = minetest.deserialize( data );
-      file:close();
-   else
-      print(S("[Mod travelnet] Error: Savefile '%s' not found."):format(tostring(path)));
+   local file = io.open( travelnet.mod_data_path, "r" );
+   if( not file ) then
+      print(S("[Mod travelnet] Error: Savefile '%s' not found.")
+         :format(travelnet.mod_data_path));
+      return;
    end
+
+   local data = file:read("*all");
+   travelnet.targets = minetest.deserialize( data );
+
+   if( not travelnet.targets ) then
+       local backup_file = travelnet.mod_data_path..".bak"
+       print(S("[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'.")
+          :format(travelnet.mod_data_path, backup_file));
+
+       minetest.safe_file_write( backup_file, data );
+       travelnet.targets = {};
+   end
+   file:close();
 end
 
 

@@ -9,6 +9,7 @@ allows to dig travelnet boxes which belog to nets of other players =
 
 [Mod travelnet] Error: Savefile '%s' could not be written. =
 [Mod travelnet] Error: Savefile '%s' not found. =
+[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'. =
 
 Back =
 Exit =
