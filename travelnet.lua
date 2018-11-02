@@ -81,7 +81,8 @@ minetest.register_node("travelnet:travelnet", {
     on_place = function(itemstack, placer, pointed_thing)
 
        local pos = pointed_thing.above;
-       if( minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name ~= "air" ) then
+       local node_name = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name
+       if( not node_name or not minetest.registered_nodes[node_name].buildable_to ) then
 
           minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
           return;
