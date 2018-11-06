@@ -81,7 +81,6 @@ minetest.register_node("travelnet:travelnet", {
     on_place = function(itemstack, placer, pointed_thing)
 
        local pos = pointed_thing.above;
-       local node_name = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name
        local def = minetest.registered_nodes[
              minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name]
        if not def or not def.buildable_to then
