@@ -1,3 +1,4 @@
+# TravelNet
 
 How this works: 
 
@@ -9,3 +10,11 @@ How this works:
 
 An unconfigured travelnet box can be configured by anyone. If it is misconfigured, just dig it and place it anew.
 All stations that have the same network name set and are owned by the same user connect to the same network.
+
+LICENSE
+
+The mod was written by me, Sokomine, and includes small contributions from other contributors.
+License: GPLv3 (see file LICENSE)
+
+The models and textures as found in the textures/ and models/ folders where created by VanessaE
+and are provided under the CC0 license.
