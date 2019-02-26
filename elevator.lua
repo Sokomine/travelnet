@@ -114,16 +114,12 @@ minetest.register_node("travelnet:elevator", {
 		},
 	},
 
-	tiles = {
-		"travelnet_elevator_front.png",
-		"travelnet_elevator_inside_controls.png",
-		"travelnet_elevator_sides_outside.png",
-		"travelnet_elevator_inside_ceiling.png",
-		"travelnet_elevator_inside_floor.png",
-		"default_steel_block.png"
-	},
-	inventory_image = "travelnet_elevator_inv.png",
-	groups = {cracky=1,choppy=1,snappy=1},
+	tiles = travelnet.tiles_elevator,
+
+	inventory_image = travelnet.elevator_inventory_image,
+	groups = {cracky=1,choppy=1,snappy=1,
+		-- for MineClone2
+		handy=1, axey=1, pickaxey=1, building_block=1, material_wood=1},
 
     light_source = 10,
 

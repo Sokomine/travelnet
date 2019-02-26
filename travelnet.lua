@@ -39,16 +39,14 @@ minetest.register_node("travelnet:travelnet", {
 		},
 	},
 
-	tiles = {
-		"travelnet_travelnet_front.png",  -- backward view
-		"travelnet_travelnet_back.png", -- front view
-		"travelnet_travelnet_side.png", -- sides :)
-		"default_steel_block.png",  -- view from top
-		"default_clay.png",  -- view from bottom
-	},
-    inventory_image = "travelnet_inv.png",
+	tiles = travelnet.tiles_travelnet,
 
-    groups = {cracky=1,choppy=1,snappy=1},
+	inventory_image = travelnet.travelnet_inventory_image,
+
+	groups = {cracky=1,choppy=1,snappy=1,
+		-- for MineClone2
+		handy=1, axey=1, pickaxey=1, building_block=1, material_wood=1},
+
 
     light_source = 10,
 

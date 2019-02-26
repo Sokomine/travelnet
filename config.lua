@@ -29,6 +29,59 @@ travelnet.elevator_recipe = {
 		{"default:steel_ingot", "",              "default:steel_ingot", },
 		{"default:steel_ingot", "default:glass", "default:steel_ingot", }
 }
+travelnet.tiles_travelnet = {
+		"travelnet_travelnet_front.png",  -- backward view
+		"travelnet_travelnet_back.png", -- front view
+		"travelnet_travelnet_side.png", -- sides :)
+		"default_steel_block.png",  -- view from top
+		"default_clay.png",  -- view from bottom
+		}
+travelnet.tiles_elevator = {
+		"travelnet_elevator_front.png",
+		"travelnet_elevator_inside_controls.png",
+		"travelnet_elevator_sides_outside.png",
+		"travelnet_elevator_inside_ceiling.png",
+		"travelnet_elevator_inside_floor.png",
+		"default_steel_block.png"
+		}
+travelnet.travelnet_inventory_image = "travelnet_inv.png"
+travelnet.elevator_inventory_image  = "travelnet_elevator_inv.png"
+
+if( minetest.registered_nodes["mcl_core:wood"]) then
+	travelnet.travelnet_recipe = {
+                {"mcl_stairs:slab_wood", "mcl_stairs:slab_wood", "mcl_stairs:slab_wood",},
+		{"mesecons_torch:mesecon_torch_on", "mcl_chests:chest", "mesecons_torch:mesecon_torch_on"},
+		{"mesecons_torch:mesecon_torch_on", "mcl_chests:chest", "mesecons_torch:mesecon_torch_on"},
+--		  {"core:glass", "mcl_core:iron_ingot",           "mcl_core:glass", },
+--                {"mcl_core:glass", "mesecons_torch:redstoneblock", "mcl_core:glass", },
+--                {"mcl_core:glass", "mcl_core:iron_ingot",           "mcl_core:glass", }
+	}
+	travelnet.elevator_recipe = {
+                {"mcl_stairs:slab_wood", "mcl_stairs:slab_wood", "mcl_stairs:slab_wood",},
+		{"mesecons_torch:mesecon_torch_on", "", "mesecons_torch:mesecon_torch_on"},
+		{"mesecons_torch:mesecon_torch_on", "", "mesecons_torch:mesecon_torch_on"},
+--	        {"mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot", },
+--		{"mcl_core:iron_ingot", "",               "mcl_core:iron_ingot", },
+--		{"mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot", }
+	}
+	travelnet.tiles_travelnet = {
+		"default_wood.png^[transformR90",  -- backward view
+		"default_wood.png^[transformR90", -- front view
+		"default_wood.png^[transformR90", -- sides :)
+		"default_wood.png^[transformR90",  -- view from top
+		"default_wood.png^[transformR90",  -- view from bottom
+	}
+	travelnet.tiles_elevator = {
+		"mcl_core_planks_big_oak.png^[transformR90", -- front
+		"mcl_core_planks_big_oak.png^[transformR90", -- inside
+		"mcl_core_planks_big_oak.png^[transformR90", -- sides outside
+		"mcl_core_planks_big_oak.png^[transformR90", -- inside ceiling
+		"mcl_core_planks_big_oak.png^[transformR90", -- inside floor
+		"mcl_core_planks_big_oak.png^[transformR90", -- top
+		}
+	travelnet.travelnet_inventory_image = nil
+	travelnet.elevator_inventory_image  = nil
+end
 
 -- if this function returns true, the player with the name player_name is
 -- allowed to add a box to the network named network_name, which is owned
