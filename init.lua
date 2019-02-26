@@ -224,6 +224,7 @@ travelnet.reset_formspec = function( meta )
       meta:set_string("formspec",
 		"size[10,6.0]"..
 		"label[2.0,0.0;--> "..S("Configure this travelnet station").." <--]"..
+		"button_exit[8.0,0.0;2.2,0.7;station_dig;"..S("Remove station").."]"..
 		"field[0.3,1.2;9,0.9;station_name;"..S("Name of this station")..":;"..
 			minetest.formspec_escape(station_name or "").."]"..
 		"label[0.3,1.5;"..S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"...").."]"..
@@ -461,6 +462,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
    formspec = formspec..
          "label[8.0,1.6;"..S("Position in list:").."]"..
          "button_exit[11.3,0.0;1.0,0.5;station_exit;"..S("Exit").."]"..
+         "button_exit[10.0,0.5;2.2,0.7;station_dig;"..S("Remove station").."]"..
          "button[9.6,1.6;1.4,0.5;move_up;"..S("move up").."]"..
          "button[10.9,1.6;1.4,0.5;move_down;"..S("move down").."]";
 
@@ -655,6 +657,50 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       return;
    end
 
+   -- the player wants to remove the station
+   if( fields.station_dig ) then
+      local owner = meta:get_string( "owner" );
+
+      local node = minetest.get_node(pos)
+      local description = "station"
+      if( node and node.name and node.name == "travelnet:travelnet") then
+         description = "travelnet box"
+      elseif( node and node.name and node.name == "travelnet:elevator") then
+         description = "elevator"
+      else
+         minetest.chat_send_player(name, "Error: Unkown node.");
+         return
+      end
+      -- players with travelnet_remove priv can dig the station
+      if( not(minetest.check_player_privs(name, {travelnet_remove=true}))
+       -- the function travelnet.allow_dig(..) may allow additional digging
+       and not(travelnet.allow_dig( name, owner, network_name ))
+       -- the owner can remove the station
+       and owner ~= name
+       -- stations without owner can be removed by anybody
+       and owner ~= "") then
+         minetest.chat_send_player(name, S("This %s belongs to %s. You can't remove it."):format(description, tostring( meta:get_string('owner'))));
+         return
+      end
+
+      local pinv = player:get_inventory()
+      if(not(pinv:room_for_item("main", node.name))) then
+         minetest.chat_send_player(name, S("You do not have enough room in your inventory."));
+         return
+      end
+
+      -- give the player the box
+      pinv:add_item("main", node.name)
+      -- remove the box from the data structure
+      travelnet.remove_box( pos, nil, meta:to_table(), player );
+      -- remove the node as such
+      minetest.remove_node(pos)
+      return;
+   end
+
+
+
+
    -- if the box has not been configured yet
    if( meta:get_string("station_network")=="" ) then
 
@@ -847,7 +893,12 @@ end
 
 
 travelnet.can_dig = function( pos, player, description )
+   -- forbid digging of the travelnet
+   return false;
+end
 
+-- obsolete function
+travelnet.can_dig_old = function( pos, player, description )
    if( not( player )) then
       return false;
    end

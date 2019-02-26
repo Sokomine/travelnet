@@ -117,9 +117,7 @@ minetest.register_node("travelnet:elevator", {
 	tiles = travelnet.tiles_elevator,
 
 	inventory_image = travelnet.elevator_inventory_image,
-	groups = {cracky=1,choppy=1,snappy=1,
-		-- for MineClone2
-		handy=1, axey=1, pickaxey=1, building_block=1, material_wood=1},
+	groups = {}, --cracky=1,choppy=1,snappy=1,
 
     light_source = 10,
 
@@ -145,9 +143,7 @@ minetest.register_node("travelnet:elevator", {
     
     on_receive_fields = travelnet.on_receive_fields,
     on_punch          = function(pos, node, puncher)
-                          if( not( travelnet.check_if_trying_to_dig( puncher, node ))) then
                              travelnet.update_formspec(pos, puncher:get_player_name())
-                          end
     end,
 
     can_dig = function( pos, player )
