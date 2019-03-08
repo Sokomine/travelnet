@@ -22,6 +22,9 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 26.02.19 - Removing a travelnet can now be done by clicking on a button (no need to
+            wield a diamond pick anymore)
+ 26.02.19 - Added compatibility with MineClone2
  22.09.18 - Move up/move down no longer close the formspec.
  22.09.18 - If in creative mode, wield a diamond pick to dig the station. This avoids
             conflicts with too fast punches.
