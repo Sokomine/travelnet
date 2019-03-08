@@ -48,6 +48,7 @@ travelnet.travelnet_inventory_image = "travelnet_inv.png"
 travelnet.elevator_inventory_image  = "travelnet_elevator_inv.png"
 
 if( minetest.registered_nodes["mcl_core:wood"]) then
+	local w_texture = "default_wood.png^[transformR90"; -- "mcl_doors_door_spruce_lower.png";
 	travelnet.travelnet_recipe = {
                 {"mcl_stairs:slab_wood", "mcl_stairs:slab_wood", "mcl_stairs:slab_wood",},
 		{"mesecons_torch:mesecon_torch_on", "mcl_chests:chest", "mesecons_torch:mesecon_torch_on"},
@@ -65,11 +66,11 @@ if( minetest.registered_nodes["mcl_core:wood"]) then
 --		{"mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot", }
 	}
 	travelnet.tiles_travelnet = {
-		"default_wood.png^[transformR90",  -- backward view
-		"default_wood.png^[transformR90", -- front view
-		"default_wood.png^[transformR90", -- sides :)
-		"default_wood.png^[transformR90",  -- view from top
-		"default_wood.png^[transformR90",  -- view from bottom
+		w_texture,  -- backward view
+		w_texture, -- front view
+		w_texture, -- sides :)
+		w_texture,  -- view from top
+		w_texture,  -- view from bottom
 	}
 	travelnet.tiles_elevator = {
 		"mcl_core_planks_big_oak.png^[transformR90", -- front
