@@ -820,13 +820,6 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:moveto( target_pos, false);
 
-   if( travelnet.travelnet_sound_enabled ) then
-      if ( this_node.name == 'travelnet:elevator' ) then
-         minetest.sound_play("travelnet_bell", {pos = pos, gain = 0.75, max_hear_distance = 10,});
-      else
-         minetest.sound_play("travelnet_travel", {pos = target_pos, gain = 0.75, max_hear_distance = 10,})
-      end
-   end
    if( travelnet.travelnet_effect_enabled ) then 
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
@@ -858,6 +851,15 @@ travelnet.rotate_player = function( target_pos, player, tries )
          minetest.after( 0, travelnet.rotate_player, target_pos, player, tries+1 )
       end
       return
+   end
+
+   -- play sound at the target position as well
+   if( travelnet.travelnet_sound_enabled ) then
+      if ( node2.name == 'travelnet:elevator' ) then
+         minetest.sound_play("travelnet_bell", {pos = target_pos, gain = 0.75, max_hear_distance = 10,});
+      else
+         minetest.sound_play("travelnet_travel", {pos = target_pos, gain = 0.75, max_hear_distance = 10,});
+      end
    end
 
    -- do this only on servers where the function exists

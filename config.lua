@@ -119,3 +119,5 @@ travelnet.allow_travel = function( player_name, owner_name, network_name, statio
 
    return true;
 end
+
+travelnet.travelnet_sound_enabled = true
