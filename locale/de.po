@@ -319,3 +319,8 @@ msgstr "Station entfernen"
 #, lua-format
 msgid "You do not have enough room in your inventory."
 msgstr "Du hast nicht genug Platz in deinem Inventar."
+
+#: init.lua
+#, lua-format
+msgid "[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'."
+msgstr "[Mod travelnet] Fehler: Sicherungsdatei '%s' ist beschädigt. Backup wurde unter '%s' gespeichert."
