@@ -707,7 +707,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    -- if the box has not been configured yet
    if( meta:get_string("station_network")=="" ) then
 
-      travelnet.add_target( fields.station_name, fields.station_network, pos, name, meta, fields.owner_name );
+      travelnet.add_target( fields.station_name, fields.station_network, pos, name, meta, fields.owner );
       return;
    end
 
