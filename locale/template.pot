@@ -365,3 +365,8 @@ msgstr ""
 #, lua-format
 msgid "You do not have enough room in your inventory."
 msgstr ""
+
+#: init.lua
+#, lua-format
+msgid "[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'."
+msgstr ""
