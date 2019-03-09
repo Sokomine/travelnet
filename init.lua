@@ -595,7 +595,11 @@ end
 -- allow doors to open
 travelnet.open_close_door = function( pos, player, mode )
 
-   local this_node = minetest.get_node( pos );
+   local this_node = minetest.get_node_or_nil( pos );
+   -- give up if the area is *still* not loaded
+   if( this_node == nil ) then
+      return
+   end
    local pos2 = {x=pos.x,y=pos.y,z=pos.z};
 
    if(     this_node.param2 == 0 ) then pos2 = {x=pos.x,y=pos.y,z=(pos.z-1)};
@@ -612,7 +616,7 @@ travelnet.open_close_door = function( pos, player, mode )
       -- do not close the elevator door if it is already closed
       if( mode==1 and ( string.sub( door_node.name, -7 ) == '_closed'
                      -- handle doors that change their facedir
-                     or ( door_node.param2 == this_node.param2
+                     or ( door_node.param2 == ((this_node.param2 + 2)%4)
                       and door_node.name ~= 'travelnet:elevator_door_glass_open'
                       and door_node.name ~= 'travelnet:elevator_door_tin_open'
                       and door_node.name ~= 'travelnet:elevator_door_steel_open'))) then
@@ -621,7 +625,7 @@ travelnet.open_close_door = function( pos, player, mode )
       -- do not open the doors if they are already open (works only on elevator-doors; not on doors in general)
       if( mode==2 and ( string.sub( door_node.name, -5 ) == '_open'
                      -- handle doors that change their facedir
-                     or ( door_node.param2 ~= this_node.param2 
+                     or ( door_node.param2 ~= ((this_node.param2 + 2)%4)
                       and door_node.name ~= 'travelnet:elevator_door_glass_closed'
                       and door_node.name ~= 'travelnet:elevator_door_tin_closed'
                       and door_node.name ~= 'travelnet:elevator_door_steel_closed'))) then
@@ -821,7 +825,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
 
    -- check if the box has at the other end has been removed.
-   local node2 = minetest.get_node(  target_pos );
+   local node2 = minetest.get_node_or_nil(  target_pos );
    if( node2 ~= nil and node2.name ~= 'ignore' and node2.name ~= 'travelnet:travelnet' and node2.name ~= 'travelnet:elevator' and node2.name ~= "locked_travelnet:travelnet" and node2.name ~= "travelnet:travelnet_private") then
 
       -- provide information necessary to identify the removed box
@@ -833,9 +837,23 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       -- send the player back as there's no receiving travelnet
       player:moveto( pos, false );
 
-   -- do this only on servers where the function exists
-   elseif( player.set_look_horizontal ) then
+   else
+      travelnet.rotate_player( target_pos, player, 0 )
+   end
+end
 
+travelnet.rotate_player = function( target_pos, player, tries )
+   -- try later when the box is loaded
+   local node2 = minetest.get_node_or_nil( target_pos );
+   if( node2 == nil ) then
+      if( tries < 30 ) then
+         minetest.after( 0, travelnet.rotate_player, target_pos, player, tries+1 )
+      end
+      return
+   end
+
+   -- do this only on servers where the function exists
+   if( player.set_look_horizontal ) then
       -- rotate the player so that he/she can walk straight out of the box
       local yaw    = 0;
       local param2 = node2.param2;
