@@ -17,11 +17,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
- Version: 2.2 (with optional abm for self-healing)
+ Version: 2.3 (click button to dig)
 
  Please configure this mod in config.lua
 
  Changelog:
+ 09.03.19 - Several PRs merged (sound added, locale changed etc.)
+            Version bumped to 2.3
  26.02.19 - Removing a travelnet can now be done by clicking on a button (no need to
             wield a diamond pick anymore)
  26.02.19 - Added compatibility with MineClone2
