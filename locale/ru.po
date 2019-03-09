@@ -1,0 +1,377 @@
+# Russian translation for the travelnet mod.
+# Copyright (C) 2018 Sokomine
+# This file is distributed under the same license as the travelnet package.
+# CodeXP <codexp@gmx.net>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: travelnet\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-05 14:30+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: CodeXP <codexp@gmx.net>\n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: doors.lua
+msgid "elevator door (open)"
+msgstr "дверь лифта (открыта)"
+
+#: doors.lua
+msgid "elevator door (closed)"
+msgstr "дверь лифта (закрыта)"
+
+#: elevator.lua
+msgid ""
+"Congratulations! This is your first elevator.You can build an elevator "
+"network by placing further elevators somewhere above or below this one. "
+"Just make sure that the x and z coordinate are the same."
+msgstr ""
+"Поздравляем! Это ваш первый лифт. Вы можете построить сеть лифтов, "
+"разместив дополнительные лифты выше или ниже этого лифта. "
+"Только убедитесь, что координаты x и z совпадают."
+
+#: elevator.lua
+msgid ""
+"This elevator will automaticly connect to the other elevators you have "
+"placed at diffrent heights. Just enter a station name and click on \"store\" "
+"to set it up. Or just punch it to set the height as station name."
+msgstr ""
+"Этот лифт будет автоматически подключен к другим лифтам, которые размещены "
+"на разных высотах. После установки можете ввести название лифта и нажать \"сохранить\". "
+"Или просто ударьте его, чтобы установить высоту в качестве названия лифта."
+
+#: elevator.lua
+msgid "Your nearest elevator network is located"
+msgstr "Ваша ближайшая сеть лифтов находится"
+
+#: elevator.lua
+msgid "m behind this elevator and"
+msgstr "м за этим лифтом"
+
+#: elevator.lua
+msgid "m in front of this elevator and"
+msgstr "м перед этим лифтом"
+
+#: elevator.lua
+msgid " ERROR"
+msgstr " ОЩИБКА"
+
+#: elevator.lua
+msgid "m to the left"
+msgstr "м с лева"
+
+#: elevator.lua
+msgid "m to the right"
+msgstr "м с права"
+
+#: elevator.lua
+msgid ", located at x"
+msgstr ", находится на x"
+
+#: elevator.lua
+msgid "This elevator here will start a new shaft/network."
+msgstr "Этот лифт составит новую сеть."
+
+#: elevator.lua
+msgid ""
+"This is your first elevator. It differs from travelnet networks by only "
+"allowing movement in vertical direction (up or down). All further elevators "
+"which you will place at the same x,z coordinates at differnt heights will be "
+"able to connect to this elevator."
+msgstr ""
+"Это ваш первый лифт. Он отличается от сети телепортов только тем что "
+"движение ограниченно в вертикальном направлении (вверх или вниз). "
+"Все дополнительные лифты, которые вы будете размещать в тех же координатах "
+"(x, z) на разных высотах, будут подключены к этому лифту."
+
+#: elevator.lua
+msgid "Elevator"
+msgstr "Лифт"
+
+#: elevator.lua
+msgid "Elevator (unconfigured)"
+msgstr "Лифт (без настройки)"
+
+#: elevator.lua init.lua
+msgid "Name of this station:"
+msgstr "Имя этой станции:"
+
+#: elevator.lua
+msgid "Store"
+msgstr "Сохранить"
+
+#: elevator.lua travelnet.lua
+msgid "Not enough vertical space to place the travelnet box!"
+msgstr "Недостаточно вертикального места, чтобы разместить телепорт!"
+
+#: init.lua
+msgid "allows to attach travelnet boxes to travelnets of other players"
+msgstr "позволяет присоеденять телепорты к сетям других игроков"
+
+#: init.lua
+msgid "allows to dig travelnet boxes which belog to nets of other players"
+msgstr "позволяет убирать телепорты других игроков"
+
+#: init.lua
+#, lua-format
+msgid "[Mod travelnet] Error: Savefile '%s' could not be written."
+msgstr "[MOD travelnet] Ошибка: Файл «%s» не может быть записан."
+
+#: init.lua
+#, lua-format
+msgid "[Mod travelnet] Error: Savefile '%s' not found."
+msgstr "[MOD travelnet] Ошибка: Файл «%s» не найден."
+
+#: init.lua
+msgid "Back"
+msgstr "Назад"
+
+#: init.lua
+msgid "Exit"
+msgstr "Выход"
+
+#: init.lua
+msgid "Travelnet-box (unconfigured)"
+msgstr "Телепорт (без настройки)"
+
+#: init.lua
+msgid "Configure this travelnet station"
+msgstr "НАСТРОЙКИ СТАНЦИИ"
+
+#: init.lua
+msgid "Name of this station"
+msgstr "Имя этой станции"
+
+#: init.lua
+msgid ""
+"How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."
+msgstr ""
+"Как вы назавёте это место? Пример: \"мой первый дом\", \"шахта\", \"магазин\"..."
+
+#: init.lua
+msgid "Assign to Network:"
+msgstr "Добавить в сеть:"
+
+#: init.lua
+#, lua-format
+msgid "You can have more than one network. If unsure, use \"%s\""
+msgstr "Вы можете иметь несколько сетей. Если вы не уверены, используйте \"%s\""
+
+#: init.lua
+msgid "Owned by:"
+msgstr "Пренадлежит:"
+
+#: init.lua
+msgid "Unless you know what you are doing, leave this empty."
+msgstr "Если вы не знаете для чего это, оставьте это пустым."
+
+#: init.lua
+msgid "Help"
+msgstr "Справка"
+
+#: init.lua
+msgid "Save"
+msgstr "Сохранить"
+
+#: init.lua
+msgid "Update failed! Resetting this box on the travelnet."
+msgstr "Обновление не выполнено! Нстройки телепорта сброшенны."
+
+#: init.lua
+#, lua-format
+msgid "Station '%s'"
+msgstr "Станция «%s»"
+
+#: init.lua
+#, lua-format
+msgid " has been reattached to the network '%s'."
+msgstr " присоеденён к сети «%s»."
+
+#: init.lua
+msgid "Locked travelnet. Type /help for help:"
+msgstr "Закрытый телепорт. Напишите /help для справки:"
+
+#: init.lua travelnet.lua
+msgid "Travelnet-Box"
+msgstr "Телепорт"
+
+#: init.lua
+msgid "Punch box to update target list."
+msgstr "Ударьте станцию для обновления целей."
+
+#: init.lua
+msgid "Assigned to Network:"
+msgstr "Присоеденён к сети:"
+
+#: init.lua
+msgid "Click on target to travel there:"
+msgstr "Выберите цель, чтобы переместится:"
+
+# (G)round floor
+#: init.lua
+msgid "G"
+msgstr "1"
+
+#: init.lua
+msgid "This station is already the first one on the list."
+msgstr "Эта станция уже первая в списке."
+
+#: init.lua
+msgid "This station is already the last one on the list."
+msgstr "Эта станция уже последнея в списке."
+
+#: init.lua
+msgid "Position in list:"
+msgstr "Позиция:"
+
+#: init.lua
+msgid "move up"
+msgstr "▲ вверх"
+
+#: init.lua
+msgid "move down"
+msgstr "▼ вниз"
+
+#: init.lua
+#, lua-format
+msgid "on travelnet '%s'"
+msgstr "на сети «%s»"
+
+#: init.lua
+#, lua-format
+msgid "(owned by %s)"
+msgstr "(пренадлежит %s)"
+
+#: init.lua
+msgid "ready for usage. Right-click to travel, punch to update."
+msgstr "готова к использованию. Правая кнопка для перемещения, ударить чтобы обновить."
+
+#: init.lua
+#, lua-format
+msgid "at %s m"
+msgstr "на %s м"
+
+#: init.lua
+msgid "Error"
+msgstr "Ошибка"
+
+#: init.lua
+msgid "Please provide a name for this station."
+msgstr "Укажите название этой станции."
+
+#: init.lua
+msgid ""
+"Please provide the name of the network this station ought to be connected to."
+msgstr ""
+"Укажите название сети, к которой добавить эту станцию."
+
+#: init.lua
+#, lua-format
+msgid "There is no player with interact privilege named '%s'. Aborting."
+msgstr "Нет игрока с привилегией «interact» по имени «%s». Отмена."
+
+#: init.lua
+msgid ""
+"You do not have the travelnet_attach priv which is required to attach your "
+"box to the network of someone else. Aborting."
+msgstr ""
+"У вас нет привилегии «travelnet_attach», которая необходима для добавки "
+"вашего телепорта в сеть другого игрока. Отмена."
+
+#: init.lua
+#, lua-format
+msgid ""
+"A station named '%s' already exists on this network. Please choose a "
+"diffrent name!"
+msgstr ""
+"Станция «%s» уже существует в этой сети. "
+"Попробуйте другое имя!"
+
+#: init.lua
+#, lua-format
+msgid "Network '%s',"
+msgstr "Сеть «%s»,"
+
+#: init.lua
+#, lua-format
+msgid ""
+"already contains the maximum number (=%s) of allowed stations per network. "
+"Please choose a diffrent/new network name."
+msgstr ""
+"уже содержит максимальное количество (=%s) разрешенных станций на сеть. "
+"Выберите друю сеть (иное имя сети)."
+
+#: init.lua
+#, lua-format
+msgid "has been added to the network '%s'"
+msgstr "была добавлена в сеть «%s»"
+
+#: init.lua
+#, lua-format
+msgid ", which now consists of %s station(s)."
+msgstr ", которая теперь состоит из %s станций."
+
+#: init.lua
+msgid "Station:"
+msgstr "Станция:"
+
+#: init.lua
+msgid "Network:"
+msgstr "Сеть:"
+
+#: init.lua
+msgid "No help available yet."
+msgstr "Пока нет справки."
+
+#: init.lua
+msgid "Please click on the target you want to travel to."
+msgstr "Пожалуйста, выберите цель, куда вы хотели бы попасть."
+
+#: init.lua
+msgid "There is something wrong with the configuration of this station."
+msgstr "С конфигурацией этой станции что-то не так."
+
+#: init.lua
+msgid "This travelnet is lacking data and/or improperly configured."
+msgstr "В этом телепорте отсутствуют данные или он неправильно настроен."
+
+#: init.lua
+msgid "does not exist (anymore?) on this network."
+msgstr "в этой сети (больше?) не существует."
+
+#: init.lua
+#, lua-format
+msgid "Initiating transfer to station '%s'."
+msgstr "Инициирование перехода на станцию «%s»."
+
+#: init.lua
+msgid "Could not find information about the station that is to be removed."
+msgstr "Не удалось найти информацию о станции, для удаления."
+
+#: init.lua
+msgid "Could not find the station that is to be removed."
+msgstr "Не удалось найти станцию, для удаления."
+
+#: init.lua
+#, lua-format
+msgid "has been REMOVED from the network '%s'."
+msgstr "УДАЛЕНА из сети «%s»."
+
+#: init.lua
+#, lua-format
+msgid ""
+"This %s has not been configured yet. Please set it up first to claim it. "
+"Afterwards you can remove it because you are then the owner."
+msgstr ""
+"Этот %s еще не настроен. Пожалуйста, сначала настройте его, чтобы перенять имущество. "
+"После этого вы можете удалить его, так как вы являетесь владельцем."
+
+#: init.lua
+#, lua-format
+msgid "This %s belongs to %s. You can't remove it."
+msgstr "Этот %s принадлежит %s."

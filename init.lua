@@ -1,5 +1,5 @@
 
-          
+
 --[[
     Teleporter networks that allow players to choose a destination out of a list
     Copyright (C) 2013 Sokomine
@@ -18,7 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  Version: 2.2 (with optional abm for self-healing)
-    
+
  Please configure this mod in config.lua
 
  Changelog:
@@ -85,28 +85,26 @@
 travelnet = {};
 
 travelnet.targets = {};
+travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
--- Boilerplate to support localized strings if intllib mod is installed.
-if minetest.get_modpath( "intllib" ) and intllib then
-	travelnet.S = intllib.Getter()
-else
-	travelnet.S = function(s) return s end
-end
 
-local S = travelnet.S;
+-- Intllib
+local S = dofile(travelnet.path .. "/intllib.lua")
+travelnet.S = S
+
 
 minetest.register_privilege("travelnet_attach", { description = S("allows to attach travelnet boxes to travelnets of other players"), give_to_singleplayer = false});
 minetest.register_privilege("travelnet_remove", { description = S("allows to dig travelnet boxes which belog to nets of other players"), give_to_singleplayer = false});
 
 -- read the configuration
-dofile(minetest.get_modpath("travelnet").."/config.lua"); -- the normal, default travelnet
+dofile(travelnet.path.."/config.lua"); -- the normal, default travelnet
 
 
 
 -- TODO: save and restore ought to be library functions and not implemented in each individual mod!
 -- called whenever a station is added or removed
 travelnet.save_data = function()
-   
+
    local data = minetest.serialize( travelnet.targets );
    local path = minetest.get_worldpath().."/mod_travelnet.data";
 
@@ -123,7 +121,7 @@ end
 travelnet.restore_data = function()
 
    local path = minetest.get_worldpath().."/mod_travelnet.data";
-   
+
    local file = io.open( path, "r" );
    if( file ) then
       local data = file:read("*all");
@@ -234,7 +232,7 @@ travelnet.reset_formspec = function( meta )
 
 		"field[0.3,2.8;9,0.9;station_network;"..S("Assign to Network:")..";"..
 			minetest.formspec_escape(station_network or "").."]"..
-		"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"%s\""):format(tostring(station_network)).."\".]"..
+		"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"%s\""):format(tostring(station_network))..".]"..
 		"field[0.3,4.4;9,0.9;owner;"..S("Owned by:")..";]"..
 		"label[0.3,4.7;"..S("Unless you know what you are doing, leave this empty.").."]"..
 		"button_exit[1.3,5.3;1.7,0.7;station_help_setup;"..S("Help").."]"..
@@ -251,7 +249,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
    if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then
       is_elevator = true;
-   end 
+   end
 
    if( not( meta )) then
       return;
@@ -261,7 +259,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
    local station_name    = meta:get_string( "station_name" );
    local station_network = meta:get_string( "station_network" );
 
-   if(  not( owner_name ) 
+   if(  not( owner_name )
      or not( station_name ) or station_network == ''
      or not( station_network )) then
 
@@ -291,7 +289,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
       if( not( travelnet.targets[ owner_name ] )) then
          travelnet.targets[       owner_name ] = {};
       end
- 
+
       -- first station on this network?
       if( not( travelnet.targets[ owner_name ][ station_network ] )) then
          travelnet.targets[       owner_name ][ station_network ] = {};
@@ -334,15 +332,15 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
    -- collect all station names in a table
    local stations = {};
-   
+
    for k,v in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
       table.insert( stations, k );
    end
    -- minetest.chat_send_player(puncher_name, "stations: "..minetest.serialize( stations ));
-    
+
    local ground_level = 1;
    if( is_elevator ) then
-      table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].pos.y > 
+      table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].pos.y >
                                                  travelnet.targets[ owner_name ][ station_network ][ b ].pos.y  end);
       -- find ground level
       local vgl_timestamp = 999999999999;
@@ -351,7 +349,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
             travelnet.targets[ owner_name ][ station_network ][ k ].timestamp = os.time();
          end
          if( travelnet.targets[ owner_name ][ station_network ][ k ].timestamp < vgl_timestamp ) then
-            vgl_timestamp = travelnet.targets[ owner_name ][ station_network ][ k ].timestamp;       
+            vgl_timestamp = travelnet.targets[ owner_name ][ station_network ][ k ].timestamp;
             ground_level  = index;
          end
       end
@@ -362,10 +360,10 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
             travelnet.targets[ owner_name ][ station_network ][ k ].nr = tostring( ground_level - index );
          end
       end
-            
-   else 
+
+   else
       -- sort the table according to the timestamp (=time the station was configured)
-      table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].timestamp < 
+      table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].timestamp <
                                                  travelnet.targets[ owner_name ][ station_network ][ b ].timestamp  end);
    end
 
@@ -403,9 +401,9 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
       else
          -- swap the actual data by which the stations are sorted
          local old_timestamp = travelnet.targets[ owner_name ][ station_network ][ stations[swap_with_pos]].timestamp;
-         travelnet.targets[    owner_name ][ station_network ][ stations[swap_with_pos]].timestamp = 
+         travelnet.targets[    owner_name ][ station_network ][ stations[swap_with_pos]].timestamp =
             travelnet.targets[ owner_name ][ station_network ][ stations[current_pos  ]].timestamp;
-         travelnet.targets[    owner_name ][ station_network ][ stations[current_pos  ]].timestamp = 
+         travelnet.targets[    owner_name ][ station_network ][ stations[current_pos  ]].timestamp =
             old_timestamp;
 
          -- for elevators, only the "G"(round) marking is moved; no point in swapping stations
@@ -426,7 +424,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
       x = 4;
    end
 
-   for index,k in ipairs( stations ) do 
+   for index,k in ipairs( stations ) do
 
       -- check if there is an elevator door in front that needs to be opened
       local open_door_cmd = false;
@@ -434,7 +432,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
          open_door_cmd = true;
       end
 
-      if( k ~= station_name or open_door_cmd) then 
+      if( k ~= station_name or open_door_cmd) then
          i = i+1;
 
          -- new column
@@ -492,7 +490,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    if( this_node.name == 'travelnet:elevator' ) then
 --      owner_name   = '*'; -- the owner name is not relevant here
       is_elevator  = true;
-      network_name = tostring( pos.x )..','..tostring( pos.z ); 
+      network_name = tostring( pos.x )..','..tostring( pos.z );
       if( not( station_name ) or station_name == '' ) then
          station_name = S('at %s m'):format(tostring( pos.y ));
       end
@@ -534,7 +532,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    if( not( travelnet.targets[ owner_name ] )) then
       travelnet.targets[       owner_name ] = {};
    end
- 
+
    -- first station on this network?
    if( not( travelnet.targets[ owner_name ][ network_name ] )) then
       travelnet.targets[       owner_name ][ network_name ] = {};
@@ -561,7 +559,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 	"Please choose a diffrent/new network name."):format(travelnet.MAX_STATIONS_PER_NETWORK));
       return;
    end
-     
+
    -- add this station
    travelnet.targets[ owner_name ][ network_name ][ station_name ] = {pos=pos, timestamp=os.time() };
 
@@ -577,7 +575,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       meta:set_string( "owner",           owner_name );
       meta:set_int( "timestamp",       travelnet.targets[ owner_name ][ network_name ][ station_name ].timestamp);
 
-      meta:set_string("formspec", 
+      meta:set_string("formspec",
                      "size[12,10]"..
                      "field[0.3,0.6;6,0.7;station_name;"..S("Station:")..";"..   minetest.formspec_escape(meta:get_string("station_name")).."]"..
                      "field[0.3,3.6;6,0.7;station_network;"..S("Network:")..";"..minetest.formspec_escape(meta:get_string("station_network")).."]" );
@@ -631,7 +629,7 @@ travelnet.open_close_door = function( pos, player, mode )
                       and door_node.name ~= 'travelnet:elevator_door_steel_closed'))) then
          return;
       end
-        
+
       if( mode==2 ) then
          minetest.after( 1, minetest.registered_nodes[ door_node.name ].on_rightclick, pos2, door_node, player );
       else
@@ -739,8 +737,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local station_name    = meta:get_string( "station_name" );
    local station_network = meta:get_string( "station_network" );
 
-   if(  not( owner_name  ) 
-     or not( station_name ) 
+   if(  not( owner_name  )
+     or not( station_name )
      or not( station_network )
      or not( travelnet.targets[ owner_name ] )
      or not( travelnet.targets[ owner_name ][ station_network ] )) then
@@ -775,7 +773,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    end
 
    local this_node = minetest.get_node( pos );
-   if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then 
+   if( this_node ~= nil and this_node.name == 'travelnet:elevator' ) then
       for k,v in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
          if( travelnet.targets[ owner_name ][ station_network ][ k ].nr  --..' ('..tostring( travelnet.targets[ owner_name ][ station_network ][ k ].pos.y )..'m)'
                == fields.target) then
@@ -809,7 +807,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          minetest.sound_play("travelnet_travel", {pos = pos, gain = 0.75, max_hear_distance = 10,});
       end
    end
-   if( travelnet.travelnet_effect_enabled ) then 
+   if( travelnet.travelnet_effect_enabled ) then
       minetest.add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
@@ -876,7 +874,7 @@ travelnet.rotate_player = function( target_pos, player, tries )
       elseif( param2==3 ) then
          yaw = 270;
       end
-       
+
       player:set_look_horizontal( math.rad( yaw ));
       player:set_look_vertical( math.rad( 0 ));
    end
@@ -898,19 +896,19 @@ travelnet.remove_box = function( pos, oldnode, oldmetadata, digger )
    local station_network = oldmetadata.fields[ "station_network" ];
 
    -- station is not known? then just remove it
-   if(  not( owner_name ) 
-     or not( station_name ) 
-     or not( station_network ) 
+   if(  not( owner_name )
+     or not( station_name )
+     or not( station_network )
      or not( travelnet.targets[ owner_name ] )
      or not( travelnet.targets[ owner_name ][ station_network ] )) then
-       
+
       minetest.chat_send_player( digger:get_player_name(), S("Error")..": "..
 		S("Could not find the station that is to be removed."));
       return;
    end
 
    travelnet.targets[ owner_name ][ station_network ][ station_name ] = nil;
-   
+
    -- inform the owner
    minetest.chat_send_player( owner_name, S("Station '%s'"):format(station_name ).." "..
 		S("has been REMOVED from the network '%s'."):format(station_network));
@@ -1004,17 +1002,17 @@ end
 
 
 if( travelnet.travelnet_enabled ) then
-   dofile(minetest.get_modpath("travelnet").."/travelnet.lua"); -- the travelnet node definition
+   dofile(travelnet.path.."/travelnet.lua"); -- the travelnet node definition
 end
 if( travelnet.elevator_enabled ) then
-   dofile(minetest.get_modpath("travelnet").."/elevator.lua");  -- allows up/down transfers only
+   dofile(travelnet.path.."/elevator.lua");  -- allows up/down transfers only
 end
 if( travelnet.doors_enabled ) then
-   dofile(minetest.get_modpath("travelnet").."/doors.lua");     -- doors that open and close automaticly when the travelnet or elevator is used
+   dofile(travelnet.path.."/doors.lua");     -- doors that open and close automaticly when the travelnet or elevator is used
 end
 
 if( travelnet.abm_enabled ) then
-   dofile(minetest.get_modpath("travelnet").."/restore_network_via_abm.lua"); -- restore travelnet data when players pass by broken networks
+   dofile(travelnet.path.."/restore_network_via_abm.lua"); -- restore travelnet data when players pass by broken networks
 end
 
 -- upon server start, read the savefile
