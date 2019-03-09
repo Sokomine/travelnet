@@ -614,6 +614,7 @@ travelnet.open_close_door = function( pos, player, mode )
                      -- handle doors that change their facedir
                      or ( door_node.param2 == this_node.param2
                       and door_node.name ~= 'travelnet:elevator_door_glass_open'
+                      and door_node.name ~= 'travelnet:elevator_door_tin_open'
                       and door_node.name ~= 'travelnet:elevator_door_steel_open'))) then
          return;
       end
@@ -622,6 +623,7 @@ travelnet.open_close_door = function( pos, player, mode )
                      -- handle doors that change their facedir
                      or ( door_node.param2 ~= this_node.param2 
                       and door_node.name ~= 'travelnet:elevator_door_glass_closed'
+                      and door_node.name ~= 'travelnet:elevator_door_tin_closed'
                       and door_node.name ~= 'travelnet:elevator_door_steel_closed'))) then
          return;
       end
