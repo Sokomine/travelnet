@@ -205,6 +205,9 @@ end
 travelnet.form_input_handler = function( player, formname, fields)
         if(formname == "travelnet:show" and fields and fields.pos2str) then
 		local pos = minetest.string_to_pos( fields.pos2str );
+		if( locks and (fields.locks_config or fields.locks_authorize)) then
+			return locks:lock_handle_input( pos, formname, fields, player )
+		end
 		-- back button leads back to the main menu
 		if( fields.back and fields.back ~= "" ) then
 			return travelnet.show_current_formspec( pos,
@@ -665,6 +668,11 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    -- the player wants to quit/exit the formspec; do not save/update anything
    if( fields and fields.station_exit and fields.station_exit ~= "" ) then
       return;
+   end
+
+   -- show special locks buttons if needed
+   if( locks and (fields.locks_config or fields.locks_authorize)) then
+      return locks:lock_handle_input( pos, formname, fields, player )
    end
 
    -- show help text
