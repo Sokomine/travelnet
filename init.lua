@@ -22,6 +22,7 @@
  Please configure this mod in config.lua
 
  Changelog:
+ 10.03.19 - Added the extra config buttons for locked_travelnet mod.
  09.03.19 - Several PRs merged (sound added, locale changed etc.)
             Version bumped to 2.3
  26.02.19 - Removing a travelnet can now be done by clicking on a button (no need to
@@ -325,8 +326,10 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
    -- add name of station + network + owner + update-button
    local zusatzstr = "";
    local trheight = "10";
-   if( this_node and this_node.name=="locked_travelnet:travelnet" ) then
-      zusatzstr = "field[0.3,11;6,0.7;locks_sent_lock_command;"..S("Locked travelnet. Type /help for help:")..";]";
+   if( this_node and this_node.name=="locked_travelnet:travelnet" and locks) then
+      zusatzstr = "field[0.3,11;6,0.7;locks_sent_lock_command;"..S("Locked travelnet. Type /help for help:")..";]"..
+		  locks.get_authorize_button(10,"10.5")..
+		  locks.get_config_button(11,"10.5")
       trheight = "11.5";
    end
    local formspec = "size[12,"..trheight.."]"..
@@ -686,6 +689,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          description = "travelnet box"
       elseif( node and node.name and node.name == "travelnet:elevator") then
          description = "elevator"
+      elseif( node and node.name and node.name == "locked_travelnet:travelnet") then
+         description = "locked travelnet"
       else
          minetest.chat_send_player(name, "Error: Unkown node.");
          return
