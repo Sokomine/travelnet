@@ -841,7 +841,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
    -- transport the player to the target location
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
-   player:moveto( target_pos, false);
+   player:move_to( target_pos, false);
 
    if( travelnet.travelnet_effect_enabled ) then 
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
@@ -859,7 +859,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
       travelnet.remove_box( target_pos, nil, oldmetadata, player );
       -- send the player back as there's no receiving travelnet
-      player:moveto( pos, false );
+      player:move_to( pos, false );
 
    else
       travelnet.rotate_player( target_pos, player, 0 )
@@ -1015,7 +1015,7 @@ if( travelnet.travelnet_effect_enabled ) then
 
     on_step = function( self, dtime )
        -- this is supposed to be more flickering than smooth animation
-       self.object:setyaw( self.object:getyaw()+1);
+       self.object:set_yaw( self.object:get_yaw()+1);
        self.anz_rotations = self.anz_rotations + 1;
        -- eventually self-destruct
        if( self.anz_rotations > 15 ) then
