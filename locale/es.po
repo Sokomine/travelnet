@@ -1,0 +1,401 @@
+# Spanish translation for the travelnet mod.
+# Copyright (C) 2018 Sokomine
+# This file is distributed under the same license as the travelnet package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: travelnet\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-05 14:34+0200\n"
+"PO-Revision-Date: 2018-04-05 14:34+0200\n"
+"Last-Translator: Diego Martínez <lkaezadl3@yahoo.com>\n"
+"Language-Team: none\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: doors.lua
+msgid "elevator door (open)"
+msgstr "puerta de elevador (abierta)"
+
+#: doors.lua
+msgid "elevator door (closed)"
+msgstr "puerta de elevador (cerrada)"
+
+#: elevator.lua
+msgid ""
+"Congratulations! This is your first elevator.You can build an elevator "
+"network by placing further elevators somewhere above or below this one. Just "
+"make sure that the x and z coordinate are the same."
+msgstr ""
+"¡Felicidades! Éste es tu primer elevador. Puedes construir una red de "
+"elevadores colocando más elevadores en algún lugar arriba o abajo de éste. "
+"asegúrate de que las coordenadas X y Z sean las mismas."
+
+#: elevator.lua
+msgid ""
+"This elevator will automaticly connect to the other elevators you have "
+"placed at diffrent heights. Just enter a station name and click on \"store\" "
+"to set it up. Or just punch it to set the height as station name."
+msgstr ""
+"Éste elevador se conectará automáticamente a otros elevadores que hayas "
+"colocado a diferentes alturas. Simplemente ingresa un nombre para la "
+"estación y haz clic en \"Guardar\" para configurarlo, o golpéalo para usar "
+"la altura como nombre."
+
+#: elevator.lua
+msgid "Your nearest elevator network is located"
+msgstr "La red de elevadores más cercana se ubica"
+
+#: elevator.lua
+msgid "m behind this elevator and"
+msgstr "m detrás de éste elevador y"
+
+#: elevator.lua
+msgid "m in front of this elevator and"
+msgstr "m delante de éste elevador y"
+
+#: elevator.lua
+msgid " ERROR"
+msgstr " ERROR"
+
+#: elevator.lua
+msgid "m to the left"
+msgstr "m a la izquierda"
+
+#: elevator.lua
+msgid "m to the right"
+msgstr "m a la derecha"
+
+#: elevator.lua
+msgid ", located at x"
+msgstr ", ubicado en x"
+
+#: elevator.lua
+msgid "This elevator here will start a new shaft/network."
+msgstr "Éste elevador comenzará una nueva red."
+
+#: elevator.lua
+msgid ""
+"This is your first elevator. It differs from travelnet networks by only "
+"allowing movement in vertical direction (up or down). All further elevators "
+"which you will place at the same x,z coordinates at differnt heights will be "
+"able to connect to this elevator."
+msgstr ""
+"Éste es tu primer elevador. Se diferencia de las cabinas de viaje en que "
+"solamente permite movimiento vertical (arriba o abajo). Los elevadores que "
+"coloque en las mismas coordenadas X,Z se conectarán a éste elevador."
+
+#: elevator.lua
+msgid "Elevator"
+msgstr "Elevador"
+
+#: elevator.lua
+msgid "Elevator (unconfigured)"
+msgstr "Elevador (sin configurar)"
+
+#: elevator.lua init.lua
+msgid "Name of this station:"
+msgstr "Nombre de ésta estación:"
+
+#: elevator.lua
+msgid "Store"
+msgstr "Guardar"
+
+#: elevator.lua travelnet.lua
+msgid "Not enough vertical space to place the travelnet box!"
+msgstr ""
+"¡No hay espacio vertical suficiente para colocar la cabina de viaje!"
+
+#: init.lua
+msgid "allows to attach travelnet boxes to travelnets of other players"
+msgstr "permite adjuntar cajas de viaje a redes de otros jugadores"
+
+#: init.lua
+msgid "allows to dig travelnet boxes which belog to nets of other players"
+msgstr ""
+"permite cavar cabinas de viaje pertenecientes a redes de otros jugadores"
+
+#: init.lua
+#, lua-format
+msgid "[Mod travelnet] Error: Savefile '%s' could not be written."
+msgstr "[Mod travelnet] Error: No se pudo escribir '%s'."
+
+#: init.lua
+#, lua-format
+msgid "[Mod travelnet] Error: Savefile '%s' not found."
+msgstr "[Mod travelnet] Error: No se pudo encontrar '%s'."
+
+#: init.lua
+msgid "Back"
+msgstr "Atras"
+
+#: init.lua
+msgid "Exit"
+msgstr "Salir"
+
+#: init.lua
+msgid "Travelnet-box (unconfigured)"
+msgstr "Cabina de viaje (sin configurar)"
+
+#: init.lua
+msgid "Configure this travelnet station"
+msgstr "Configurar ésta estación"
+
+#: init.lua
+msgid "Name of this station"
+msgstr "Nombre de ésta estación"
+
+#: init.lua
+msgid ""
+"How do you call this place here? Example: \"my first house\", \"mine\", "
+"\"shop\"..."
+msgstr ""
+"¿Cómo llamaras a éste lugar? Por ejemplo: \"mi casa\", \"mina\", "
+"\"tienda\"..."
+
+#: init.lua
+msgid "Assign to Network:"
+msgstr "Asignar a la red:"
+
+#: init.lua
+#, lua-format
+msgid "You can have more than one network. If unsure, use \"%s\""
+msgstr ""
+"Puedes tener más de una red. Si no estás seguro, usa \"%s\""
+
+#: init.lua
+msgid "Owned by:"
+msgstr "Propiedad de:"
+
+#: init.lua
+msgid "Unless you know what you are doing, leave this empty."
+msgstr "Deja éste campo vacío a menos que sepas lo que haces."
+
+#: init.lua
+msgid "Help"
+msgstr "Ayuda"
+
+#: init.lua
+msgid "Save"
+msgstr "Guardar"
+
+#: init.lua
+msgid "Update failed! Resetting this box on the travelnet."
+msgstr "¡Actualización fallida! Reiniciando ésta cabina de viaje."
+
+#: init.lua
+#, lua-format
+msgid "Station '%s'"
+msgstr "Estación '%s'"
+
+#: init.lua
+#, lua-format
+msgid " has been reattached to the network '%s'."
+msgstr " ha sido reacoplado a la red '%s'."
+
+#: init.lua
+msgid "Locked travelnet. Type /help for help:"
+msgstr "Cabins de viaje bloqueada. Escriba /help para ver la ayuda:"
+
+#: init.lua travelnet.lua
+msgid "Travelnet-Box"
+msgstr "Cabina de viaje"
+
+#: init.lua
+msgid "Punch box to update target list."
+msgstr "Golpea la cabina para actualizar la lista de destinos."
+
+#: init.lua
+msgid "Assigned to Network:"
+msgstr "Asignado a la red:"
+
+#: init.lua
+msgid "Click on target to travel there:"
+msgstr "Has clic en un destino para viajar allí:"
+
+#: init.lua
+msgid "G"
+msgstr "G"
+
+#: init.lua
+msgid "This station is already the first one on the list."
+msgstr "Ésta estación ya es la primera en la lista."
+
+#: init.lua
+msgid "This station is already the last one on the list."
+msgstr "Ésta estación ya es la última en la lista."
+
+#: init.lua
+msgid "Position in list:"
+msgstr "Posición en la lista:"
+
+#: init.lua
+msgid "move up"
+msgstr "subir"
+
+#: init.lua
+msgid "move down"
+msgstr "bajar"
+
+#: init.lua
+#, lua-format
+msgid "on travelnet '%s'"
+msgstr "en la red '%s'"
+
+#: init.lua
+#, lua-format
+msgid "(owned by %s)"
+msgstr "(pertenece a %s)"
+
+#: init.lua
+msgid "ready for usage. Right-click to travel, punch to update."
+msgstr ""
+"listo para usar. Haz clic derecho para viajar, golpea para actualizar."
+
+#: init.lua
+#, lua-format
+msgid "at %s m"
+msgstr "a %s m"
+
+#: init.lua
+msgid "Error"
+msgstr "Error"
+
+#: init.lua
+msgid "Please provide a name for this station."
+msgstr ""
+
+#: init.lua
+msgid ""
+"Please provide the name of the network this station ought to be connected to."
+msgstr ""
+"Por favor especifique el nombre de la red a la cual conectarse."
+
+#: init.lua
+#, lua-format
+msgid "There is no player with interact privilege named '%s'. Aborting."
+msgstr ""
+"No hay un jugador llamado '%s' con privilegios de interacción. Abortando."
+
+#: init.lua
+msgid ""
+"You do not have the travelnet_attach priv which is required to attach your "
+"box to the network of someone else. Aborting."
+msgstr ""
+"No tienes el privilegio 'travelnet_attach' requerido para acoplar tu "
+"cabina a la red de otros. Abortando."
+
+#: init.lua
+#, lua-format
+msgid ""
+"A station named '%s' already exists on this network. Please choose a "
+"diffrent name!"
+msgstr ""
+"Yes existe una estación llamada '%s' en ésta red. Por favor, ¡elige un "
+"nombre diferente!"
+
+#: init.lua
+#, lua-format
+msgid "Network '%s',"
+msgstr "La red '%s',"
+
+#: init.lua
+#, lua-format
+msgid ""
+"already contains the maximum number (=%s) of allowed stations per network. "
+"Please choose a diffrent/new network name."
+msgstr ""
+"ya contiene la cantidad máxima (%s) de estaciones permitidas. Por favor "
+"elige un nombre de red diferente/nuevo."
+
+#: init.lua
+#, lua-format
+msgid "has been added to the network '%s'"
+msgstr "ha sido añadida a la red '%s'"
+
+#: init.lua
+#, lua-format
+msgid ", which now consists of %s station(s)."
+msgstr ", la cual consta de %s estación(es)."
+
+#: init.lua
+msgid "Station:"
+msgstr "Estación:"
+
+#: init.lua
+msgid "Network:"
+msgstr "Red:"
+
+#: init.lua
+msgid "No help available yet."
+msgstr "No hay ayuda disponible aún."
+
+#: init.lua
+msgid "Please click on the target you want to travel to."
+msgstr "Por favor haz clic en el destino al cual quieres viajar."
+
+#: init.lua
+msgid "There is something wrong with the configuration of this station."
+msgstr "Excuse algún error en la configuración de ésta estación."
+
+#: init.lua
+msgid "This travelnet is lacking data and/or improperly configured."
+msgstr ""
+"A ésta red le faltan datos y/o no ha sido configurada apropiadamente."
+
+#: init.lua
+msgid "does not exist (anymore?) on this network."
+msgstr "ya no existe (mas?) en ésta red."
+
+#: init.lua
+#, lua-format
+msgid "Initiating transfer to station '%s'."
+msgstr "Iniciando transferencia a la estación '%s'."
+
+#: init.lua
+msgid "Could not find information about the station that is to be removed."
+msgstr "No se encontró información acerca de la estación a quitar."
+
+#: init.lua
+msgid "Could not find the station that is to be removed."
+msgstr "No se encontró la estación a quitar."
+
+#: init.lua
+#, lua-format
+msgid "has been REMOVED from the network '%s'."
+msgstr "ha sido QUITADA de la red '%s'."
+
+#: init.lua
+#, lua-format
+msgid ""
+"This %s has not been configured yet. Please set it up first to claim it. "
+"Afterwards you can remove it because you are then the owner."
+msgstr ""
+"Éste %s aún no ha sido configurado. Por favor configurarlo para "
+"reclamarlo. Luego de hacerlo serás el dueño y podrás quitarlo."
+
+#: init.lua
+#, lua-format
+msgid "This %s belongs to %s. You can't remove it."
+msgstr "Éste %s pertenece a %s. No lo puedes quitar."
+
+#: init.lua
+#, lua-format
+msgid "Remove station"
+msgstr "Quitar estación"
+
+#: init.lua
+#, lua-format
+msgid "You do not have enough room in your inventory."
+msgstr "No tienes suficiente espacio en el inventario."
+
+#: init.lua
+#, lua-format
+msgid ""
+"[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'."
+msgstr ""
+"[Mod travelnet] Error: El fichero '%s' está dañado. Guardando copia de "
+"respaldo en '%s'."
