@@ -1,0 +1,7 @@
+travelnet.MAX_STATIONS_PER_NETWORK (Maximum travelnet stations per network) float 24
+travelnet.travelnet_effect_enabled (Travelnet visual beam effect) bool false
+travelnet.travelnet_sound_enabled (Travelnet sound effect) bool true
+travelnet.travelnet_enabled (Allow travelnets) bool true
+travelnet.elevator_enabled (Allow travelnet elevators) bool true
+travelnet.doors_enabled (Travelnet elevator doors) bool true
+travelnet.abm_enabled (Reconnect travelnets automatically via ABM) bool false
