@@ -123,7 +123,7 @@ end
 
 
 travelnet.restore_data = function()
-   
+
    local file = io.open( travelnet.mod_data_path, "r" );
    if( not file ) then
       print(S("[Mod travelnet] Error: Savefile '%s' not found.")
@@ -825,14 +825,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
 
 
-   if( travelnet.travelnet_sound_enabled ) then
+   if( travelnet.enable_travelnet_sound ) then
       if ( this_node.name == 'travelnet:elevator' ) then
          minetest.sound_play("travelnet_bell", {pos = pos, gain = 0.75, max_hear_distance = 10,});
       else
          minetest.sound_play("travelnet_travel", {pos = pos, gain = 0.75, max_hear_distance = 10,});
       end
    end
-   if( travelnet.travelnet_effect_enabled ) then
+   if( travelnet.enable_travelnet_effect ) then
       minetest.add_entity( {x=pos.x,y=pos.y+0.5,z=pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
@@ -840,10 +840,12 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    travelnet.open_close_door( pos, player, 1 );
 
    -- transport the player to the target location
+   local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5;  -- may be 0.0 for some versions of MT 5 player model
+   local player_model_vec = vector.new(0, player_model_bottom, 0);
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
-   player:move_to( target_pos, false);
+   player:move_to( vector.add(target_pos, player_model_vec), false);
 
-   if( travelnet.travelnet_effect_enabled ) then 
+   if( travelnet.enable_travelnet_effect ) then
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
@@ -859,7 +861,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
       travelnet.remove_box( target_pos, nil, oldmetadata, player );
       -- send the player back as there's no receiving travelnet
-      player:move_to( pos, false );
+      player:move_to( vector.add(pos, player_model_vec), false );
 
    else
       travelnet.rotate_player( target_pos, player, 0 )
@@ -877,7 +879,7 @@ travelnet.rotate_player = function( target_pos, player, tries )
    end
 
    -- play sound at the target position as well
-   if( travelnet.travelnet_sound_enabled ) then
+   if( travelnet.enable_travelnet_sound ) then
       if ( node2.name == 'travelnet:elevator' ) then
          minetest.sound_play("travelnet_bell", {pos = target_pos, gain = 0.75, max_hear_distance = 10,});
       else
@@ -993,7 +995,7 @@ end
 
 
 
-if( travelnet.travelnet_effect_enabled ) then
+if( travelnet.enable_travelnet_effect ) then
   minetest.register_entity( 'travelnet:effect', {
 
     hp_max = 1,
@@ -1026,17 +1028,17 @@ if( travelnet.travelnet_effect_enabled ) then
 end
 
 
-if( travelnet.travelnet_enabled ) then
+if( travelnet.enable_travelnet ) then
    dofile(travelnet.path.."/travelnet.lua"); -- the travelnet node definition
 end
-if( travelnet.elevator_enabled ) then
+if( travelnet.enable_elevator ) then
    dofile(travelnet.path.."/elevator.lua");  -- allows up/down transfers only
 end
-if( travelnet.doors_enabled ) then
+if( travelnet.enable_doors ) then
    dofile(travelnet.path.."/doors.lua");     -- doors that open and close automaticly when the travelnet or elevator is used
 end
 
-if( travelnet.abm_enabled ) then
+if( travelnet.enable_abm ) then
    dofile(travelnet.path.."/restore_network_via_abm.lua"); -- restore travelnet data when players pass by broken networks
 end
 
