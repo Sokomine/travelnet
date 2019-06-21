@@ -840,8 +840,10 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    travelnet.open_close_door( pos, player, 1 );
 
    -- transport the player to the target location
+   local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5;  -- may be 0.0 for some versions of MT 5 player model
+   local player_model_vec = vector.new(0, player_model_bottom, 0);
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
-   player:move_to( target_pos, false);
+   player:move_to( vector.add(target_pos, player_model_vec), false);
 
    if( travelnet.enable_travelnet_effect ) then
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
@@ -859,7 +861,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
       travelnet.remove_box( target_pos, nil, oldmetadata, player );
       -- send the player back as there's no receiving travelnet
-      player:move_to( pos, false );
+      player:move_to( vector.add(pos, player_model_vec), false );
 
    else
       travelnet.rotate_player( target_pos, player, 0 )
