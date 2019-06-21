@@ -25,13 +25,13 @@ minetest.register_node("travelnet:travelnet", {
 		fixed = {
 
 			{ 0.45, -0.5,-0.5,  0.5,  1.45, 0.5},
-			{-0.5 , -0.5, 0.45, 0.45, 1.45, 0.5}, 
+			{-0.5 , -0.5, 0.45, 0.45, 1.45, 0.5},
 			{-0.5,  -0.5,-0.5 ,-0.45, 1.45, 0.5},
 
 			--groundplate to stand on
-			{ -0.5,-0.5,-0.5,0.5,-0.45, 0.5}, 
+			{ -0.5,-0.5,-0.5,0.5,-0.45, 0.5},
 			--roof
-			{ -0.5, 1.45,-0.5,0.5, 1.5, 0.5}, 
+			{ -0.5, 1.45,-0.5,0.5, 1.5, 0.5},
 
 			-- control panel
 			--                { -0.2, 0.6,  0.3, 0.2, 1.1,  0.5},
@@ -52,7 +52,7 @@ minetest.register_node("travelnet:travelnet", {
 	travelnet.reset_formspec( meta );
         meta:set_string("owner",          placer:get_player_name() );
     end,
-    
+
     on_receive_fields = travelnet.on_receive_fields,
     on_punch          = function(pos, node, puncher)
                              travelnet.update_formspec(pos, puncher:get_player_name(), nil)
@@ -78,7 +78,7 @@ minetest.register_node("travelnet:travelnet", {
              minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name]
        if not def or not def.buildable_to then
 
-          minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
+          minetest.chat_send_player( placer:get_player_name(), S('There is not enough vertical space to place the travelnet box!'))
           return;
        end
        return minetest.item_place(itemstack, placer, pointed_thing);

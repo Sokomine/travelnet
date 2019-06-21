@@ -20,8 +20,8 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	if( travelnet.targets[ owner_name ][ network_name ]
 	  -- does the network have any members at all?
 	  and next( travelnet.targets[ owner_name ][ network_name ], nil )) then
-		minetest.chat_send_player( owner_name, S("This elevator will automaticly connect to the "..
-			"other elevators you have placed at diffrent heights. Just enter a station name "..
+		minetest.chat_send_player( owner_name, S("This elevator will automatically connect to the "..
+			"other elevators you have placed at different heights. Just enter a station name "..
 			"and click on \"store\" to set it up. Or just punch it to set the height as station "..
 			"name."));
 		return;
@@ -106,11 +106,11 @@ minetest.register_node("travelnet:elevator", {
 		fixed = {
 
 			{ 0.48, -0.5,-0.5,  0.5,  0.5, 0.5},
-			{-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5}, 
+			{-0.5 , -0.5, 0.48, 0.48, 0.5, 0.5},
 			{-0.5,  -0.5,-0.5 ,-0.48, 0.5, 0.5},
 
 			--groundplate to stand on
-			{ -0.5,-0.5,-0.5,0.5,-0.48, 0.5}, 
+			{ -0.5,-0.5,-0.5,0.5,-0.48, 0.5},
 		},
 	},
 
@@ -128,7 +128,7 @@ minetest.register_node("travelnet:elevator", {
         meta:set_string("station_network","");
         meta:set_string("owner",          placer:get_player_name() );
         -- request initial data
-        meta:set_string("formspec", 
+        meta:set_string("formspec",
                             "size[12,10]"..
                             "field[0.3,5.6;6,0.7;station_name;"..S("Name of this station:")..";]"..
 --                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
@@ -140,7 +140,7 @@ minetest.register_node("travelnet:elevator", {
        minetest.add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
        travelnet.show_nearest_elevator( pos, placer:get_player_name(), p2 );
     end,
-    
+
     on_receive_fields = travelnet.on_receive_fields,
     on_punch          = function(pos, node, puncher)
                              travelnet.update_formspec(pos, puncher:get_player_name())
@@ -164,7 +164,7 @@ minetest.register_node("travelnet:elevator", {
        local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z});
        -- leftover elevator_top nodes can be removed by placing a new elevator underneath
        if( node ~= nil and node.name ~= "air" and node.name ~= 'travelnet:elevator_top') then
-          minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
+          minetest.chat_send_player( placer:get_player_name(), S('There is not enough vertical space to place the travelnet box!'))
           return;
        end
        return minetest.item_place(itemstack, placer, pointed_thing);
