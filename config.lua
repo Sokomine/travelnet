@@ -3,24 +3,24 @@
 travelnet.MAX_STATIONS_PER_NETWORK = tonumber(minetest.settings:get("travelnet.MAX_STATIONS_PER_NETWORK")) or 24;
 
 -- set this to true if you want a simulated beam effect
-travelnet.travelnet_effect_enabled = minetest.settings:get_bool("travelnet.travelnet_effect_enabled") or false;
+travelnet.enable_travelnet_effect = minetest.settings:get_bool("travelnet.enable_travelnet_effect") or false;
 
 -- set this to true if you want a sound to be played when the travelnet is used
-travelnet.travelnet_sound_enabled  = minetest.settings:get_bool("travelnet.travelnet_sound_enabled") or true;
+travelnet.enable_travelnet_sound  = minetest.settings:get_bool("travelnet.enable_travelnet_sound") or true;
 
 -- if you set this to false, travelnets cannot be created
 -- (this may be useful if you want nothing but the elevators on your server)
-travelnet.travelnet_enabled        = minetest.settings:get_bool("travelnet.travelnet_enabled") or true;
+travelnet.enable_travelnet        = minetest.settings:get_bool("travelnet.enable_travelnet") or true;
 
--- if you set travelnet.elevator_enabled to false, you will not be able to
+-- if you set travelnet.enable_elevator to false, you will not be able to
 -- craft, place or use elevators
-travelnet.elevator_enabled         = minetest.settings:get_bool("travelnet.elevator_enabled") or true;
+travelnet.enable_elevator         = minetest.settings:get_bool("travelnet.enable_elevator") or true;
 
 -- if you set this to false, doors will be disabled
-travelnet.doors_enabled            = minetest.settings:get_bool("travelnet.doors_enabled") or true;
+travelnet.enable_doors            = minetest.settings:get_bool("travelnet.enable_doors") or true;
 
 -- starts an abm which re-adds travelnet stations to networks in case the savefile got lost
-travelnet.abm_enabled              = minetest.settings:get_bool("travelnet.abm_enabled") or false;
+travelnet.enable_abm              = minetest.settings:get_bool("travelnet.enable_abm") or false;
 
 -- change these if you want other receipes for travelnet or elevator
 travelnet.travelnet_recipe = {
@@ -94,7 +94,7 @@ end
 -- if you want to allow *everybody* to attach stations to all nets, let the
 -- function always return true;
 -- if the function returns false, players with the travelnet_attach priv
--- can still add stations to that network 
+-- can still add stations to that network
 
 travelnet.allow_attach = function( player_name, owner_name, network_name )
    return false;
