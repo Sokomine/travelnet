@@ -100,11 +100,11 @@ msgid "There is not enough vertical space to place the travelnet box!"
 msgstr ""
 
 #: init.lua
-msgid "allows attaching travelnet boxes to travelnets of other players"
+msgid "Allow attaching travelnet boxes to travelnets of other players."
 msgstr ""
 
 #: init.lua
-msgid "allows breaking travelnet boxes which belong to networks of other players"
+msgid "Allow removing travelnet boxes which belong to networks of other players."
 msgstr ""
 
 #: init.lua
@@ -114,7 +114,7 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "[Mod travelnet] Error: Savefile '%s' was not found."
+msgid "[Mod travelnet] Error: Savefile '%s' does not exist."
 msgstr ""
 
 #: init.lua
@@ -169,17 +169,12 @@ msgid "Save"
 msgstr ""
 
 #: init.lua
-msgid "Update failed! Resetting..."
+msgid "Update failed! Changes reverted."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "Station '%s'"
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid " has been reattached to the network '%s'."
+msgid "Station '%s' reconnected to network '%s'."
 msgstr ""
 
 #: init.lua
@@ -228,16 +223,8 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "on travelnet '%s'"
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid "(owned by %s)"
-msgstr ""
-
-#: init.lua
-msgid "is ready. Right-click to travel, punch to update."
+msgid "Station '%s' on travelnet '%s' (owned by %s) is ready."
+" Right-click to travel, punch to update."
 msgstr ""
 
 #: init.lua
@@ -260,42 +247,33 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "Access has been denied. There is no player with interact privilege named '%s'."
+msgid "Access is denied."
+" There is no player with interact privilege named '%s'."
 msgstr ""
 
 #: init.lua
-msgid ""
-"Access has been denied. You do not have the travelnet_attach priv which is required to attach your "
-"box to the network of someone else."
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid ""
-"A station named '%s' already exists on this network. Please choose a "
-"different name!"
+msgid "Access is denied. You do not have the travelnet_attach priv"
+" which is required to attach your box"
+" to the network of someone else."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "Network '%s',"
+msgid "A station named '%s' already exists on this network."
+" Please choose a different name!"
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid ""
-"already contains the maximum number (=%s) of allowed stations per network. "
-"Please choose a different/new network name."
+msgid "Network '%s' already contains the maximum number (=%s)"
+" of allowed stations per network."
+" Please choose a different/new network name."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "has been added to the network '%s'"
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid ", which now consists of %s station(s)."
+msgid "Station '%s' connected to network '%s'"
+", which now consists of %s station(s)."
 msgstr ""
 
 #: init.lua
@@ -341,14 +319,14 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "has been REMOVED from the network '%s'."
+msgid "Station '%s' disconnected from network '%s'."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid ""
-"This %s has not been configured yet. Please set it up first to claim it. "
-"You can only remove stations you own."
+msgid "This %s has not been configured yet."
+" Please set it up first to claim it."
+" You can only remove stations you own."
 msgstr ""
 
 #: init.lua
