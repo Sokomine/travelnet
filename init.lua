@@ -292,7 +292,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
 
       travelnet.reset_formspec( meta );
-      travelnet.show_message( pos, puncher_name, "Error", S("Update failed! Resetting...."));
+      travelnet.show_message( pos, puncher_name, "Error", S("Update failed! Resetting..."));
       return;
    end
 
