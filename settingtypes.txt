@@ -2,6 +2,6 @@ travelnet.MAX_STATIONS_PER_NETWORK (Maximum travelnet stations per network) int 
 travelnet.enable_travelnet_effect (Travelnet visual beam effect) bool false
 travelnet.enable_travelnet_sound (Travelnet sound effect) bool true
 travelnet.enable_travelnet (Enable travelnets) bool true
-travelnet.enable_elevator (Allow travelnet elevators) bool true
+travelnet.enable_elevator (Enable elevators) bool true
 travelnet.enable_doors (Travelnet elevator doors) bool true
 travelnet.enable_abm (Reconnect travelnets automatically via ABM) bool false
