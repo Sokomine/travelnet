@@ -199,7 +199,7 @@ msgid "Assigned to Network:"
 msgstr ""
 
 #: init.lua
-msgid "Choose a Destination:"
+msgid "Choose a destination:"
 msgstr ""
 
 #: init.lua
