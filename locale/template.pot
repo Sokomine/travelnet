@@ -169,7 +169,7 @@ msgid "Save"
 msgstr ""
 
 #: init.lua
-msgid "Update failed! Resetting...."
+msgid "Update failed! Resetting..."
 msgstr ""
 
 #: init.lua
