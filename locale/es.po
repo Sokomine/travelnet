@@ -111,7 +111,7 @@ msgstr ""
 
 #: init.lua
 msgid "Allow attaching travelnet boxes to travelnets of other players."
-msgstr "permite adjuntar cajas de viaje a redes de otros jugadores"
+msgstr "Permite adjuntar cajas de viaje a redes de otros jugadores."
 
 #: init.lua
 msgid msgid "Allow removing travelnet boxes which belong to networks of other players."
