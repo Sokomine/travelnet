@@ -291,7 +291,7 @@ msgid "Network '%s' already contains the maximum number (=%s)"
 " Please choose a different/new network name."
 msgstr ""
 "La red '%s' ya contiene la cantidad máxima (%s) de estaciones permitidas. Por favor "
-"elige un nombre de red diferente/nuevo."
+"elija un nombre de red diferente/nuevo."
 
 #: init.lua
 #, lua-format
