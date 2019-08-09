@@ -281,7 +281,7 @@ msgstr ""
 msgid "A station named '%s' already exists on this network."
 " Please choose a different name!"
 msgstr ""
-"Yes existe una estación llamada '%s' en ésta red. Por favor, ¡elige un "
+"Ya existe una estación llamada '%s' en ésta red. Por favor, ¡elija un "
 "nombre diferente!"
 
 #: init.lua
