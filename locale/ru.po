@@ -114,7 +114,7 @@ msgid "Allow attaching travelnet boxes to travelnets of other players."
 msgstr "позволяет присоеденять телепорты к сетям других игроков"
 
 #: init.lua
-msgid msgid "Allow removing travelnet boxes which belong to networks of other players."
+msgid "Allow removing travelnet boxes which belong to networks of other players."
 msgstr "позволяет убирать телепорты других игроков"
 
 #: init.lua
