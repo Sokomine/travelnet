@@ -1,38 +1,24 @@
 # textdomain: travelnet
 elevator door (open)=puerta de elevador (abierta)
 elevator door (closed)=puerta de elevador (cerrada)
-Congratulations! This is your first elevator.You can build an elevator 
-network by placing further elevators somewhere above or below this one. Just 
-make sure that the x and z coordinate are the same.=¡Felicidades! Éste es tu primer elevador. Puedes construir una red de 
-elevadores colocando más elevadores en algún lugar arriba o abajo de éste. 
-asegúrate de que las coordenadas X y Z sean las mismas.
-This elevator will automaticly connect to the other elevators you have 
-placed at diffrent heights. Just enter a station name and click on \"store\" 
-to set it up. Or just punch it to set the height as station name.=Éste elevador se conectará automáticamente a otros elevadores que hayas 
-colocado a diferentes alturas. Simplemente ingresa un nombre para la 
-estación y haz clic en \"Guardar\" para configurarlo, o golpéalo para usar 
-la altura como nombre.
+Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=¡Felicidades! Éste es tu primer elevador. Puedes construir una red de elevadores colocando más elevadores en algún lugar arriba o abajo de éste. Asegúrate de que las coordenadas X y Z sean las mismas.
+This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Éste elevador se conectará automáticamente a otros elevadores que hayas colocado a diferentes alturas. Simplemente ingresa un nombre para la estación y haz clic en "Guardar" para configurarlo, o golpéalo para usar la altura como nombre.
 Your nearest elevator network is located=La red de elevadores más cercana se ubica
 m behind this elevator and=m detrás de éste elevador y
 m in front of this elevator and=m delante de éste elevador y
-ERROR=ERROR
+ ERROR= ERROR
 m to the left=m a la izquierda
 m to the right=m a la derecha
 , located at x=, ubicado en x
 This elevator here will start a new shaft/network.=Éste elevador comenzará una nueva red.
-This is your first elevator. It differs from travelnet networks by only 
-allowing movement in vertical direction (up or down). All further elevators 
-which you will place at the same x,z coordinates at differnt heights will be 
-able to connect to this elevator.=Éste es tu primer elevador. Se diferencia de las cabinas de viaje en que 
-solamente permite movimiento vertical (arriba o abajo). Los elevadores que 
-coloque en las mismas coordenadas X,Z se conectarán a éste elevador.
+This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at differnt heights will be able to connect to this elevator.=Éste es tu primer elevador. Se diferencia de las cabinas de viaje en que solamente permite movimiento vertical (arriba o abajo). Los elevadores que coloque en las mismas coordenadas X,Z se conectarán a éste elevador.
 Elevator=Elevador
 Elevator (unconfigured)=Elevador (sin configurar)
 Name of this station:=Nombre de ésta estación:
 Store=Guardar
 Not enough vertical space to place the travelnet box!=¡No hay espacio vertical suficiente para colocar la cabina de viaje!
-allows to attach travelnet boxes to travelnets of other players=permite adjuntar cajas de viaje a redes de otros jugadores
-allows to dig travelnet boxes which belog to nets of other players=permite cavar cabinas de viaje pertenecientes a redes de otros jugadores
+allows to attach travelnet boxes to travelnets of other players=Permite adjuntar cajas de viaje a redes de otros jugadores
+allows to dig travelnet boxes which belog to nets of other players=Permite cavar cabinas de viaje pertenecientes a redes de otros jugadores
 [Mod travelnet] Error: Savefile '%s' could not be written.=[Mod travelnet] Error: No se pudo escribir '%s'.
 [Mod travelnet] Error: Savefile '%s' not found.=[Mod travelnet] Error: No se pudo encontrar '%s'.
 Back=Atras
@@ -40,17 +26,17 @@ Exit=Salir
 Travelnet-box (unconfigured)=Cabina de viaje (sin configurar)
 Configure this travelnet station=Configurar ésta estación"
 Name of this station=Nombre de ésta estación
-How do you call this place here? Example: \"my first house\", \"mine\", "\"shop\"...=¿Cómo llamaras a éste lugar? Por ejemplo: \"mi casa\", \"mina\", "\"tienda\"...
+How do you call this place here? Example: "my first house", "mine", "shop"...=¿Cómo llamaras a éste lugar? Por ejemplo: "mi casa", "mina", "tienda"...
 Assign to Network:=Asignar a la red:
-You can have more than one network. If unsure, use \"%s\"=Puedes tener más de una red. Si no estás seguro, usa \"%s\"
+You can have more than one network. If unsure, use "%s"=Puedes tener más de una red. Si no estás seguro, usa "%s"
 Owned by:=Propiedad de:
 Unless you know what you are doing, leave this empty.=Deja éste campo vacío a menos que sepas lo que haces.
 Help=Ayuda
 Save=Guardar
 Update failed! Resetting this box on the travelnet.=¡Actualización fallida! Reiniciando ésta cabina de viaje.
-Station '%s'=Estación '%s'
+Station '%s'=La estación '%s'
  has been reattached to the network '%s'.= ha sido reacoplado a la red '%s'.
-Locked travelnet. Type /help for help:=Cabins de viaje bloqueada. Escriba /help para ver la ayuda:
+Locked travelnet. Type /help for help:=Cabina de viaje bloqueada. Escriba /help para ver la ayuda:
   Travelnet-Box=Cabina de viaje
 Punch box to update target list.=Golpea la cabina para actualizar la lista de destinos.
 Assigned to Network:=Asignado a la red:
@@ -63,7 +49,7 @@ move up=subir
 move down=bajar
 on travelnet '%s'=en la red '%s'
 (owned by %s)=(pertenece a %s)
-ready for usage. Right-click to travel, punch to update.=listo para usar. Haz clic derecho para viajar, golpea para actualizar.
+ready for usage. Right-click to travel, punch to update.=Listo para usar. Haz clic derecho para viajar, golpea para actualizar.
 at %s m=a %s m
 Error=Error
 Please provide a name for this station.=Por favor proporciona un nombre para esta estación.
@@ -85,9 +71,10 @@ does not exist (anymore?) on this network.=ya no existe (mas?) en ésta red.
 Initiating transfer to station '%s'.=Iniciando transferencia a la estación '%s'.
 Could not find information about the station that is to be removed.=No se encontró información acerca de la estación a quitar.
 Could not find the station that is to be removed.=No se encontró la estación a quitar.
-has been REMOVED from the network '%s'.=Ha sido QUITADA de la red '%s'.
+has been REMOVED from the network '%s'.=ha sido QUITADA de la red '%s'.
 This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.=Éste %s aún no ha sido configurado. Por favor configurarlo para reclamarlo. Luego de hacerlo serás el dueño y podrás quitarlo.
 This %s belongs to %s. You can't remove it.=Éste %s pertenece a %s. No lo puedes quitar.
 Remove station=Quitar estación
+Travelnet-Box=Cabina de viaje
 You do not have enough room in your inventory.=No tienes suficiente espacio en el inventario.
 [Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'.=[Mod travelnet] Error: El fichero '%s' está dañado. Guardando copia de respaldo en '%s'.

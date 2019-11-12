@@ -8,9 +8,9 @@ Exit=Ende
 Travelnet-box (unconfigured)=Reisenetz-Box (nicht konfiguriert)
 Configure this travelnet station=Konfiguration dieser Reisenetz-Box
 Name of this station=Name dieser Reisenetz-Box
-How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"...=Wie willst du diesen Ort nennen? Beispiel: \"mein erstes Haus\", \"Mine\", \"Laden\"...
+How do you call this place here? Example: "my first house", "mine", "shop"...=Wie willst du diesen Ort nennen? Beispiel: "mein erstes Haus", "Mine", "Laden"...
 Assign to Network:=Station dem folgendem Netzwerk zuweisen:
-You can have more than one network. If unsure, use \"%s\"=Du kannst mehrere Netzwerke anlegen. Falls du nicht weißt, was du tun sollst, wähle \"%s\"
+You can have more than one network. If unsure, use "%s"=Du kannst mehrere Netzwerke anlegen. Falls du nicht weißt, was du tun sollst, wähle "%s"
 Owned by:=Besitzer:
 Unless you know what you are doing, leave this empty.=Wenn du nicht weißt, wozu dieses Feld dient, laß es leer.
 Help=Hilfe
@@ -41,8 +41,7 @@ There is no player with interact privilege named '%s'. Aborting.=Es gibt keinen 
 You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.=Dir fehlt das travelnet_attach-Recht, welches für das Hinzufügen von Reisenetz-Boxen zu Netzwerken nötig ist, die anderen Spielern gehören. Abbruch.
 A station named '%s' already exists on this network. Please choose a diffrent name!=Eine Reisenetz-Box namens '%s' existiert bereits in diesem Netzwerk. Abbruch.
 Network '%s'=Netzwerk '%s' 
-already contains the maximum number ( 
-%s) of allowed stations per network. Please choose a diffrent/new network name.=enthält bereits die maixmale Anzahl (=%s) erlaubert Stationen pro Netzwerk. Bitte wähle ein anderes bzw. neues Netzwerk. 
+already contains the maximum number (%s) of allowed stations per network. Please choose a diffrent/new network name.=enthält bereits die maixmale Anzahl (=%s) erlaubert Stationen pro Netzwerk. Bitte wähle ein anderes bzw. neues Netzwerk. 
 has been added to the network '%s'=wurde an das Netzwerk '%s' angeschlossen.
 , which now consists of %s station(s).=, das nun aus %s Station(en) besteht.
 Station:=Station:
@@ -61,7 +60,7 @@ This %s has not been configured yet. Please set it up first to claim it. Afterwa
 This %s belongs to %s. You can't remove it.=Diese Reisenetz-Box gehört %s. Du kannst sie nicht entfernen.
 Not enough vertical space to place the travelnet box!=Nicht genug Platz (vertikal) um die Reisenetz-Box zu setzen!
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=
-This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on \ store\  to set it up. Or just punch it to set the height as station name.=Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf \"Speichern\" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
+This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf "Speichern" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
 Your nearest elevator network is located=Dein nächstgelegenes Aufzugs-Netzwerk befindet sich
 behind this elevator and=hinter diesem Aufzug und
 in front of this elevator and=vor diesem Aufzug und 
@@ -75,5 +74,6 @@ Elevator (unconfigured)=Aufzug (nicht konfiguriert)
 elevator door (open)=Aufzugstür (offen)
 elevator door (closed)=Aufzugstür (geschlossen) 
 Remove station=Station entfernen
+Travelnet-Box=
 You do not have enough room in your inventory.=Du hast nicht genug Platz in deinem Inventar. 
 [Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'.=[Mod travelnet] Fehler: Sicherungsdatei '%s' ist beschädigt. Backup wurde unter '%s' gespeichert. 

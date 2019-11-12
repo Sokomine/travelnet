@@ -27,7 +27,7 @@ msgstr ""
 
 #: elevator.lua
 msgid ""
-"Congratulations! This is your first elevator.You can build an elevator "
+"Congratulations! This is your first elevator. You can build an elevator "
 "network by placing further elevators somewhere above or below this one. Just "
 "make sure that the x and z coordinate are the same."
 msgstr ""

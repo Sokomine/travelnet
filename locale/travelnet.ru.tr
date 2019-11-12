@@ -1,16 +1,8 @@
 # textdomain: travelnet
 elevator door (open)=дверь лифта (открыта)
 elevator door (closed)=дверь лифта (закрыта)
-Congratulations! This is your first elevator.You can build an elevator 
-network by placing further elevators somewhere above or below this one. 
-Just make sure that the x and z coordinate are the same.=Поздравляем! Это ваш первый лифт. Вы можете построить сеть лифтов, 
-разместив дополнительные лифты выше или ниже этого лифта. 
-Только убедитесь, что координаты x и z совпадают.
-This elevator will automaticly connect to the other elevators you have 
-placed at diffrent heights. Just enter a station name and click on \"store\" 
-to set it up. Or just punch it to set the height as station name.=Этот лифт будет автоматически подключен к другим лифтам, которые размещены 
-на разных высотах. После установки можете ввести название лифта и нажать \"сохранить\". 
-Или просто ударьте его, чтобы установить высоту в качестве названия лифта.
+Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=Поздравляем! Это ваш первый лифт. Вы можете построить сеть лифтов, разместив дополнительные лифты выше или ниже этого лифта. Только убедитесь, что координаты x и z совпадают.
+This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Этот лифт будет автоматически подключен к другим лифтам, которые размещены на разных высотах. После установки можете ввести название лифта и нажать "сохранить". Или просто ударьте его, чтобы установить высоту в качестве названия лифта.
 Your nearest elevator network is located=Ваша ближайшая сеть лифтов находится
 m behind this elevator and=м за этим лифтом
 m in front of this elevator and=м перед этим лифтом
@@ -19,13 +11,7 @@ m to the left=м с лева
 m to the right=м с права
 , located at x=, находится на x
 This elevator here will start a new shaft/network.=Этот лифт составит новую сеть.
-This is your first elevator. It differs from travelnet networks by only 
-allowing movement in vertical direction (up or down). All further elevators 
-which you will place at the same x,z coordinates at differnt heights will be 
-able to connect to this elevator.=Это ваш первый лифт. Он отличается от сети телепортов только тем что 
-движение ограниченно в вертикальном направлении (вверх или вниз). 
-Все дополнительные лифты, которые вы будете размещать в тех же координатах 
-(x, z) на разных высотах, будут подключены к этому лифту.
+This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at differnt heights will be able to connect to this elevator.=Это ваш первый лифт. Он отличается от сети телепортов только тем что движение ограниченно в вертикальном направлении (вверх или вниз). Все дополнительные лифты, которые вы будете размещать в тех же координатах (x, z) на разных высотах, будут подключены к этому лифту.
 Elevator=Лифт
 Elevator (unconfigured)=Лифт (без настройки)
 Name of this station:=Имя этой станции:
@@ -86,5 +72,6 @@ Initiating transfer to station '%s'.=Инициирование перехода
 Could not find information about the station that is to be removed.=Не удалось найти информацию о станции, для удаления.
 Could not find the station that is to be removed.=Не удалось найти станцию, для удаления.
 has been REMOVED from the network '%s'.=УДАЛЕНА из сети «%s».
+Travelnet-Box=
 This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.=Этот %s еще не настроен. Пожалуйста, сначала настройте его, чтобы перенять имущество. После этого вы можете удалить его, так как вы являетесь владельцем.
 This %s belongs to %s. You can't remove it.=Этот %s принадлежит %s.
