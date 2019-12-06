@@ -100,7 +100,7 @@ end
 -- if this returns true, a player named player_name can remove a travelnet station
 -- from network_name (owned by owner_name) even though he is neither the owner nor
 -- has the travelnet_remove priv
-travelnet.allow_dig    = function( player_name, owner_name, network_name )
+travelnet.allow_dig    = function( player_name, owner_name, network_name, pos )
    return false;
 end
 
