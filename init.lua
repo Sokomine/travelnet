@@ -706,7 +706,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       -- players with travelnet_remove priv can dig the station
       if( not(minetest.check_player_privs(name, {travelnet_remove=true}))
        -- the function travelnet.allow_dig(..) may allow additional digging
-       and not(travelnet.allow_dig( name, owner, network_name ))
+       and not(travelnet.allow_dig( name, owner, network_name, pos ))
        -- the owner can remove the station
        and owner ~= name
        -- stations without owner can be removed by anybody
@@ -974,7 +974,7 @@ travelnet.can_dig_old = function( pos, player, description )
 
    -- players with that priv can dig regardless of owner
    if( minetest.check_player_privs(name, {travelnet_remove=true})
-       or travelnet.allow_dig( name, owner, network_name )) then
+       or travelnet.allow_dig( name, owner, network_name, pos )) then
       return true;
    end
 
