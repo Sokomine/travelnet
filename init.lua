@@ -123,7 +123,7 @@ end
 
 
 travelnet.restore_data = function()
-   
+
    local file = io.open( travelnet.mod_data_path, "r" );
    if( not file ) then
       print(S("[Mod travelnet] Error: Savefile '%s' not found.")
@@ -204,7 +204,8 @@ end
 -- (back from help page, moved travelnet up or down etc.)
 travelnet.form_input_handler = function( player, formname, fields)
         if(formname == "travelnet:show" and fields and fields.pos2str) then
-		local pos = minetest.string_to_pos( fields.pos2str );
+		local pos = minetest.string_to_pos( fields.pos2str )
+		if not pos then return end
 		if( locks and (fields.locks_config or fields.locks_authorize)) then
 			return locks:lock_handle_input( pos, formname, fields, player )
 		end
@@ -843,7 +844,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:move_to( target_pos, false);
 
-   if( travelnet.travelnet_effect_enabled ) then 
+   if( travelnet.travelnet_effect_enabled ) then
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
