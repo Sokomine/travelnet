@@ -31,7 +31,7 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	local nearest_dist = 100000000;
 	local nearest_dist_x = 0;
 	local nearest_dist_z = 0;
-	for network_name, data in pairs( travelnet.targets[ owner_name ] ) do
+	for target_network_name, data in pairs( travelnet.targets[ owner_name ] ) do
 		local station_name = next( data, nil );
 		if( station_name and data[ station_name ][ "nr" ] and data[ station_name ].pos) then
 			local station_pos = data[ station_name ].pos;
@@ -43,7 +43,7 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 				nearest_dist = dist;
 				nearest_dist_x = station_pos.x - pos.x;
 				nearest_dist_z = station_pos.z - pos.z;
-				nearest_name = network_name;
+				nearest_name = target_network_name;
 			end
 		end
 	end
@@ -165,7 +165,10 @@ minetest.register_node("travelnet:elevator", {
 	   local def = minetest.registered_nodes[node.name]
        -- leftover elevator_top nodes can be removed by placing a new elevator underneath
        if not def or not def.buildable_to then
-          minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
+          minetest.chat_send_player(
+						placer:get_player_name(),
+						S('Not enough vertical space to place the travelnet box!')
+					)
           return;
        end
        return minetest.item_place(itemstack, placer, pointed_thing);
@@ -194,4 +197,3 @@ minetest.register_alias("travelnet:elevator_top", "air")
 		recipe = travelnet.elevator_recipe,
 	})
 --end
-

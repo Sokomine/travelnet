@@ -1,6 +1,8 @@
 # TravelNet
 
-How this works: 
+![](https://github.com/mt-mods/travelnet/workflows/luacheck/badge.svg)
+
+How this works:
 
 - craft it by filling the right and left row with glass; place in the middle row (from top to bottom): steel, mese, steel
 - place the travelnet box somewhere

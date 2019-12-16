@@ -16,7 +16,8 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 		is_ground_content = true,
 		-- only the closed variant is in creative inventory
 		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=2,not_in_creative_inventory=1},
-                -- larger than one node but slightly smaller than a half node so that wallmounted torches pose no problem
+                -- larger than one node but slightly smaller than a half node so
+								-- that wallmounted torches pose no problem
 		node_box = {
 			type = "fixed",
 			fixed = {

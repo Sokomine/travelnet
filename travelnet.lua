@@ -1,6 +1,7 @@
 -- contains the node definition for a general travelnet that can be used by anyone
 --   further travelnets can only be installed by the owner or by people with the travelnet_attach priv
---   digging of such a travelnet is limited to the owner and to people with the travelnet_remove priv (useful for admins to clean up)
+--   digging of such a travelnet is limited to the owner and to people with the
+--   travelnet_remove priv (useful for admins to clean up)
 -- (this can be overrided in config.lua)
 -- Author: Sokomine
 local S = travelnet.S;
@@ -78,7 +79,10 @@ minetest.register_node("travelnet:travelnet", {
        local def = minetest.registered_nodes[node.name]
        if not def or not def.buildable_to then
 
-          minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
+          minetest.chat_send_player(
+						placer:get_player_name(),
+						S('Not enough vertical space to place the travelnet box!')
+					)
           return;
        end
        return minetest.item_place(itemstack, placer, pointed_thing);
