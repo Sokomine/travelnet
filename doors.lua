@@ -94,7 +94,7 @@ end
 
 -- actually register the doors
 -- (but only if the materials for them exist)
-if( minetest.registered_nodes["default:glass"]) then
+if(minetest.get_modpath("default")) then
    travelnet.register_door( "travelnet:elevator_door_steel", {"default_stone.png"}, "default:steel_ingot");
    travelnet.register_door( "travelnet:elevator_door_glass", {"travelnet_elevator_door_glass.png"}, "default:glass");
    travelnet.register_door( "travelnet:elevator_door_tin", {"default_clay.png"}, "default:tin_ingot");
