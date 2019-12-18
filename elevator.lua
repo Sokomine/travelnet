@@ -135,10 +135,9 @@ minetest.register_node("travelnet:elevator", {
 --                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
                             "button_exit[6.3,6.2;1.7,0.7;station_set;"..S("Store").."]" );
 
-       local p = {x=pos.x, y=pos.y+1, z=pos.z}
-       local p2 = minetest.dir_to_facedir(placer:get_look_dir())
-       minetest.add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
-       travelnet.show_nearest_elevator( pos, placer:get_player_name(), p2 );
+       local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
+       minetest.set_node(top_pos, {name="travelnet:hidden_top"})
+       travelnet.show_nearest_elevator( pos, placer:get_player_name(), minetest.dir_to_facedir(placer:get_look_dir()));
     end,
 
     on_receive_fields = travelnet.on_receive_fields,
@@ -163,8 +162,8 @@ minetest.register_node("travelnet:elevator", {
        local pos  = pointed_thing.above;
        local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z});
 	   local def = minetest.registered_nodes[node.name]
-       -- leftover elevator_top nodes can be removed by placing a new elevator underneath
-       if not def or not def.buildable_to then
+       -- leftover top nodes can be removed by placing a new elevator underneath
+       if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
           minetest.chat_send_player(
 						placer:get_player_name(),
 						S('Not enough vertical space to place the travelnet box!')
@@ -175,12 +174,12 @@ minetest.register_node("travelnet:elevator", {
     end,
 
     on_destruct = function(pos)
-            local p = {x=pos.x, y=pos.y+1, z=pos.z}
-	    minetest.remove_node(p)
+        pos = {x=pos.x, y=pos.y+1, z=pos.z}
+	    minetest.remove_node(pos)
     end
 })
 
-minetest.register_alias("travelnet:elevator_top", "air")
+minetest.register_alias("travelnet:hidden_top", "air")
 
 --if( minetest.get_modpath("technic") ~= nil ) then
 --        minetest.register_craft({

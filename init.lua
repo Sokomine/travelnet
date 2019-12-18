@@ -865,11 +865,15 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local player_model_vec = vector.new(0, player_model_bottom, 0);
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
 
-	 -- check if the node above the box (upper half) is air
-	 if minetest.get_node(vector.add(target_pos, {x=0, y=1, z=0})).name ~= "air" then
-		 -- replace with air if blocked
-		 minetest.set_node(target_pos, {name="air"})
-	 end
+	local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
+	local top_node = minetest.get_node(top_pos)
+	if top_node.name ~= "travelnet:hidden_top" then
+		local def = minetest.registered_nodes[top_node.name]
+		if def and def.buildable_to then
+			minetest.set_node(top_pos, {name="travelnet:hidden_top"})
+		end
+	end
+
    player:move_to( vector.add(target_pos, player_model_vec), false);
 
    if( travelnet.enable_travelnet_effect ) then
@@ -1031,8 +1035,25 @@ travelnet.can_dig_old = function( pos, player, description )
    return true;
 end
 
-
-
+-- invisible node to place inside top of travelnet box and elevator
+minetest.register_node("travelnet:hidden_top", {
+	drawtype = "nodebox",
+	paramtype = "light",
+	sunlight_propagates = true,
+	pointable = false,
+	diggable = false,
+	drop = "",
+	groups = {not_in_creative_inventory = 1},
+	tiles = {"travelnet_blank.png"},
+	node_box = {
+		type = "fixed",
+		fixed = { -0.5, 0.45,-0.5,0.5, 0.5, 0.5},
+	},
+	collision_box = {
+		type = "fixed",
+		fixed = { -0.5, 0.45,-0.5,0.5, 0.5, 0.5},
+	},
+})
 
 
 if( travelnet.travelnet_effect_enabled ) then
