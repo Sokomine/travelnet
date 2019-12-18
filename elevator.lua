@@ -179,8 +179,6 @@ minetest.register_node("travelnet:elevator", {
     end
 })
 
-minetest.register_alias("travelnet:hidden_top", "air")
-
 --if( minetest.get_modpath("technic") ~= nil ) then
 --        minetest.register_craft({
 --                output = "travelnet:elevator",
