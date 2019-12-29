@@ -20,5 +20,5 @@ read_globals = {
 	"dump", "screwdriver",
 
 	-- Deps
-	"default", "creative", "locks"
+	"default", "creative", "locks", "intllib"
 }
