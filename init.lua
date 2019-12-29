@@ -862,7 +862,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
 	 -- may be 0.0 for some versions of MT 5 player model
    local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5;
-   local player_model_vec = vector.n	ew(0, player_model_bottom, 0);
+   local player_model_vec = vector.new(0, player_model_bottom, 0);
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
 
 	local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
