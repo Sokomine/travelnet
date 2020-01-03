@@ -212,6 +212,10 @@ end
 travelnet.form_input_handler = function( player, formname, fields)
         if(formname == "travelnet:show" and fields and fields.pos2str) then
 		local pos = minetest.string_to_pos( fields.pos2str );
+		if not pos then
+			return
+		end
+
 		if( locks and (fields.locks_config or fields.locks_authorize)) then
 			return locks:lock_handle_input( pos, formname, fields, player )
 		end
