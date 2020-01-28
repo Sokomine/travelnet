@@ -282,6 +282,13 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
 
       if( is_elevator == true ) then
+         if minetest.get_modpath("areas") and areas.canInteract then
+            if owner_name ~= puncher_name and not areas:canInteract(pos, puncher_name) then
+               minetest.chat_send_player(puncher_name, S("You cannot configure an elevator in an area you don't control"))
+               return
+            end
+         end
+
          travelnet.add_target( nil, nil, pos, puncher_name, meta, owner_name );
          return;
       end
@@ -738,12 +745,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       return;
    end
 
-
-
-
    -- if the box has not been configured yet
    if( meta:get_string("station_network")=="" ) then
-
+      if minetest.get_modpath("areas") and areas.canInteract then
+         if fields.owner ~= name and not areas:canInteract(pos, name) then
+            minetest.chat_send_player(name, S("You cannot configure in an area you don't control"))
+            return
+         end
+      end
       travelnet.add_target( fields.station_name, fields.station_network, pos, name, meta, fields.owner );
       return;
    end
