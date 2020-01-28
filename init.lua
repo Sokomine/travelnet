@@ -716,6 +716,13 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          return
       end
 
+      if minetest.get_modpath("areas") and areas.canInteract then
+         if owner ~= name and not areas:canInteract(pos, name) then
+            minetest.chat_send_player(name, S("You cannot remove this travelnet from an area you don't control"))
+            return
+         end
+      end
+
       local pinv = player:get_inventory()
       if(not(pinv:room_for_item("main", node.name))) then
          minetest.chat_send_player(name, S("You do not have enough room in your inventory."));
