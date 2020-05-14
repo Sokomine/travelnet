@@ -738,6 +738,13 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
         return
       end
 
+      -- abort if protected by another mod
+      if( minetest.is_protected(pos, name)
+       and not(minetest.check_player_privs(name, {protection_bypass=true})) ) then
+         minetest.record_protection_violation(pos, name)
+         return
+      end
+
       local pinv = player:get_inventory()
       if(not(pinv:room_for_item("main", node.name))) then
          minetest.chat_send_player(name, S("You do not have enough room in your inventory."));
