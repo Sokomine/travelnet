@@ -87,6 +87,16 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 end
 
 
+minetest.register_node("travelnet:air",{
+	drawtype  = "airlike",
+	groups    = {undiggable = 1},
+	pointable = false,
+	walkable = false,
+	sunlight_propagates = true,
+	paramtype = "light",
+})
+
+
 minetest.register_node("travelnet:elevator", {
 	description = S("Elevator"),
 	drawtype = "mesh",
@@ -138,7 +148,9 @@ minetest.register_node("travelnet:elevator", {
        local p = {x=pos.x, y=pos.y+1, z=pos.z}
        local p2 = minetest.dir_to_facedir(placer:get_look_dir())
        minetest.add_node(p, {name="travelnet:elevator_top", paramtype2="facedir", param2=p2})
-       travelnet.show_nearest_elevator( pos, placer:get_player_name(), p2 );
+	   travelnet.show_nearest_elevator( pos, placer:get_player_name(), p2 );
+	   pos.y = pos.y + 1
+	   minetest.set_node(pos,{name = "travelnet:air"})
     end,
     
     on_receive_fields = travelnet.on_receive_fields,
@@ -152,6 +164,8 @@ minetest.register_node("travelnet:elevator", {
 
     after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
+			  pos.y = pos.y + 1
+			  minetest.remove_node(pos)
     end,
 
     -- TNT and overenthusiastic DMs do not destroy elevators either

@@ -50,7 +50,9 @@ minetest.register_node("travelnet:travelnet", {
     after_place_node  = function(pos, placer, itemstack)
 	local meta = minetest.get_meta(pos);
 	travelnet.reset_formspec( meta );
-        meta:set_string("owner",          placer:get_player_name() );
+		meta:set_string("owner",          placer:get_player_name() );
+		pos.y = pos.y + 1
+	    minetest.set_node(pos,{name = "travelnet:air"})
     end,
     
     on_receive_fields = travelnet.on_receive_fields,
@@ -64,6 +66,8 @@ minetest.register_node("travelnet:travelnet", {
 
     after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
+			  pos.y = pos.y + 1
+			  minetest.remove_node(pos)
     end,
 
     -- TNT and overenthusiastic DMs do not destroy travelnets
