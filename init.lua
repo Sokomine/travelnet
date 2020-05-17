@@ -727,6 +727,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       travelnet.remove_box( pos, nil, meta:to_table(), player );
       -- remove the node as such
       minetest.remove_node(pos)
+      pos.y = pos.y + 1
+      minetest.remove_node(pos)
       return;
    end
 
