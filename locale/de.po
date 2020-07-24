@@ -252,10 +252,11 @@ msgid "There is not enough vertical space to place the travelnet box!"
 msgstr "Nicht genug Platz (vertikal) um die Reisenetz-Box zu setzen!"
 
 #: elevator.lua
-msgid "Congratulations! This is your first elevator. You can build an elevator "
+msgid ""
+"Congratulations! This is your first elevator. You can build an elevator "
 "network by placing further elevators somewhere above or below this one. Just "
 "make sure that the x and z coordinate are the same."
-msgstr ""
+msgstr "Herzliche Glückwünsche! Dies ist Ihr erster Aufzug. Sie können ein Aufzugsnetz aufbauen, indem Sie weitere Aufzüge irgendwo über oder unter diesem platzieren. Stellen Sie einfach sicher, dass die x- und z-Koordinaten gleich sind."
 
 #: elevator.lua
 msgid "This elevator will automatically connect to the other elevators you have "
