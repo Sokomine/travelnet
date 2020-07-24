@@ -7,12 +7,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: travelnet\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: Poikilos <7557867+poikilos@users.noreply.github.com>\n"
 "POT-Creation-Date: 2018-04-05 14:34+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-07-24 13:55-04:00\n"
+"Last-Translator: Poikilos <7557867+poikilos@users.noreply.github.com>\n"
+"Language-Team: unknown <LL@li.org>\n"
+"Language: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,15 +27,15 @@ msgstr ""
 
 #: elevator.lua
 msgid ""
-"Congratulations! This is your first elevator.You can build an elevator "
+"Congratulations! This is your first elevator. You can build an elevator "
 "network by placing further elevators somewhere above or below this one. Just "
 "make sure that the x and z coordinate are the same."
 msgstr ""
 
 #: elevator.lua
 msgid ""
-"This elevator will automaticly connect to the other elevators you have "
-"placed at diffrent heights. Just enter a station name and click on \"store\" "
+"This elevator will automatically connect to the other elevators you have "
+"placed at different heights. Just enter a station name and click on \"store\" "
 "to set it up. Or just punch it to set the height as station name."
 msgstr ""
 
@@ -96,15 +96,15 @@ msgid "Store"
 msgstr ""
 
 #: elevator.lua travelnet.lua
-msgid "Not enough vertical space to place the travelnet box!"
+msgid "There is not enough vertical space to place the travelnet box!"
 msgstr ""
 
 #: init.lua
-msgid "allows to attach travelnet boxes to travelnets of other players"
+msgid "Allow attaching travelnet boxes to travelnets of other players."
 msgstr ""
 
 #: init.lua
-msgid "allows to dig travelnet boxes which belog to nets of other players"
+msgid "Allow removing travelnet boxes which belong to networks of other players."
 msgstr ""
 
 #: init.lua
@@ -114,7 +114,7 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "[Mod travelnet] Error: Savefile '%s' not found."
+msgid "[Mod travelnet] Error: Savefile '%s' does not exist."
 msgstr ""
 
 #: init.lua
@@ -139,8 +139,8 @@ msgstr ""
 
 #: init.lua
 msgid ""
-"How do you call this place here? Example: \"my first house\", \"mine\", "
-"\"shop\"..."
+"Name of this location (Example: \"my first house\", \"mine\", "
+"\"shop\"):"
 msgstr ""
 
 #: init.lua
@@ -169,17 +169,12 @@ msgid "Save"
 msgstr ""
 
 #: init.lua
-msgid "Update failed! Resetting this box on the travelnet."
+msgid "Update failed! Changes reverted."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "Station '%s'"
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid " has been reattached to the network '%s'."
+msgid "Station '%s' reconnected to network '%s'."
 msgstr ""
 
 #: init.lua
@@ -199,7 +194,7 @@ msgid "Assigned to Network:"
 msgstr ""
 
 #: init.lua
-msgid "Click on target to travel there:"
+msgid "Choose a destination:"
 msgstr ""
 
 #: init.lua
@@ -228,16 +223,8 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "on travelnet '%s'"
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid "(owned by %s)"
-msgstr ""
-
-#: init.lua
-msgid "ready for usage. Right-click to travel, punch to update."
+msgid "Station '%s' on travelnet '%s' (owned by %s) is ready."
+" Right-click to travel, punch to update."
 msgstr ""
 
 #: init.lua
@@ -255,47 +242,38 @@ msgstr ""
 
 #: init.lua
 msgid ""
-"Please provide the name of the network this station ought to be connected to."
+"Please provide a new or existing network to which this station should connect."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "There is no player with interact privilege named '%s'. Aborting."
+msgid "Access is denied."
+" There is no player with interact privilege named '%s'."
 msgstr ""
 
 #: init.lua
-msgid ""
-"You do not have the travelnet_attach priv which is required to attach your "
-"box to the network of someone else. Aborting."
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid ""
-"A station named '%s' already exists on this network. Please choose a "
-"diffrent name!"
+msgid "Access is denied. You do not have the travelnet_attach priv"
+" which is required to attach your box"
+" to the network of someone else."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "Network '%s',"
+msgid "A station named '%s' already exists on this network."
+" Please choose a different name!"
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid ""
-"already contains the maximum number (=%s) of allowed stations per network. "
-"Please choose a diffrent/new network name."
+msgid "Network '%s' already contains the maximum number (=%s)"
+" of allowed stations per network."
+" Please choose a different/new network name."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "has been added to the network '%s'"
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid ", which now consists of %s station(s)."
+msgid "Station '%s' connected to network '%s'"
+", which now consists of %s station(s)."
 msgstr ""
 
 #: init.lua
@@ -311,7 +289,7 @@ msgid "No help available yet."
 msgstr ""
 
 #: init.lua
-msgid "Please click on the target you want to travel to."
+msgid "Choose a destination."
 msgstr ""
 
 #: init.lua
@@ -332,23 +310,23 @@ msgid "Initiating transfer to station '%s'."
 msgstr ""
 
 #: init.lua
-msgid "Could not find information about the station that is to be removed."
+msgid "Travelnet could not find information about the station that is to be removed."
 msgstr ""
 
 #: init.lua
-msgid "Could not find the station that is to be removed."
-msgstr ""
-
-#: init.lua
-#, lua-format
-msgid "has been REMOVED from the network '%s'."
+msgid "Travelnet could not find the station that is to be removed."
 msgstr ""
 
 #: init.lua
 #, lua-format
-msgid ""
-"This %s has not been configured yet. Please set it up first to claim it. "
-"Afterwards you can remove it because you are then the owner."
+msgid "Station '%s' disconnected from network '%s'."
+msgstr ""
+
+#: init.lua
+#, lua-format
+msgid "This %s has not been configured yet."
+" Please set it up first to claim it."
+" You can only remove stations you own."
 msgstr ""
 
 #: init.lua
@@ -368,5 +346,5 @@ msgstr ""
 
 #: init.lua
 #, lua-format
-msgid "[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'."
+msgid "[Mod travelnet] Error: Savefile '%s' is damaged. A backup is being saved: '%s'."
 msgstr ""
