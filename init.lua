@@ -115,8 +115,7 @@ travelnet.save_data = function()
 
    local success = minetest.safe_file_write( travelnet.mod_data_path, data );
    if( not success ) then
-      print(S("[Mod travelnet] Error: Savefile '%s' could not be written.")
-         :format(travelnet.mod_data_path));
+      print(S("[Mod travelnet] Error: Savefile '@1' could not be written.", travelnet.mod_data_path));
    end
 end
 
@@ -125,8 +124,7 @@ travelnet.restore_data = function()
    
    local file = io.open( travelnet.mod_data_path, "r" );
    if( not file ) then
-      print(S("[Mod travelnet] Error: Savefile '%s' not found.")
-         :format(travelnet.mod_data_path));
+      print(S("[Mod travelnet] Error: Savefile '@1' not found.", travelnet.mod_data_path));
       return;
    end
 
@@ -135,8 +133,7 @@ travelnet.restore_data = function()
 
    if( not travelnet.targets ) then
        local backup_file = travelnet.mod_data_path..".bak"
-       print(S("[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'.")
-          :format(travelnet.mod_data_path, backup_file));
+       print(S("[Mod travelnet] Error: Savefile '@1' is damaged. Saved the backup as '@2'.", travelnet.mod_data_path, backup_file));
 
        minetest.safe_file_write( backup_file, data );
        travelnet.targets = {};
@@ -508,7 +505,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       is_elevator  = true;
       network_name = tostring( pos.x )..','..tostring( pos.z );
       if( not( station_name ) or station_name == '' ) then
-         station_name = S('at %s m'):format(tostring( pos.y ));
+         station_name = S("at @1 m", tostring( pos.y ));
       end
    end
 
@@ -808,8 +805,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    -- if the target station is gone
    if( not( travelnet.targets[ owner_name ][ station_network ][ fields.target ] )) then
 
-      minetest.chat_send_player(name, S("Station '%s'"):format( fields.target or "?").." "..
-			S("does not exist (anymore?) on this network."));
+      minetest.chat_send_player(name, S("Station '@1' does not exist (anymore?) on this network.", fields.target or "?"));
       travelnet.update_formspec( pos, name, nil );
       return;
    end
@@ -818,7 +814,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if( not( travelnet.allow_travel( name, owner_name, station_network, station_name, fields.target ))) then
       return;
    end
-   minetest.chat_send_player(name, S("Initiating transfer to station '%s'."):format( fields.target or "?"));
+   minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"));
 
 
 
@@ -976,11 +972,11 @@ travelnet.can_dig_old = function( pos, player, description )
    end
 
    if( not( meta ) or not( owner) or owner=='') then
-      minetest.chat_send_player(name, S("This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner."):format(description));
+      minetest.chat_send_player(name, S("This @1 has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.", description));
       return false;
 
    elseif( owner ~= name ) then
-      minetest.chat_send_player(name, S("This %s belongs to %s. You can't remove it."):format(description, tostring( meta:get_string('owner'))));
+      minetest.chat_send_player(name, S("This @1 belongs to @2. You can't remove it.", description, tostring( meta:get_string('owner'))));
       return false;
    end
    return true;
