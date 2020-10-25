@@ -1,8 +1,8 @@
 # textdomain: travelnet
 allows to attach travelnet boxes to travelnets of other players=erlaubt es, Stationen zu den Reisenetzwerken anderer Spieler hinzuzufügen
 allows to dig travelnet boxes which belog to nets of other players=erlaubt es, die Reisenetz-Stationen anderer Spieler zu entfernen
-[Mod travelnet] Error: Savefile '%s' could not be written.=[Mod travelnet] Fehler: Sicherungsdatei '%s' konnte nicht geschrieben werden.
-[Mod travelnet] Error: Savefile '%s' not found.=[Mod travelnet] Fehler: Sicherungsdatei '%s' nicht gefunden.
+[Mod travelnet] Error: Savefile '@1' could not be written.=[Mod travelnet] Fehler: Sicherungsdatei '@1' konnte nicht geschrieben werden.
+[Mod travelnet] Error: Savefile '@1' not found.=[Mod travelnet] Fehler: Sicherungsdatei '@1' nicht gefunden.
 Back=Zurück
 Exit=Ende
 Travelnet-box (unconfigured)=Reisenetz-Box (nicht konfiguriert)
@@ -30,7 +30,7 @@ Position in list:=Listenposition:
 move up=hoch 
 move down=runter 
 Station '@1' on travelnet '@2' (owned by @3) ready for usage. Right-click to travel, punch to update.=Station '@1' im Reisenetzwerk '@2' (Eigentum von @3) bereit für die Nutzung. Rechtsklick um zu Reisen, Linksklick für Update.
-at %s m=in %s m Höhe
+at @1 m=in @1 m Höhe
 Error=Fehler
 Please provide a name for this station.=Bitte gib einen Namen für diese Reisenetz-Box an.
 Please provide the name of the network this station ought to be connected to.=Bitte gib einen Namen für das Netzwerk an zu dem diese Reisenetz-Box gehören soll.
@@ -48,12 +48,12 @@ There is something wrong with the configuration of this station.=Die Konfigurati
 This travelnet is lacking data and/or improperly configured. 
 Diese Reisenetz-Box ist fehlerhaft oder unvollständig konfiguriert. 
 does not exist (anymore?) on this network.=gibt es nicht (mehr?) in diesem Netzwerk. 
-Initiating transfer to station '%s'.=leite Reise zur Station '%s' ein.
+Initiating transfer to station '@1'.=leite Reise zur Station '@1' ein.
 Could not find information about the station that is to be removed.=Konnte keine Informationen über die zu entfernende Station finden.
 Could not find the station that is to be removed.=Konnte die zu entfernende Station nicht finden.
 Station '@1' has been REMOVED from the network '@2'.=Station '@1' wurde vom Netzwerk '@2' ENTFERNT.
-This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.=Diese Reisenetz-Box wurde noch nicht konfiguriert. Bitte konfiguriere sie um sie in Besitz zu nehmen. Anschließend kannst du sie auch wieder entfernen da du dann der Besitzer bist.
-This %s belongs to %s. You can't remove it.=Diese Reisenetz-Box gehört %s. Du kannst sie nicht entfernen.
+This @1 has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.=Diese Reisenetz-Box wurde noch nicht konfiguriert. Bitte konfiguriere sie um sie in Besitz zu nehmen. Anschließend kannst du sie auch wieder entfernen da du dann der Besitzer bist.
+This @1 belongs to @2. You can't remove it.=Diese Reisenetz-Box gehört @2. Du kannst sie nicht entfernen.
 Not enough vertical space to place the travelnet box!=Nicht genug Platz (vertikal) um die Reisenetz-Box zu setzen!
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=
 This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf "Speichern" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
@@ -72,4 +72,4 @@ elevator door (closed)=Aufzugstür (geschlossen)
 Remove station=Station entfernen
 Travelnet-Box=
 You do not have enough room in your inventory.=Du hast nicht genug Platz in deinem Inventar. 
-[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'.=[Mod travelnet] Fehler: Sicherungsdatei '%s' ist beschädigt. Backup wurde unter '%s' gespeichert. 
+[Mod travelnet] Error: Savefile '@1' is damaged. Saved the backup as '@2'.=[Mod travelnet] Fehler: Sicherungsdatei '@1' ist beschädigt. Backup wurde unter '@2' gespeichert. 
