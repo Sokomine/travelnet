@@ -9,7 +9,7 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	end
 
 	if( not( travelnet.targets[ owner_name ] )) then
-		minetest.chat_send_player( owner_name, S("Congratulations! This is your first elevator."..
+		minetest.chat_send_player( owner_name, S("Congratulations! This is your first elevator. "..
 			"You can build an elevator network by placing further elevators somewhere above "..
 			"or below this one. Just make sure that the x and z coordinate are the same."));
 		return;

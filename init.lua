@@ -95,10 +95,9 @@ travelnet.targets = {};
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
 
--- Intllib
-local S = dofile(travelnet.path .. "/intllib.lua")
+-- Minetest Translator
+local S = minetest.get_translator("travelnet")
 travelnet.S = S
-
 
 minetest.register_privilege("travelnet_attach", { description = S("allows to attach travelnet boxes to travelnets of other players"), give_to_singleplayer = false});
 minetest.register_privilege("travelnet_remove", { description = S("allows to dig travelnet boxes which belog to nets of other players"), give_to_singleplayer = false});
@@ -116,8 +115,7 @@ travelnet.save_data = function()
 
    local success = minetest.safe_file_write( travelnet.mod_data_path, data );
    if( not success ) then
-      print(S("[Mod travelnet] Error: Savefile '%s' could not be written.")
-         :format(travelnet.mod_data_path));
+      print(S("[Mod travelnet] Error: Savefile '@1' could not be written.", travelnet.mod_data_path));
    end
 end
 
@@ -126,8 +124,7 @@ travelnet.restore_data = function()
    
    local file = io.open( travelnet.mod_data_path, "r" );
    if( not file ) then
-      print(S("[Mod travelnet] Error: Savefile '%s' not found.")
-         :format(travelnet.mod_data_path));
+      print(S("[Mod travelnet] Error: Savefile '@1' not found.", travelnet.mod_data_path));
       return;
    end
 
@@ -136,8 +133,7 @@ travelnet.restore_data = function()
 
    if( not travelnet.targets ) then
        local backup_file = travelnet.mod_data_path..".bak"
-       print(S("[Mod travelnet] Error: Savefile '%s' is damaged. Saved the backup as '%s'.")
-          :format(travelnet.mod_data_path, backup_file));
+       print(S("[Mod travelnet] Error: Savefile '@1' is damaged. Saved the backup as '@2'.", travelnet.mod_data_path, backup_file));
 
        minetest.safe_file_write( backup_file, data );
        travelnet.targets = {};
@@ -179,7 +175,7 @@ travelnet.show_message = function( pos, player_name, title, message )
 		return;
 	end
 	local formspec = "size[8,3]"..
-		"label[3,0;"..minetest.formspec_escape( title or "Error").."]"..
+		"label[3,0;"..minetest.formspec_escape( title or S("Error")).."]"..
 		"textlist[0,0.5;8,1.5;;"..minetest.formspec_escape( message or "- nothing -")..";]"..
 		"button_exit[3.5,2.5;1.0,0.5;back;"..S("Back").."]"..
 		"button_exit[6.8,2.5;1.0,0.5;station_exit;"..S("Exit").."]"..
@@ -248,7 +244,7 @@ travelnet.reset_formspec = function( meta )
 
 		"field[0.3,2.8;9,0.9;station_network;"..S("Assign to Network:")..";"..
 			minetest.formspec_escape(station_network or "").."]"..
-		"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"%s\""):format(tostring(station_network))..".]"..
+		"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"@1\"", tostring(station_network)) .. ".]"..
 		"field[0.3,4.4;9,0.9;owner;"..S("Owned by:")..";]"..
 		"label[0.3,4.7;"..S("Unless you know what you are doing, leave this empty.").."]"..
 		"button_exit[1.3,5.3;1.7,0.7;station_help_setup;"..S("Help").."]"..
@@ -320,8 +316,8 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
       -- add this station
       travelnet.targets[ owner_name ][ station_network ][ station_name ] = {pos=pos, timestamp=zeit };
 
-      minetest.chat_send_player(owner_name, S("Station '%s'"):format(station_name).." "..
-		S(" has been reattached to the network '%s'."):format(station_network));
+      minetest.chat_send_player(owner_name, S("Station '@1'" .." "..
+		"has been reattached to the network '@2'.", station_name, station_network));
       travelnet.save_data();
    end
 
@@ -487,10 +483,9 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
    meta:set_string( "formspec", formspec );
 
-   meta:set_string( "infotext", S("Station '%s'"):format(tostring( station_name )).." "..
-				S("on travelnet '%s'"):format(tostring( station_network )).." "..
-                                S("(owned by %s)"):format(tostring( owner_name )).." "..
-				S("ready for usage. Right-click to travel, punch to update."));
+   meta:set_string( "infotext", S("Station '@1'".." "..
+				"on travelnet '@2' (owned by @3)" .." "..
+				"ready for usage. Right-click to travel, punch to update.", tostring(station_name), tostring(station_network), tostring(owner_name)));
 
    -- show the player the updated formspec
    travelnet.show_current_formspec( pos, meta, puncher_name );
@@ -510,7 +505,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       is_elevator  = true;
       network_name = tostring( pos.x )..','..tostring( pos.z );
       if( not( station_name ) or station_name == '' ) then
-         station_name = S('at %s m'):format(tostring( pos.y ));
+         station_name = S("at @1 m", tostring( pos.y ));
       end
    end
 
@@ -534,7 +529,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    elseif( not( minetest.check_player_privs(player_name, {interact=true}))) then
 
       travelnet.show_message( pos, player_name, S("Error"),
-	S("There is no player with interact privilege named '%s'. Aborting."):format(tostring( player_name )));
+	S("There is no player with interact privilege named '@1'. Aborting.", tostring( player_name)));
       return;
 
    elseif( not( minetest.check_player_privs(player_name, {travelnet_attach=true}))
@@ -562,7 +557,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
       if( k == station_name ) then
          travelnet.show_message( pos, player_name, S("Error"),
-	    S("A station named '%s' already exists on this network. Please choose a diffrent name!"):format(station_name));
+	    S("A station named '@1' already exists on this network. Please choose a diffrent name!", station_name));
          return;
       end
 
@@ -572,9 +567,8 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    -- we don't want too many stations in the same network because that would get confusing when displaying the targets
    if( anz+1 > travelnet.MAX_STATIONS_PER_NETWORK ) then
       travelnet.show_message( pos, player_name, S("Error"),
-	S("Network '%s',"):format(network_name).." "..
-	S("already contains the maximum number (=%s) of allowed stations per network. "..
-	"Please choose a diffrent/new network name."):format(travelnet.MAX_STATIONS_PER_NETWORK));
+	S("Network '@1', already contains the maximum number (@2) of allowed stations per network. "..
+	"Please choose a different/new network name.", network_name, travelnet.MAX_STATIONS_PER_NETWORK));
       return;
    end
 
@@ -584,9 +578,9 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    -- do we have a new node to set up? (and are not just reading from a safefile?)
    if( meta ) then
 
-      minetest.chat_send_player(player_name, S("Station '%s'"):format(station_name).." "..
-		S("has been added to the network '%s'"):format(network_name)..
-		S(", which now consists of %s station(s)."):format(anz+1));
+      minetest.chat_send_player(player_name, S("Station '@1'" .." "..
+		"has been added to the network '@2'" ..
+		", which now consists of @3 station(s).", station_name, network_name, anz+1));
 
       meta:set_string( "station_name",    station_name );
       meta:set_string( "station_network", network_name );
@@ -680,7 +674,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       -- simulate right-click
       local node = minetest.get_node( pos );
       if( node and node.name and minetest.registered_nodes[ node.name ] ) then
-         travelnet.show_message( pos, name, "--> Help <--",
+         travelnet.show_message( pos, name, S("--> Help <--"),
 -- TODO: actually add help page
 		S("No help available yet."));
       end
@@ -811,8 +805,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    -- if the target station is gone
    if( not( travelnet.targets[ owner_name ][ station_network ][ fields.target ] )) then
 
-      minetest.chat_send_player(name, S("Station '%s'"):format( fields.target or "?").." "..
-			S("does not exist (anymore?) on this network."));
+      minetest.chat_send_player(name, S("Station '@1' does not exist (anymore?) on this network.", fields.target or "?"));
       travelnet.update_formspec( pos, name, nil );
       return;
    end
@@ -821,7 +814,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if( not( travelnet.allow_travel( name, owner_name, station_network, station_name, fields.target ))) then
       return;
    end
-   minetest.chat_send_player(name, S("Initiating transfer to station '%s'."):format( fields.target or "?"));
+   minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"));
 
 
 
@@ -935,11 +928,11 @@ travelnet.remove_box = function( pos, oldnode, oldmetadata, digger )
    travelnet.targets[ owner_name ][ station_network ][ station_name ] = nil;
 
    -- inform the owner
-   minetest.chat_send_player( owner_name, S("Station '%s'"):format(station_name ).." "..
-		S("has been REMOVED from the network '%s'."):format(station_network));
+   minetest.chat_send_player( owner_name, S("Station '@1'" .." "..
+   "has been REMOVED from the network '@2'.", station_name, station_network));
    if( digger ~= nil and owner_name ~= digger:get_player_name() ) then
-      minetest.chat_send_player( digger:get_player_name(), S("Station '%s'"):format(station_name)..
-		S("has been REMOVED from the network '%s'."):format(station_network));
+      minetest.chat_send_player( digger:get_player_name(), S("Station '@1'" .." "..
+      "has been REMOVED from the network '@2'.", station_name, station_network));
    end
 
    -- save the updated network data in a savefile over server restart
@@ -979,11 +972,11 @@ travelnet.can_dig_old = function( pos, player, description )
    end
 
    if( not( meta ) or not( owner) or owner=='') then
-      minetest.chat_send_player(name, S("This %s has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner."):format(description));
+      minetest.chat_send_player(name, S("This @1 has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.", description));
       return false;
 
    elseif( owner ~= name ) then
-      minetest.chat_send_player(name, S("This %s belongs to %s. You can't remove it."):format(description, tostring( meta:get_string('owner'))));
+      minetest.chat_send_player(name, S("This @1 belongs to @2. You can't remove it.", description, tostring( meta:get_string('owner'))));
       return false;
    end
    return true;
