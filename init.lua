@@ -141,7 +141,8 @@ travelnet.restore_data = function()
 
    if( not travelnet.targets ) then
        local backup_file = travelnet.mod_data_path..".bak"
-       print(S("[Mod travelnet] Error: Savefile '@1' is damaged. Saved the backup as '@2'.", travelnet.mod_data_path, backup_file));
+       print(S("[Mod travelnet] Error: Savefile '@1' is damaged." .. " " ..
+       "Saved the backup as '@2'.", travelnet.mod_data_path, backup_file));
 
        minetest.safe_file_write( backup_file, data );
        travelnet.targets = {};
@@ -497,7 +498,8 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
    meta:set_string( "infotext", S("Station '@1'".." "..
 				"on travelnet '@2' (owned by @3)" .." "..
-				"ready for usage. Right-click to travel, punch to update.", tostring(station_name), tostring(station_network), tostring(owner_name)));
+            "ready for usage. Right-click to travel, punch to update.",
+            tostring(station_name), tostring(station_network), tostring(owner_name)));
 
    -- show the player the updated formspec
    travelnet.show_current_formspec( pos, meta, puncher_name );
@@ -835,7 +837,8 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    -- if the target station is gone
    if( not( travelnet.targets[ owner_name ][ station_network ][ fields.target ] )) then
 
-      minetest.chat_send_player(name, S("Station '@1' does not exist (anymore?) on this network.", fields.target or "?"));
+      minetest.chat_send_player(name, S("Station '@1' does not exist (anymore?)" ..
+      " " .. "on this network.", fields.target or "?"));
       travelnet.update_formspec( pos, name, nil );
       return;
    end
@@ -1022,11 +1025,13 @@ travelnet.can_dig_old = function( pos, player, description )
    end
 
    if( not( meta ) or not( owner) or owner=='') then
-      minetest.chat_send_player(name, S("This @1 has not been configured yet. Please set it up first to claim it. Afterwards you can remove it because you are then the owner.", description));
+      minetest.chat_send_player(name, S("This @1 has not been configured yet. Please set it up first to claim it." ..
+      " " .. "Afterwards you can remove it because you are then the owner.", description));
       return false;
 
    elseif( owner ~= name ) then
-      minetest.chat_send_player(name, S("This @1 belongs to @2. You can't remove it.", description, tostring( meta:get_string('owner'))));
+      minetest.chat_send_player(name, S("This @1 belongs to @2. You can't remove it.",
+      description, tostring(meta:get_string('owner'))));
       return false;
    end
    return true;
