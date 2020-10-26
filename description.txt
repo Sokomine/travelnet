@@ -1,1 +1,0 @@
-Network of teleporter-boxes that allow easy travelling to other boxes on the same network.
