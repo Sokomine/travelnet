@@ -85,6 +85,11 @@
           - target list is now centered if there are less than 9 targets
 --]]
 
+-- integration test
+if minetest.settings:get_bool("travelnet.enable_travelnet_integration_test") then
+   dofile(minetest.get_modpath(minetest.get_current_modname()) .. "/integration_test.lua")
+end
+
 -- Required to save the travelnet data properly in all cases
 if not minetest.safe_file_write then
 	error("[Mod travelnet] Your Minetest version is no longer supported. (version < 0.4.17)")

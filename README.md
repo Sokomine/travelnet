@@ -1,6 +1,7 @@
 # TravelNet
 
-![](https://github.com/mt-mods/travelnet/workflows/luacheck/badge.svg)
+[![Build status](https://github.com/mt-mods/travelnet/workflows/luacheck/badge.svg)](https://github.com/mt-mods/travelnet/actions?query=workflow%3Aluacheck)
+[![Integration test status](https://github.com/mt-mods/travelnet/workflows/integration-test/badge.svg)](https://github.com/mt-mods/travelnet/actions?query=workflow%3Aintegration-test)
 
 How this works:
 
