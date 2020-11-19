@@ -17,72 +17,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
- Version: 2.3 (click button to dig)
-
- Please configure this mod in config.lua
-
- Changelog:
- 10.03.19 - Added the extra config buttons for locked_travelnet mod.
- 09.03.19 - Several PRs merged (sound added, locale changed etc.)
-            Version bumped to 2.3
- 26.02.19 - Removing a travelnet can now be done by clicking on a button (no need to
-            wield a diamond pick anymore)
- 26.02.19 - Added compatibility with MineClone2
- 22.09.18 - Move up/move down no longer close the formspec.
- 22.09.18 - If in creative mode, wield a diamond pick to dig the station. This avoids
-            conflicts with too fast punches.
- 24.12.17 - Added support for localization through intllib.
-            Added localization for German (de).
-            Door opening/closing can now handle more general doors.
- 17.07.17 - Added more detailled licence information.
-            TNT and DungeonMasters ought to leave travelnets and elevators untouched now.
-            Added function to register elevator doors.
-            Added elevator doors made out of tin ingots.
-            Provide information about the nearest elevator network when placing a new elevator. This
-              ought to make it easier to find the right spot.
-            Improved formspec.
- 16.07.17 - Merged several PR from others (Typo, screenshot, documentation, mesecon support, bugfix).
-            Added buttons to move stations up or down in the list, independent on when they where added.
-            Fixed undeclared globals.
-            Changed deprecated functions set_look_yaw/pitch to current functions.
- 22.07.17 - Fixed bug with locked travelnets beeing removed from the network due to not beeing recognized.
- 30.08.16 - If the station the traveller just travelled to no longer exists, the player is sent back to the
-            station where he/she came from.
- 30.08.16 - Attaching a travelnet box to a non-existant network of another player is possible (requested by OldCoder).
-            Still requires the travelnet_attach-priv.
- 05.10.14 - Added an optional abm so that the travelnet network can heal itshelf in case of loss of the savefile.
-            If you want to use this, set
-                  travelnet.enable_abm = true
-            in config.lua and edit the interval in the abm to suit your needs.
- 19.11.13 - moved doors and travelnet definition into an extra file
-          - moved configuration to config.lua
- 05.08.13 - fixed possible crash when the node in front of the travelnet is unknown
- 26.06.13 - added inventory image for elevator (created by VanessaE)
- 21.06.13 - bugfix: wielding an elevator while digging a door caused the elevator_top to be placed
-          - leftover floating elevator_top nodes can be removed by placing a new
-					  travelnet:elevator underneath them and removing that afterwards
-          - homedecor-doors are now opened and closed correctly as well
-          - removed nodes that are not intended for manual use from creative inventory
-          - improved naming of station levels for the elevator
- 21.06.13 - elevator stations are sorted by height instead of date of creation as is the case with travelnet boxes
-          - elevator stations are named automaticly
- 20.06.13 - doors can be opened and closed from inside the travelnet box/elevator
-          - the elevator can only move vertically; the network name is defined by its x and z coordinate
- 13.06.13 - bugfix
-          - elevator added (written by kpoppel) and placed into extra file
-          - elevator doors added
-          - groups changed to avoid accidental dig/drop on dig of node beneath
-          - added new priv travelnet_remove for digging of boxes owned by other players
-          - only the owner of a box or players with the travelnet_remove priv can now dig it
-          - entering your own name as owner_name does no longer abort setup
- 22.03.13 - added automatic detection if yaw can be set
-          - beam effect is disabled by default
- 20.03.13 - added inventory image provided by VanessaE
-          - fixed bug that made it impossible to remove stations from the net
-          - if the station a player beamed to no longer exists, the station will be removed automaticly
-          - with the travelnet_attach priv, you can now attach your box to the nets of other players
-          - in newer versions of Minetest, the players yaw is set so that he/she looks out of the receiving box
-          - target list is now centered if there are less than 9 targets
 --]]
 
 -- integration test
@@ -105,168 +39,22 @@ travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 local S = minetest.get_translator("travelnet")
 travelnet.S = S
 
-minetest.register_privilege("travelnet_attach", {
-	description = S("allows to attach travelnet boxes to travelnets of other players"),
-	give_to_singleplayer = false
-});
-
-minetest.register_privilege("travelnet_remove", {
-	description = S("allows to dig travelnet boxes which belog to nets of other players"),
-	give_to_singleplayer = false
-});
+-- privs
+dofile(travelnet.path.."/privs.lua");
 
 -- read the configuration
 dofile(travelnet.path.."/config.lua"); -- the normal, default travelnet
 
-travelnet.mod_data_path = minetest.get_worldpath().."/mod_travelnet.data"
+-- saving / reading
+dofile(travelnet.path.."/persistence.lua");
 
--- TODO: save and restore ought to be library functions and not implemented in each individual mod!
--- called whenever a station is added or removed
-travelnet.save_data = function()
+-- common functions
+dofile(travelnet.path.."/functions.lua");
 
-   local data = minetest.serialize( travelnet.targets );
-
-   local success = minetest.safe_file_write( travelnet.mod_data_path, data );
-   if( not success ) then
-      print(S("[Mod travelnet] Error: Savefile '@1' could not be written.", travelnet.mod_data_path));
-   end
-end
+-- formspec stuff
+dofile(travelnet.path.."/formspecs.lua");
 
 
-travelnet.restore_data = function()
-
-   local file = io.open( travelnet.mod_data_path, "r" );
-   if( not file ) then
-      print(S("[Mod travelnet] Error: Savefile '@1' not found.", travelnet.mod_data_path));
-      return;
-   end
-
-   local data = file:read("*all");
-   travelnet.targets = minetest.deserialize( data );
-
-   if( not travelnet.targets ) then
-       local backup_file = travelnet.mod_data_path..".bak"
-       print(S("[Mod travelnet] Error: Savefile '@1' is damaged." .. " " ..
-       "Saved the backup as '@2'.", travelnet.mod_data_path, backup_file));
-
-       minetest.safe_file_write( backup_file, data );
-       travelnet.targets = {};
-   end
-   file:close();
-end
-
-
--- punching the travelnet updates its formspec and shows it to the player;
--- however, that would be very annoying when actually trying to dig the thing.
--- Thus, check if the player is wielding a tool that can dig nodes of the
--- group cracky
-travelnet.check_if_trying_to_dig = function( puncher, node )
-	-- if in doubt: show formspec
-	if( not( puncher) or not( puncher:get_wielded_item())) then
-		return false;
-	end
-	-- show menu when in creative mode
-        if(   creative
-	  and creative.is_enabled_for(puncher:get_player_name())
---          and (not(puncher:get_wielded_item())
---                or puncher:get_wielded_item():get_name()~="default:pick_diamond")) then
-		) then
-		return false;
-	end
-	local tool_capabilities = puncher:get_wielded_item():get_tool_capabilities();
-	if( not( tool_capabilities )
-	 or not( tool_capabilities["groupcaps"])
-	 or not( tool_capabilities["groupcaps"]["cracky"])) then
-		return false;
-	end
-	-- tools which can dig cracky items can start digging immediately
-	return true;
-end
-
--- minetest.chat_send_player is sometimes not so well visible
-travelnet.show_message = function( pos, player_name, title, message )
-	if( not( pos ) or not( player_name ) or not( message )) then
-		return;
-	end
-	local formspec = "size[8,3]"..
-		"label[3,0;"..minetest.formspec_escape( title or S("Error")).."]"..
-		"textlist[0,0.5;8,1.5;;"..minetest.formspec_escape( message or "- nothing -")..";]"..
-		"button_exit[3.5,2.5;1.0,0.5;back;"..S("Back").."]"..
-		"button_exit[6.8,2.5;1.0,0.5;station_exit;"..S("Exit").."]"..
-		"field[20,20;0.1,0.1;pos2str;Pos;".. minetest.pos_to_string( pos ).."]";
-	minetest.show_formspec(player_name, "travelnet:show", formspec);
-end
-
--- show the player the formspec he would see when right-clicking the node;
--- needs to be simulated this way as calling on_rightclick would not do
-travelnet.show_current_formspec = function( pos, meta, player_name )
-	if( not( pos ) or not( meta ) or not( player_name )) then
-		return;
-	end
-	-- we need to supply the position of the travelnet box
-	local formspec = meta:get_string("formspec")..
-		"field[20,20;0.1,0.1;pos2str;Pos;".. minetest.pos_to_string( pos ).."]";
-	-- show the formspec manually
-	minetest.show_formspec(player_name, "travelnet:show", formspec);
-end
-
--- a player clicked on something in the formspec he was manually shown
--- (back from help page, moved travelnet up or down etc.)
-travelnet.form_input_handler = function( player, formname, fields)
-        if(formname == "travelnet:show" and fields and fields.pos2str) then
-		local pos = minetest.string_to_pos( fields.pos2str );
-		if not pos then
-			return
-		end
-
-		if( locks and (fields.locks_config or fields.locks_authorize)) then
-			return locks:lock_handle_input( pos, formname, fields, player )
-		end
-		-- back button leads back to the main menu
-		if( fields.back and fields.back ~= "" ) then
-			return travelnet.show_current_formspec( pos,
-					minetest.get_meta( pos ), player:get_player_name());
-		end
-		return travelnet.on_receive_fields(pos, formname, fields, player);
-        end
-end
-
--- most formspecs the travelnet uses are stored in the travelnet node itself,
--- but some may require some "back"-button functionality (i.e. help page,
--- move up/down etc.)
-minetest.register_on_player_receive_fields( travelnet.form_input_handler );
-
-
-
-travelnet.reset_formspec = function( meta )
-      if( not( meta )) then
-         return;
-      end
-      meta:set_string("infotext",       S("Travelnet-box (unconfigured)"));
-      meta:set_string("station_name",   "");
-      meta:set_string("station_network","");
-      meta:set_string("owner",          "");
-      -- some players seem to be confused with entering network names at first; provide them
-      -- with a default name
-			local station_network = "net1";
-
-      -- request initinal data
-      meta:set_string("formspec",
-		"size[10,6.0]"..
-		"label[2.0,0.0;--> "..S("Configure this travelnet station").." <--]"..
-		"button_exit[8.0,0.0;2.2,0.7;station_dig;"..S("Remove station").."]"..
-		"field[0.3,1.2;9,0.9;station_name;"..S("Name of this station")..":;]"..
-		"label[0.3,1.5;"..S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"...").."]"..
-
-		"field[0.3,2.8;9,0.9;station_network;"..S("Assign to Network:")..";"..
-			minetest.formspec_escape(station_network or "").."]"..
-		"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"@1\"", tostring(station_network)) .. ".]"..
-		"field[0.3,4.4;9,0.9;owner;"..S("Owned by:")..";]"..
-		"label[0.3,4.7;"..S("Unless you know what you are doing, leave this empty.").."]"..
-		"button_exit[1.3,5.3;1.7,0.7;station_help_setup;"..S("Help").."]"..
-		"button_exit[3.8,5.3;1.7,0.7;station_set;"..S("Save").."]"..
-		"button_exit[6.3,5.3;1.7,0.7;station_exit;"..S("Exit").."]");
-end
 
 
 travelnet.update_formspec = function( pos, puncher_name, fields )
@@ -296,12 +84,6 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
          travelnet.add_target( nil, nil, pos, puncher_name, meta, owner_name );
          return;
       end
-
---      minetest.chat_send_player(puncher_name, "DEBUG DATA: owner: "..(owner_name or "?")..
---                                                  " station_name: "..(station_name or "?")..
---                                               " station_network: "..(station_network or "?")..".");
--- minetest.chat_send_player(puncher_name, "data: "..minetest.serialize(  travelnet.targets ));
-
 
       travelnet.reset_formspec( meta );
       travelnet.show_message( pos, puncher_name, "Error", S("Update failed! Resetting this box on the travelnet."));
