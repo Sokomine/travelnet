@@ -4,7 +4,8 @@
 --   travelnet_remove priv (useful for admins to clean up)
 -- (this can be overrided in config.lua)
 -- Author: Sokomine
-local S = travelnet.S;
+
+local S = minetest.get_translator("travelnet")
 
 minetest.register_node("travelnet:travelnet", {
 
@@ -98,7 +99,6 @@ minetest.register_node("travelnet:travelnet", {
     end
 })
 
---[
 minetest.register_craft({
         output = "travelnet:travelnet",
         recipe = travelnet.travelnet_recipe,
