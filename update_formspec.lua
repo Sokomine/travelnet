@@ -115,7 +115,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
       end
       for index,k in ipairs( stations ) do
          if( index == ground_level ) then
-            travelnet.targets[ owner_name ][ station_network ][ k ].nr = S('G');
+            travelnet.targets[ owner_name ][ station_network ][ k ].nr = 'G';
          else
             travelnet.targets[ owner_name ][ station_network ][ k ].nr = tostring( ground_level - index );
          end

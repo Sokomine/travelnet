@@ -163,6 +163,10 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       end
    end
 
+  print("owner_name", owner_name)
+  print("station_network", station_network)
+  print("networks", dump(travelnet.targets[ owner_name ][ station_network ]))
+  print("fields", dump(fields.target))
 
    -- if the target station is gone
    if( not( travelnet.targets[ owner_name ][ station_network ][ fields.target ] )) then
