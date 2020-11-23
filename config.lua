@@ -8,7 +8,7 @@ travelnet.travelnet_sound_enabled  = false;
 
 -- if you set this to false, travelnets cannot be created
 -- (this may be useful if you want nothing but the elevators on your server)
-travelnet.travelnet_enabled        = false;
+travelnet.travelnet_enabled        = true;
 -- if you set travelnet.elevator_enabled to false, you will not be able to
 -- craft, place or use elevators
 travelnet.elevator_enabled         = true;
@@ -20,9 +20,6 @@ travelnet.abm_enabled              = false;
 
 -- change these if you want other receipes for travelnet or elevator
 travelnet.travelnet_recipe = {
-                {"default:glass", "default:steel_ingot", "default:glass", },
-                {"default:glass", "default:mese",        "default:glass", },
-                {"default:glass", "default:steel_ingot", "default:glass", }
 }
 travelnet.elevator_recipe = {
 	        {"default:steel_ingot", "default:glass", "default:steel_ingot", },
