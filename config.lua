@@ -8,7 +8,7 @@ travelnet.travelnet_sound_enabled  = false;
 
 -- if you set this to false, travelnets cannot be created
 -- (this may be useful if you want nothing but the elevators on your server)
-travelnet.travelnet_enabled        = true;
+travelnet.travelnet_enabled        = false;
 -- if you set travelnet.elevator_enabled to false, you will not be able to
 -- craft, place or use elevators
 travelnet.elevator_enabled         = true;
