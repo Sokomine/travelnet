@@ -18,6 +18,11 @@ All stations that have the same network name set and are owned by the same user 
 
 * [API](./doc/api.md)
 
+# Screenshots
+
+<img src="./screenshot.png"/>
+<img src="./screenshot_colors.png"/>
+
 # License
 
 The mod was written by me, Sokomine, and includes small contributions from other contributors.
