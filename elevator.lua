@@ -117,7 +117,9 @@ minetest.register_node("travelnet:elevator", {
 	tiles = travelnet.tiles_elevator,
 
 	inventory_image = travelnet.elevator_inventory_image,
-	groups = {}, --cracky=1,choppy=1,snappy=1,
+	groups = {
+		elevator = 1
+	},
 
     light_source = 10,
 

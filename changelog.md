@@ -1,4 +1,6 @@
 
+# Changelog
+
 10.03.19 - Added the extra config buttons for locked_travelnet mod.
 09.03.19 - Several PRs merged (sound added, locale changed etc.)
 					 Version bumped to 2.3

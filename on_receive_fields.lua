@@ -219,24 +219,22 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
 
    -- check if the box has at the other end has been removed.
-   local node2 = minetest.get_node_or_nil(  target_pos );
-   if node2 ~= nil and
-	  node2.name ~= 'ignore' and
-		node2.name ~= 'travelnet:travelnet' and
-		node2.name ~= 'travelnet:elevator' and
-		node2.name ~= "locked_travelnet:travelnet" and
-		node2.name ~= "travelnet:travelnet_private" then
+   local node2 = minetest.get_node_or_nil(target_pos);
+   if node2 ~= nil then
+     local node2_def = minetest.registered_nodes[node2.name]
+     local has_travelnet_group = node2_def.groups.travelnet or node2_def.groups.elevator
 
-      -- provide information necessary to identify the removed box
-      local oldmetadata = { fields = { owner           = owner_name,
-                                       station_name    = fields.target,
-                                       station_network = station_network }};
+     if not has_travelnet_group then
+        -- provide information necessary to identify the removed box
+        local oldmetadata = { fields = { owner           = owner_name,
+                                         station_name    = fields.target,
+                                         station_network = station_network }};
 
-      travelnet.remove_box( target_pos, nil, oldmetadata, player );
-      -- send the player back as there's no receiving travelnet
-      player:move_to( pos, false );
-
-   else
-      travelnet.rotate_player( target_pos, player, 0 )
+        travelnet.remove_box( target_pos, nil, oldmetadata, player );
+        -- send the player back as there's no receiving travelnet
+        player:move_to( pos, false );
+     else
+        travelnet.rotate_player( target_pos, player, 0 )
+     end
    end
 end

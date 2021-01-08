@@ -113,7 +113,10 @@ end
 
 
 if( travelnet.travelnet_enabled ) then
-   dofile(travelnet.path.."/travelnet.lua"); -- the travelnet node definition
+  -- register-functions for travelnet nodes
+  dofile(travelnet.path.."/register_travelnet.lua");
+  -- default travelnet registrations
+  dofile(travelnet.path.."/travelnet.lua");
 end
 if( travelnet.elevator_enabled ) then
    dofile(travelnet.path.."/elevator.lua");  -- allows up/down transfers only
