@@ -44,7 +44,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       elseif( node and node.name and node.name == "locked_travelnet:travelnet") then
          description = "locked travelnet"
       else
-         minetest.chat_send_player(name, "Error: Unkown node.");
+         minetest.chat_send_player(name, "Error: Unknown node.");
          return
       end
       -- players with travelnet_remove priv can dig the station
