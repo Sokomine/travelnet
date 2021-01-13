@@ -37,12 +37,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 			local network_name = meta:get_string("station_network")
       local node = minetest.get_node(pos)
       local description
-      if( node and node.name and node.name == "travelnet:travelnet") then
+      if node and minetest.get_item_group(node.name, "travelnet") == 1 then
          description = "travelnet box"
-      elseif( node and node.name and node.name == "travelnet:elevator") then
+      elseif node and minetest.get_item_group(node.name, "elevator") == 1 then
          description = "elevator"
-      elseif( node and node.name and node.name == "locked_travelnet:travelnet") then
+      elseif node and node.name == "locked_travelnet:travelnet" then
          description = "locked travelnet"
+      elseif node and node.name == "locked_travelnet:elevator" then
+         description = "locked elevator"
       else
          minetest.chat_send_player(name, "Error: Unknown node.");
          return
