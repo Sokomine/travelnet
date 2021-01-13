@@ -3,7 +3,8 @@
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet",
 	recipe = travelnet.travelnet_recipe,
-	color = "#ffff00"
+	color = "#ffff00",
+	dye = "dye:yellow"
 })
 
 travelnet.register_travelnet_box({

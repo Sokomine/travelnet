@@ -105,8 +105,9 @@ function travelnet.register_travelnet_box(cfg)
 			output = cfg.nodename,
 			recipe = cfg.recipe,
 		})
-	elseif has_dye_mod and cfg.dye then
-		-- dye recipe with "default" box
+	end
+	if has_dye_mod and cfg.dye then
+		-- dye recipe
 		minetest.register_craft({
 			output = cfg.nodename,
 			type = "shapeless",
