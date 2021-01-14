@@ -1,33 +1,33 @@
 
--- "basic" travelnet box in yellow
+-- "default" travelnet box in yellow
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet",
 	recipe = travelnet.travelnet_recipe,
-	color = "#ffff00",
+	color = "#e0bb2d",
 	dye = "dye:yellow"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_red",
-	color = "#ff0000",
+	color = "#ce1a1a",
 	dye = "dye:red"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_blue",
-	color = "#0000ff",
+	color = "#0051c5",
 	dye = "dye:blue"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_green",
-	color = "#00ff00",
+	color = "#53c41c",
 	dye = "dye:green"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_black",
-	color = "#000000",
+	color = "#0f0f0f",
 	dye = "dye:black",
 	light_source = 0
 })
