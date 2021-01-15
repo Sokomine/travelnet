@@ -80,55 +80,52 @@ minetest.register_node("travelnet:hidden_top", {
 
 
 if( travelnet.travelnet_effect_enabled ) then
-  minetest.register_entity( 'travelnet:effect', {
+	minetest.register_entity( 'travelnet:effect', {
+		hp_max = 1,
+		physical = false,
+		weight = 5,
+		collisionbox = {-0.4,-0.5,-0.4, 0.4,1.5,0.4},
+		visual = "upright_sprite",
+		visual_size = {x=1, y=2},
+		textures = { "travelnet_flash.png" }, -- number of required textures depends on visual
+		spritediv = {x=1, y=1},
+		initial_sprite_basepos = {x=0, y=0},
+		is_visible = true,
+		makes_footstep_sound = false,
+		automatic_rotate = true,
 
-    hp_max = 1,
-    physical = false,
-    weight = 5,
-    collisionbox = {-0.4,-0.5,-0.4, 0.4,1.5,0.4},
-    visual = "upright_sprite",
-    visual_size = {x=1, y=2},
---    mesh = "model",
-    textures = { "travelnet_flash.png" }, -- number of required textures depends on visual
---    colors = {}, -- number of required colors depends on visual
-    spritediv = {x=1, y=1},
-    initial_sprite_basepos = {x=0, y=0},
-    is_visible = true,
-    makes_footstep_sound = false,
-    automatic_rotate = true,
+		anz_rotations = 0,
 
-    anz_rotations = 0,
-
-    on_step = function( self, dtime )
-       -- this is supposed to be more flickering than smooth animation
-       self.object:set_yaw( self.object:get_yaw()+1);
-       self.anz_rotations = self.anz_rotations + 1;
-       -- eventually self-destruct
-       if( self.anz_rotations > 15 ) then
-          self.object:remove();
-       end
-    end
-  })
+		on_step = function(self)
+			-- this is supposed to be more flickering than smooth animation
+			self.object:set_yaw( self.object:get_yaw()+1);
+			self.anz_rotations = self.anz_rotations + 1;
+			-- eventually self-destruct
+			if self.anz_rotations > 15 then
+				self.object:remove();
+			end
+		end
+	})
 end
 
 
 if( travelnet.travelnet_enabled ) then
-  -- register-functions for travelnet nodes
-  dofile(travelnet.path.."/register_travelnet.lua");
-  -- default travelnet registrations
-  dofile(travelnet.path.."/travelnet.lua");
+	-- register-functions for travelnet nodes
+	dofile(travelnet.path.."/register_travelnet.lua");
+	-- default travelnet registrations
+	dofile(travelnet.path.."/travelnet.lua");
 end
 if( travelnet.elevator_enabled ) then
-   dofile(travelnet.path.."/elevator.lua");  -- allows up/down transfers only
+	dofile(travelnet.path.."/elevator.lua");  -- allows up/down transfers only
 end
 if( travelnet.doors_enabled ) then
 	-- doors that open and close automaticly when the travelnet or elevator is used
-   dofile(travelnet.path.."/doors.lua");
+	dofile(travelnet.path.."/doors.lua");
 end
 
 if( travelnet.enable_abm ) then
 	-- restore travelnet data when players pass by broken networks
-   dofile(travelnet.path.."/restore_network_via_abm.lua");
+	dofile(travelnet.path.."/restore_network_via_abm.lua");
 end
 
 -- upon server start, read the savefile

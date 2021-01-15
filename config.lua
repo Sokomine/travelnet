@@ -74,16 +74,17 @@ end
 -- function always return true;
 -- if the function returns false, players with the travelnet_attach priv
 -- can still add stations to that network
-
-travelnet.allow_attach = function( player_name, owner_name, network_name )
-   return false;
+-- params: player_name, owner_name, network_name
+travelnet.allow_attach = function()
+	return false;
 end
 
 
 -- if this returns true, a player named player_name can remove a travelnet station
 -- from network_name (owned by owner_name) even though he is neither the owner nor
 -- has the travelnet_remove priv
-travelnet.allow_dig    = function( player_name, owner_name, network_name, pos )
+-- params: player_name, owner_name, network_name, pos
+travelnet.allow_dig = function()
    return false;
 end
 
@@ -94,13 +95,8 @@ end
 -- if this function returns true, the player will be transfered to the target station;
 -- you can use this code to i.e. charge the player money for the transfer or to limit
 -- usage of stations to players in the same fraction on PvP servers
-travelnet.allow_travel = function( player_name, owner_name, network_name, station_name_start, station_name_target )
-
-   --minetest.chat_send_player( player_name, "Player "..tostring( player_name ).." tries to use station "..
-   -- tostring( station_name_start )..
-   --    " on network "..tostring( network_name ).." owned by "..tostring( owner_name ).." in order to travel to "..
-   --    tostring( station_name_target )..".");
-
+-- params: player_name, owner_name, network_name, station_name_start, station_name_target
+travelnet.allow_travel = function()
    return true;
 end
 

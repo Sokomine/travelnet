@@ -49,8 +49,8 @@ function travelnet.register_travelnet_box(cfg)
 		groups = {
 			travelnet = 1
 		},
-	  light_source = cfg.light_source or 10,
-	  after_place_node  = function(pos, placer, itemstack)
+		light_source = cfg.light_source or 10,
+		after_place_node  = function(pos, placer)
 			local meta = minetest.get_meta(pos);
 			travelnet.reset_formspec( meta );
 			meta:set_string("owner", placer:get_player_name());
@@ -58,45 +58,43 @@ function travelnet.register_travelnet_box(cfg)
 			minetest.set_node(top_pos, {name="travelnet:hidden_top"})
 	  end,
 
-	  on_receive_fields = travelnet.on_receive_fields,
-	  on_punch = function(pos, node, puncher)
+		on_receive_fields = travelnet.on_receive_fields,
+		on_punch = function(pos, _, puncher)
 			travelnet.update_formspec(pos, puncher:get_player_name(), nil)
-	  end,
+		end,
 
 	  can_dig = function( pos, player )
 			return travelnet.can_dig( pos, player, 'travelnet box' )
-	  end,
+		end,
 
-	  after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			travelnet.remove_box( pos, oldnode, oldmetadata, digger )
-	  end,
+		end,
 
-	  -- TNT and overenthusiastic DMs do not destroy travelnets
-	  on_blast = function(pos, intensity)
-	  end,
+		-- TNT and overenthusiastic DMs do not destroy travelnets
+		on_blast = function() end,
 
-	  -- taken from VanessaEs homedecor fridge
-	  on_place = function(itemstack, placer, pointed_thing)
+		-- taken from VanessaEs homedecor fridge
+		on_place = function(itemstack, placer, pointed_thing)
 
-	     local pos = pointed_thing.above;
-	     local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
-	     local def = minetest.registered_nodes[node.name]
-	   -- leftover top nodes can be removed by placing a new travelnet underneath
-	     if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
-
-	        minetest.chat_send_player(
-						placer:get_player_name(),
-						S('Not enough vertical space to place the travelnet box!')
-					)
-	        return;
-	     end
-	     return minetest.item_place(itemstack, placer, pointed_thing);
-	  end,
+			local pos = pointed_thing.above;
+			local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
+			local def = minetest.registered_nodes[node.name]
+			-- leftover top nodes can be removed by placing a new travelnet underneath
+			if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
+				minetest.chat_send_player(
+					placer:get_player_name(),
+					S('Not enough vertical space to place the travelnet box!')
+				)
+				return;
+			end
+			return minetest.item_place(itemstack, placer, pointed_thing);
+		end,
 
 		on_destruct = function(pos)
-	    pos = {x=pos.x, y=pos.y+1, z=pos.z}
-	    minetest.remove_node(pos)
-	  end
+			pos = {x=pos.x, y=pos.y+1, z=pos.z}
+			minetest.remove_node(pos)
+		end
 	})
 
 	if cfg.recipe then

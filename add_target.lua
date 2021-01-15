@@ -61,7 +61,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
    -- lua doesn't allow efficient counting here
    local anz = 0;
-   for k,v in pairs( travelnet.targets[ owner_name ][ network_name ] ) do
+   for k in pairs( travelnet.targets[ owner_name ][ network_name ] ) do
 
       if( k == station_name ) then
          travelnet.show_message( pos, player_name, S("Error"),

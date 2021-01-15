@@ -36,9 +36,6 @@ travelnet.form_input_handler = function( player, formname, fields)
 			return
 		end
 
-		if( locks and (fields.locks_config or fields.locks_authorize)) then
-			return locks:lock_handle_input( pos, formname, fields, player )
-		end
 		-- back button leads back to the main menu
 		if( fields.back and fields.back ~= "" ) then
 			return travelnet.show_current_formspec( pos,
@@ -80,7 +77,6 @@ travelnet.reset_formspec = function( meta )
 		"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"@1\"", tostring(station_network)) .. ".]"..
 		"field[0.3,4.4;9,0.9;owner;"..S("Owned by:")..";]"..
 		"label[0.3,4.7;"..S("Unless you know what you are doing, leave this empty.").."]"..
-		"button_exit[1.3,5.3;1.7,0.7;station_help_setup;"..S("Help").."]"..
 		"button_exit[3.8,5.3;1.7,0.7;station_set;"..S("Save").."]"..
 		"button_exit[6.3,5.3;1.7,0.7;station_exit;"..S("Exit").."]");
 end

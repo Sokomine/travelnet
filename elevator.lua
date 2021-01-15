@@ -121,78 +121,66 @@ minetest.register_node("travelnet:elevator", {
 		elevator = 1
 	},
 
-    light_source = 10,
+	light_source = 10,
 
-    after_place_node  = function(pos, placer, itemstack)
-	local meta = minetest.get_meta(pos);
-        meta:set_string("infotext",       S("Elevator (unconfigured)"));
-        meta:set_string("station_name",   "");
-        meta:set_string("station_network","");
-        meta:set_string("owner",          placer:get_player_name() );
-        -- request initial data
-        meta:set_string("formspec",
-                            "size[12,10]"..
-                            "field[0.3,5.6;6,0.7;station_name;"..S("Name of this station:")..";]"..
---                            "field[0.3,6.6;6,0.7;station_network;Assign to Network:;]"..
---                            "field[0.3,7.6;6,0.7;owner_name;(optional) owned by:;]"..
-                            "button_exit[6.3,6.2;1.7,0.7;station_set;"..S("Store").."]" );
+	after_place_node  = function(pos, placer)
+		local meta = minetest.get_meta(pos);
+		meta:set_string("infotext",       S("Elevator (unconfigured)"));
+		meta:set_string("station_name",   "");
+		meta:set_string("station_network","");
+		meta:set_string("owner",          placer:get_player_name() );
+		-- request initial data
+		meta:set_string("formspec",
+			"size[12,10]"..
+			"field[0.3,5.6;6,0.7;station_name;"..S("Name of this station:")..";]"..
+			"button_exit[6.3,6.2;1.7,0.7;station_set;"..S("Store").."]"
+		);
 
-       local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
-       minetest.set_node(top_pos, {name="travelnet:hidden_top"})
-       travelnet.show_nearest_elevator( pos, placer:get_player_name(), minetest.dir_to_facedir(placer:get_look_dir()));
-    end,
+		local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
+		minetest.set_node(top_pos, {name="travelnet:hidden_top"})
+		travelnet.show_nearest_elevator( pos, placer:get_player_name(), minetest.dir_to_facedir(placer:get_look_dir()));
+	end,
 
-    on_receive_fields = travelnet.on_receive_fields,
-    on_punch          = function(pos, node, puncher)
-                             travelnet.update_formspec(pos, puncher:get_player_name())
-    end,
+	on_receive_fields = travelnet.on_receive_fields,
+	on_punch          = function(pos, _, puncher)
+		travelnet.update_formspec(pos, puncher:get_player_name())
+	end,
 
-    can_dig = function( pos, player )
-                          return travelnet.can_dig( pos, player, 'elevator' )
-    end,
+	can_dig = function( pos, player )
+		return travelnet.can_dig( pos, player, 'elevator' )
+	end,
 
-    after_dig_node = function(pos, oldnode, oldmetadata, digger)
-			  travelnet.remove_box( pos, oldnode, oldmetadata, digger )
-    end,
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		travelnet.remove_box( pos, oldnode, oldmetadata, digger )
+	end,
 
-    -- TNT and overenthusiastic DMs do not destroy elevators either
-    on_blast = function(pos, intensity)
-    end,
+	-- TNT and overenthusiastic DMs do not destroy elevators either
+	on_blast = function()
+	end,
 
-    -- taken from VanessaEs homedecor fridge
-    on_place = function(itemstack, placer, pointed_thing)
-       local pos  = pointed_thing.above;
-       local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z});
-	   local def = minetest.registered_nodes[node.name]
-       -- leftover top nodes can be removed by placing a new elevator underneath
-       if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
-          minetest.chat_send_player(
-						placer:get_player_name(),
-						S('Not enough vertical space to place the travelnet box!')
-					)
-          return;
-       end
-       return minetest.item_place(itemstack, placer, pointed_thing);
-    end,
+	-- taken from VanessaEs homedecor fridge
+	on_place = function(itemstack, placer, pointed_thing)
+		local pos  = pointed_thing.above;
+		local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z});
+		local def = minetest.registered_nodes[node.name]
+		-- leftover top nodes can be removed by placing a new elevator underneath
+		if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
+			minetest.chat_send_player(
+				placer:get_player_name(),
+				S('Not enough vertical space to place the travelnet box!')
+			)
+			return;
+		end
+		return minetest.item_place(itemstack, placer, pointed_thing);
+	end,
 
-    on_destruct = function(pos)
-        pos = {x=pos.x, y=pos.y+1, z=pos.z}
-	    minetest.remove_node(pos)
-    end
+	on_destruct = function(pos)
+	pos = {x=pos.x, y=pos.y+1, z=pos.z}
+	minetest.remove_node(pos)
+	end
 })
 
---if( minetest.get_modpath("technic") ~= nil ) then
---        minetest.register_craft({
---                output = "travelnet:elevator",
---		recipe = {
---                        {"default:steel_ingot", "technic:motor", "default:steel_ingot", },
---                	{"default:steel_ingot", "technic:control_logic_unit", "default:steel_ingot", },
---                	{"default:steel_ingot", "moreores:copper_ingot", "default:steel_ingot", }
---                }
---        })
---else
-	minetest.register_craft({
-	        output = "travelnet:elevator",
-		recipe = travelnet.elevator_recipe,
-	})
---end
+minetest.register_craft({
+	output = "travelnet:elevator",
+	recipe = travelnet.elevator_recipe,
+})

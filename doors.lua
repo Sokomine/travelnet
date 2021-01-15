@@ -9,15 +9,15 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 	minetest.register_node( node_base_name.."_open", {
 		description = S("elevator door (open)"),
 		drawtype = "nodebox",
-                -- top, bottom, side1, side2, inner, outer
+		-- top, bottom, side1, side2, inner, outer
 		tiles = def_tiles,
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = true,
 		-- only the closed variant is in creative inventory
 		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=2,not_in_creative_inventory=1},
-                -- larger than one node but slightly smaller than a half node so
-								-- that wallmounted torches pose no problem
+		-- larger than one node but slightly smaller than a half node so
+		-- that wallmounted torches pose no problem
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -32,9 +32,9 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 			},
 		},
 		drop = node_base_name.."_closed",
-                on_rightclick = function(pos, node, puncher)
-                    minetest.add_node(pos, {name = node_base_name.."_closed", param2 = node.param2})
-                end,
+		on_rightclick = function(pos, node)
+			minetest.add_node(pos, {name = node_base_name.."_closed", param2 = node.param2})
+		end,
 	})
 
 	minetest.register_node(node_base_name.."_closed", {
@@ -59,19 +59,19 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 				{-0.5, -0.5,  0.4,  0.5, 1.5,  0.5},
 			},
 		},
-                on_rightclick = function(pos, node, puncher)
-                    minetest.add_node(pos, {name = node_base_name.."_open", param2 = node.param2})
-                end,
+		on_rightclick = function(pos, node)
+			minetest.add_node(pos, {name = node_base_name.."_open", param2 = node.param2})
+		end,
 	})
 
 	-- add a craft receipe for the door
 	minetest.register_craft({
-	        output = node_base_name.."_closed",
-	        recipe = {
-		        {material, '', material },
+		output = node_base_name.."_closed",
+		recipe = {
+			{material, '', material },
 			{material, '', material },
 			{material, '', material }
-		        }
+		}
 	})
 
 
@@ -95,7 +95,7 @@ end
 -- actually register the doors
 -- (but only if the materials for them exist)
 if(minetest.get_modpath("default")) then
-   travelnet.register_door( "travelnet:elevator_door_steel", {"default_stone.png"}, "default:steel_ingot");
-   travelnet.register_door( "travelnet:elevator_door_glass", {"travelnet_elevator_door_glass.png"}, "default:glass");
-   travelnet.register_door( "travelnet:elevator_door_tin", {"default_clay.png"}, "default:tin_ingot");
+	travelnet.register_door( "travelnet:elevator_door_steel", {"default_stone.png"}, "default:steel_ingot");
+	travelnet.register_door( "travelnet:elevator_door_glass", {"travelnet_elevator_door_glass.png"}, "default:glass");
+	travelnet.register_door( "travelnet:elevator_door_tin", {"default_clay.png"}, "default:tin_ingot");
 end

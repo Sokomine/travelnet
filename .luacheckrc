@@ -1,5 +1,3 @@
-unused_args = false
-
 globals = {
 	"travelnet"
 }
@@ -10,5 +8,5 @@ read_globals = {
 	"vector",
 
 	-- Deps
-	"creative", "locks", "mesecon",
+	"creative", "mesecon",
 }
