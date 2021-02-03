@@ -7,7 +7,7 @@
 
 local S = minetest.get_translator("travelnet")
 
-local has_dye_mod = minetest.get_modpath("dye")
+local travelnet_dyes = {}
 
 -- travelnet box register function
 function travelnet.register_travelnet_box(cfg)
@@ -59,7 +59,16 @@ function travelnet.register_travelnet_box(cfg)
 	  end,
 
 		on_receive_fields = travelnet.on_receive_fields,
-		on_punch = function(pos, _, puncher)
+		on_punch = function(pos, node, puncher)
+			local item = puncher:get_wielded_item()
+			if travelnet_dyes[item:get_name()] and puncher:get_player_control().sneak then
+				-- in-place travelnet coloring
+				node.name = travelnet_dyes[item:get_name()]
+				minetest.swap_node(pos, node)
+				item:take_item()
+				puncher:set_wielded_item(item)
+				return
+			end
 			travelnet.update_formspec(pos, puncher:get_player_name(), nil)
 		end,
 
@@ -104,7 +113,8 @@ function travelnet.register_travelnet_box(cfg)
 			recipe = cfg.recipe,
 		})
 	end
-	if has_dye_mod and cfg.dye then
+	if cfg.dye then
+		travelnet_dyes[cfg.dye] = cfg.nodename
 		-- dye recipe
 		minetest.register_craft({
 			output = cfg.nodename,
