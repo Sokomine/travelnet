@@ -67,7 +67,7 @@ travelnet.open_close_door = function( pos, player, mode )
 			local playername = player:get_player_name()
 			minetest.after(1, function()
 				local pplayer = minetest.get_player_by_name(playername)
-				if player then
+				if pplayer then
 					minetest.registered_nodes[ door_node.name ].on_rightclick(pos2, door_node, pplayer);
 				end
 			end);
