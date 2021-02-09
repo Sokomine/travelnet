@@ -61,7 +61,8 @@ function travelnet.register_travelnet_box(cfg)
 		on_receive_fields = travelnet.on_receive_fields,
 		on_punch = function(pos, node, puncher)
 			local item = puncher:get_wielded_item()
-			if travelnet_dyes[item:get_name()] and puncher:get_player_control().sneak then
+			if travelnet_dyes[item:get_name()] and puncher:get_player_control().sneak
+					and not minetest.is_protected(pos, puncher:get_player_name()) then
 				-- in-place travelnet coloring
 				node.name = travelnet_dyes[item:get_name()]
 				minetest.swap_node(pos, node)
