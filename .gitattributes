@@ -1,0 +1,7 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Exclusions for release export
+.* export-ignore
+etc export-ignore
+integration-test.sh export-ignore
