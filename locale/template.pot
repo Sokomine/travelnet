@@ -104,7 +104,7 @@ msgid "allows to attach travelnet boxes to travelnets of other players"
 msgstr ""
 
 #: init.lua
-msgid "allows to dig travelnet boxes which belog to nets of other players"
+msgid "allows to dig travelnet boxes which belong to nets of other players"
 msgstr ""
 
 #: init.lua
