@@ -2,7 +2,7 @@
 elevator door (open)=puerta de elevador (abierta)
 elevator door (closed)=puerta de elevador (cerrada)
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=¡Felicidades! Éste es tu primer elevador. Puedes construir una red de elevadores colocando más elevadores en algún lugar arriba o abajo de éste. Asegúrate de que las coordenadas X y Z sean las mismas.
-This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Éste elevador se conectará automáticamente a otros elevadores que hayas colocado a diferentes alturas. Simplemente ingresa un nombre para la estación y haz clic en "Guardar" para configurarlo, o golpéalo para usar la altura como nombre.
+This elevator will automaticly connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Éste elevador se conectará automáticamente a otros elevadores que hayas colocado a diferentes alturas. Simplemente ingresa un nombre para la estación y haz clic en "Guardar" para configurarlo, o golpéalo para usar la altura como nombre.
 Your nearest elevator network is located=La red de elevadores más cercana se ubica
 m behind this elevator and=m detrás de éste elevador y
 m in front of this elevator and=m delante de éste elevador y
@@ -54,7 +54,7 @@ Please provide a name for this station.=Por favor proporciona un nombre para est
 Please provide the name of the network this station ought to be connected to.=Por favor especifique el nombre de la red a la cual conectarse.
 There is no player with interact privilege named '@1'. Aborting.=No hay un jugador llamado '@1' con privilegios de interacción. Abortando.
 You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.=No tienes el privilegio 'travelnet_attach' requerido para acoplar tu cabina a la red de otros. Abortando.
-A station named '@1' already exists on this network. Please choose a diffrent name!=Ya existe una estación llamada '@1' en ésta red. Por favor, ¡elija un nombre diferente!
+A station named '@1' already exists on this network. Please choose a different name!=Ya existe una estación llamada '@1' en ésta red. Por favor, ¡elija un nombre diferente!
 Network '@1', already contains the maximum number (@2) of allowed stations per network. Please choose a different/new network name.=La red '@1', ya contiene la cantidad máxima (@2) de estaciones permitidas. Por favor elija un nombre de red diferente/nuevo.
 Station '@1' has been added to the network '@2', which now consists of @3 station(s).=La estación '@1' ha sido añadida a la red '@2', la cual consta de @3 estación(es). 
 Station:=Estación:

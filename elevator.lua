@@ -21,7 +21,7 @@ travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
 	  -- does the network have any members at all?
 	  and next( travelnet.targets[ owner_name ][ network_name ], nil )) then
 		minetest.chat_send_player( owner_name, S("This elevator will automaticly connect to the "..
-			"other elevators you have placed at diffrent heights. Just enter a station name "..
+			"other elevators you have placed at different heights. Just enter a station name "..
 			"and click on \"store\" to set it up. Or just punch it to set the height as station "..
 			"name."));
 		return;

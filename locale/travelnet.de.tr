@@ -36,7 +36,7 @@ Please provide a name for this station.=Bitte gib einen Namen für diese Reisene
 Please provide the name of the network this station ought to be connected to.=Bitte gib einen Namen für das Netzwerk an zu dem diese Reisenetz-Box gehören soll.
 There is no player with interact privilege named '@1'. Aborting.=Es gibt keinen Spieler mit interact-Recht names '@1'. Abbruch.
 You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.=Dir fehlt das travelnet_attach-Recht, welches für das Hinzufügen von Reisenetz-Boxen zu Netzwerken nötig ist, die anderen Spielern gehören. Abbruch.
-A station named '@1' already exists on this network. Please choose a diffrent name!=Eine Reisenetz-Box namens '@1' existiert bereits in diesem Netzwerk. Abbruch.
+A station named '@1' already exists on this network. Please choose a different name!=Eine Reisenetz-Box namens '@1' existiert bereits in diesem Netzwerk. Abbruch.
 Network '@1', already contains the maximum number (@2) of allowed stations per network. Please choose a different/new network name.=Netzwerk '@1' enthält bereits die maixmale Anzahl (=%s) erlaubert Stationen pro Netzwerk. Bitte wähle ein anderes bzw. neues Netzwerk.
 Station '@1' has been added to the network '@2', which now consists of %s station(s).=Station '@1' wurde an das Netzwerk '@2' angeschlossen, das nun aus %s Station(en) besteht.
 Station:=Station:
@@ -56,7 +56,7 @@ This @1 has not been configured yet. Please set it up first to claim it. Afterwa
 This @1 belongs to @2. You can't remove it.=Diese Reisenetz-Box gehört @2. Du kannst sie nicht entfernen.
 Not enough vertical space to place the travelnet box!=Nicht genug Platz (vertikal) um die Reisenetz-Box zu setzen!
 #Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=
-This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf "Speichern" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
+This elevator will automaticly connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf "Speichern" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
 Your nearest elevator network is located=Dein nächstgelegenes Aufzugs-Netzwerk befindet sich
 behind this elevator and=hinter diesem Aufzug und
 in front of this elevator and=vor diesem Aufzug und

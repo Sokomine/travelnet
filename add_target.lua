@@ -65,7 +65,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
 
       if( k == station_name ) then
          travelnet.show_message( pos, player_name, S("Error"),
-	    S("A station named '@1' already exists on this network. Please choose a diffrent name!", station_name));
+	    S("A station named '@1' already exists on this network. Please choose a different name!", station_name));
          return;
       end
 

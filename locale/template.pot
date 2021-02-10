@@ -35,7 +35,7 @@ msgstr ""
 #: elevator.lua
 msgid ""
 "This elevator will automaticly connect to the other elevators you have "
-"placed at diffrent heights. Just enter a station name and click on \"store\" "
+"placed at different heights. Just enter a station name and click on \"store\" "
 "to set it up. Or just punch it to set the height as station name."
 msgstr ""
 
@@ -273,7 +273,7 @@ msgstr ""
 #, lua-format
 msgid ""
 "A station named '%s' already exists on this network. Please choose a "
-"diffrent name!"
+"different name!"
 msgstr ""
 
 #: init.lua
@@ -285,7 +285,7 @@ msgstr ""
 #, lua-format
 msgid ""
 "already contains the maximum number (=%s) of allowed stations per network. "
-"Please choose a diffrent/new network name."
+"Please choose a different/new network name."
 msgstr ""
 
 #: init.lua

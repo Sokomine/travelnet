@@ -2,7 +2,7 @@
 elevator door (open)=дверь лифта (открыта)
 elevator door (closed)=дверь лифта (закрыта)
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=Поздравляем! Это ваш первый лифт. Вы можете построить сеть лифтов, разместив дополнительные лифты выше или ниже этого лифта. Только убедитесь, что координаты x и z совпадают.
-This elevator will automaticly connect to the other elevators you have placed at diffrent heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Этот лифт будет автоматически подключен к другим лифтам, которые размещены на разных высотах. После установки можете ввести название лифта и нажать "сохранить". Или просто ударьте его, чтобы установить высоту в качестве названия лифта.
+This elevator will automaticly connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Этот лифт будет автоматически подключен к другим лифтам, которые размещены на разных высотах. После установки можете ввести название лифта и нажать "сохранить". Или просто ударьте его, чтобы установить высоту в качестве названия лифта.
 Your nearest elevator network is located=Ваша ближайшая сеть лифтов находится
 m behind this elevator and=м за этим лифтом
 m in front of this elevator and=м перед этим лифтом
@@ -55,7 +55,7 @@ Please provide a name for this station.=Укажите название этой
 Please provide the name of the network this station ought to be connected to.=Укажите название сети, к которой добавить эту станцию.
 There is no player with interact privilege named '@1'. Aborting.=Нет игрока с привилегией «interact» по имени «@1». Отмена.
 You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.=У вас нет привилегии «travelnet_attach», которая необходима для добавки вашего телепорта в сеть другого игрока. Отмена.
-A station named '@1' already exists on this network. Please choose a diffrent name!=Станция «@1» уже существует в этой сети. Попробуйте другое имя!
+A station named '@1' already exists on this network. Please choose a different name!=Станция «@1» уже существует в этой сети. Попробуйте другое имя!
 Network '@1', already contains the maximum number (@2) of allowed stations per network. Please choose a different/new network name.=Сеть «@1», уже содержит максимальное количество (@2) разрешенных станций на сеть. Выберите друю сеть (иное имя сети).
 Station '@1' has been added to the network '@2', which now consists of @3 station(s).=Станция «@1» была добавлена в сеть «@2», которая теперь состоит из @3 станций.
 Station:=Станция:
