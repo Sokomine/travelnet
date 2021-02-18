@@ -123,7 +123,7 @@ end
 
 
 travelnet.restore_data = function()
-   
+
    local file = io.open( travelnet.mod_data_path, "r" );
    if( not file ) then
       print(S("[Mod travelnet] Error: Savefile '%s' not found.")
@@ -204,7 +204,8 @@ end
 -- (back from help page, moved travelnet up or down etc.)
 travelnet.form_input_handler = function( player, formname, fields)
         if(formname == "travelnet:show" and fields and fields.pos2str) then
-		local pos = minetest.string_to_pos( fields.pos2str );
+		local pos = minetest.string_to_pos( fields.pos2str )
+		if not pos then return end
 		if( locks and (fields.locks_config or fields.locks_authorize)) then
 			return locks:lock_handle_input( pos, formname, fields, player )
 		end
@@ -281,6 +282,13 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 
 
       if( is_elevator == true ) then
+         if minetest.get_modpath("areas") and areas.canInteract then
+            if owner_name ~= puncher_name and not areas:canInteract(pos, puncher_name) then
+               minetest.chat_send_player(puncher_name, S("You cannot configure an elevator in an area you don't control"))
+               return
+            end
+         end
+
          travelnet.add_target( nil, nil, pos, puncher_name, meta, owner_name );
          return;
       end
@@ -715,6 +723,13 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
          return
       end
 
+      if minetest.get_modpath("areas") and areas.canInteract then
+         if owner ~= name and not areas:canInteract(pos, name) then
+            minetest.chat_send_player(name, S("You cannot remove this travelnet from an area you don't control"))
+            return
+         end
+      end
+
       local pinv = player:get_inventory()
       if(not(pinv:room_for_item("main", node.name))) then
          minetest.chat_send_player(name, S("You do not have enough room in your inventory."));
@@ -730,12 +745,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
       return;
    end
 
-
-
-
    -- if the box has not been configured yet
    if( meta:get_string("station_network")=="" ) then
-
+      if minetest.get_modpath("areas") and areas.canInteract then
+         if fields.owner ~= name and not areas:canInteract(pos, name) then
+            minetest.chat_send_player(name, S("You cannot configure in an area you don't control"))
+            return
+         end
+      end
       travelnet.add_target( fields.station_name, fields.station_network, pos, name, meta, fields.owner );
       return;
    end
@@ -843,7 +860,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:move_to( target_pos, false);
 
-   if( travelnet.travelnet_effect_enabled ) then 
+   if( travelnet.travelnet_effect_enabled ) then
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
 
