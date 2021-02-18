@@ -195,3 +195,7 @@ minetest.register_alias("travelnet:elevator_top", "air")
 	})
 --end
 
+if minetest.global_exists("mesecon") and mesecon.register_mvps_stopper then
+    mesecon.register_mvps_stopper("travelnet:elevator")
+end
+
