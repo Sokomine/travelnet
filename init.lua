@@ -910,6 +910,8 @@ end
 
 travelnet.remove_box = function( pos, oldnode, oldmetadata, digger )
 
+   minetest.remove_node(vector.add({x=0,y=1,z=0}, pos))
+
    if( not( oldmetadata ) or oldmetadata=="nil" or not(oldmetadata.fields)) then
       minetest.chat_send_player( digger:get_player_name(), S("Error")..": "..
 		S("Could not find information about the station that is to be removed."));
@@ -988,9 +990,30 @@ travelnet.can_dig_old = function( pos, player, description )
    end
    return true;
 end
+local hidden_def = {
+  drawtype = "airlike",
+  paramtype = "light",
+  sunlight_propagates = true,
+  walkable = true,
+  pointable = false,
+  diggable = false,
+  builbable_to = false,
+  floodable = false,
+  drop="",
+  groups = {not_in_creative_inventory = 1},
+  on_blast = function () end,
+  collision_box = {
+    type = "fixed",
+    fixed = { 0,0,0,0,0,0 },
+  },
+}
 
+-- Make hidden node visible for debugging
+-- hidden_def.selection_box = {type="fixed",fixed={-0.3,-0.3,-0.3,0.3,0.3,0.3}}
+-- hidden_def.pointable = true
+-- hidden_def.drawtype = "glasslike"
 
-
+minetest.register_node("travelnet:hidden_top", hidden_def)
 
 
 if( travelnet.travelnet_effect_enabled ) then
