@@ -1007,13 +1007,17 @@ local hidden_def = {
     fixed = { 0,0,0,0,0,0 },
   },
 }
-
 -- Make hidden node visible for debugging
 -- hidden_def.selection_box = {type="fixed",fixed={-0.3,-0.3,-0.3,0.3,0.3,0.3}}
 -- hidden_def.pointable = true
 -- hidden_def.drawtype = "glasslike"
 
 minetest.register_node("travelnet:hidden_top", hidden_def)
+
+if minetest.global_exists("mesecon") and mesecon.register_mvps_stopper then
+  mesecon.register_mvps_stopper("travelnet:hidden_top")
+end
+
 
 
 if( travelnet.travelnet_effect_enabled ) then

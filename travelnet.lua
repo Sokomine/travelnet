@@ -92,3 +92,7 @@ minetest.register_craft({
         output = "travelnet:travelnet",
         recipe = travelnet.travelnet_recipe,
 })
+
+if minetest.global_exists("mesecon") and mesecon.register_mvps_stopper then
+    mesecon.register_mvps_stopper("travelnet:travelnet")
+end
