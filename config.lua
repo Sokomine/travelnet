@@ -18,6 +18,8 @@ travelnet.doors_enabled            = true;
 -- starts an abm which re-adds travelnet stations to networks in case the savefile got lost
 travelnet.abm_enabled              = false;
 
+travelnet.block_existing_travelnets = minetest.settings:get_bool("travelnet.block_existing_travelnets", false)
+
 -- change these if you want other receipes for travelnet or elevator
 travelnet.travelnet_recipe = {
                 {"default:glass", "default:steel_ingot", "default:glass", },

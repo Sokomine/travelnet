@@ -94,6 +94,7 @@ travelnet = {};
 travelnet.targets = {};
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
+local hidden_block = "travelnet:hidden_top"
 
 -- Intllib
 local S = dofile(travelnet.path .. "/intllib.lua")
@@ -661,6 +662,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if( not( pos )) then
       return;
    end
+
+   if travelnet.block_existing_travelnets then
+      local top_pos = vector.add({x=0,y=1,z=0}, pos)
+      if minetest.get_node(top_pos).name ~= hidden_block then
+        minetest.set_node(top_pos, {name=hidden_block})
+      end
+    end
+
    local meta = minetest.get_meta(pos);
 
    local name = player:get_player_name();
@@ -843,6 +852,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:move_to( target_pos, false);
 
+
+   if travelnet.block_existing_travelnets then
+      local top_pos = vector.add({x=0,y=1,z=0}, target_pos)
+      if minetest.get_node(top_pos).name ~= hidden_block then
+        minetest.set_node(top_pos, {name=hidden_block})
+      end
+    end
+
    if( travelnet.travelnet_effect_enabled ) then 
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
@@ -1012,10 +1029,10 @@ local hidden_def = {
 -- hidden_def.pointable = true
 -- hidden_def.drawtype = "glasslike"
 
-minetest.register_node("travelnet:hidden_top", hidden_def)
+minetest.register_node(hidden_block, hidden_def)
 
 if minetest.global_exists("mesecon") and mesecon.register_mvps_stopper then
-  mesecon.register_mvps_stopper("travelnet:hidden_top")
+  mesecon.register_mvps_stopper(hidden_block)
 end
 
 
