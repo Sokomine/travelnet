@@ -94,6 +94,7 @@ travelnet = {};
 travelnet.targets = {};
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
+local hidden_block = "travelnet:hidden_top"
 
 -- Intllib
 local S = dofile(travelnet.path .. "/intllib.lua")
@@ -661,6 +662,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if( not( pos )) then
       return;
    end
+
+   if travelnet.block_existing_travelnets then
+      local top_pos = vector.add({x=0,y=1,z=0}, pos)
+      if minetest.get_node(top_pos).name ~= hidden_block then
+        minetest.set_node(top_pos, {name=hidden_block})
+      end
+    end
+
    local meta = minetest.get_meta(pos);
 
    local name = player:get_player_name();
@@ -843,6 +852,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
    player:move_to( target_pos, false);
 
+
+   if travelnet.block_existing_travelnets then
+      local top_pos = vector.add({x=0,y=1,z=0}, target_pos)
+      if minetest.get_node(top_pos).name ~= hidden_block then
+        minetest.set_node(top_pos, {name=hidden_block})
+      end
+    end
+
    if( travelnet.travelnet_effect_enabled ) then 
       minetest.add_entity( {x=target_pos.x,y=target_pos.y+0.5,z=target_pos.z}, "travelnet:effect"); -- it self-destructs after 20 turns
    end
@@ -909,6 +926,8 @@ end
 
 
 travelnet.remove_box = function( pos, oldnode, oldmetadata, digger )
+
+   minetest.remove_node(vector.add({x=0,y=1,z=0}, pos))
 
    if( not( oldmetadata ) or oldmetadata=="nil" or not(oldmetadata.fields)) then
       minetest.chat_send_player( digger:get_player_name(), S("Error")..": "..
@@ -988,8 +1007,33 @@ travelnet.can_dig_old = function( pos, player, description )
    end
    return true;
 end
+local hidden_def = {
+  drawtype = "airlike",
+  paramtype = "light",
+  sunlight_propagates = true,
+  walkable = true,
+  pointable = false,
+  diggable = false,
+  builbable_to = false,
+  floodable = false,
+  drop="",
+  groups = {not_in_creative_inventory = 1},
+  on_blast = function () end,
+  collision_box = {
+    type = "fixed",
+    fixed = { 0,0,0,0,0,0 },
+  },
+}
+-- Make hidden node visible for debugging
+-- hidden_def.selection_box = {type="fixed",fixed={-0.3,-0.3,-0.3,0.3,0.3,0.3}}
+-- hidden_def.pointable = true
+-- hidden_def.drawtype = "glasslike"
 
+minetest.register_node(hidden_block, hidden_def)
 
+if minetest.global_exists("mesecon") and mesecon.register_mvps_stopper then
+  mesecon.register_mvps_stopper(hidden_block)
+end
 
 
 

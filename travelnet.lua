@@ -48,11 +48,13 @@ minetest.register_node("travelnet:travelnet", {
     light_source = 10,
 
     after_place_node  = function(pos, placer, itemstack)
-	local meta = minetest.get_meta(pos);
-	travelnet.reset_formspec( meta );
-        meta:set_string("owner",          placer:get_player_name() );
+		local meta = minetest.get_meta(pos);
+		travelnet.reset_formspec( meta );
+		meta:set_string("owner", placer:get_player_name() );
+		local top_pos = vector.add({x=0,y=1,z=0}, pos)
+		minetest.set_node(top_pos, {name="travelnet:hidden_top"})
     end,
-    
+
     on_receive_fields = travelnet.on_receive_fields,
     on_punch          = function(pos, node, puncher)
                              travelnet.update_formspec(pos, puncher:get_player_name(), nil)
@@ -74,10 +76,9 @@ minetest.register_node("travelnet:travelnet", {
     on_place = function(itemstack, placer, pointed_thing)
 
        local pos = pointed_thing.above;
-       local def = minetest.registered_nodes[
-             minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z}).name]
-       if not def or not def.buildable_to then
-
+       local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
+       local def = minetest.registered_nodes[node.name]
+       if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
           minetest.chat_send_player( placer:get_player_name(), S('Not enough vertical space to place the travelnet box!'))
           return;
        end
@@ -91,3 +92,7 @@ minetest.register_craft({
         output = "travelnet:travelnet",
         recipe = travelnet.travelnet_recipe,
 })
+
+if minetest.global_exists("mesecon") and mesecon.register_mvps_stopper then
+    mesecon.register_mvps_stopper("travelnet:travelnet")
+end
