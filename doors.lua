@@ -11,6 +11,7 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 		drawtype = "nodebox",
 		-- top, bottom, side1, side2, inner, outer
 		tiles = def_tiles,
+		use_texture_alpha = "clip",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = true,
@@ -42,6 +43,7 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 		drawtype = "nodebox",
                 -- top, bottom, side1, side2, inner, outer
 		tiles = def_tiles,
+		use_texture_alpha = "clip",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		is_ground_content = true,

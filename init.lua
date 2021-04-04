@@ -68,6 +68,7 @@ minetest.register_node("travelnet:hidden_top", {
 	drop = "",
 	groups = {not_in_creative_inventory = 1},
 	tiles = {"travelnet_blank.png"},
+	use_texture_alpha = "clip",
 	node_box = {
 		type = "fixed",
 		fixed = { -0.5, 0.45,-0.5,0.5, 0.5, 0.5},

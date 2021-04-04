@@ -45,6 +45,7 @@ function travelnet.register_travelnet_box(cfg)
 			"travelnet_bottom.png",  -- view from bottom
 		},
 
+		use_texture_alpha = "clip",
 		inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:"..cfg.color..")",
 		groups = {
 			travelnet = 1
@@ -56,7 +57,7 @@ function travelnet.register_travelnet_box(cfg)
 			meta:set_string("owner", placer:get_player_name());
 			local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 			minetest.set_node(top_pos, {name="travelnet:hidden_top"})
-	  end,
+		end,
 
 		on_receive_fields = travelnet.on_receive_fields,
 		on_punch = function(pos, node, puncher)
@@ -73,7 +74,7 @@ function travelnet.register_travelnet_box(cfg)
 			travelnet.update_formspec(pos, puncher:get_player_name(), nil)
 		end,
 
-	  can_dig = function( pos, player )
+		can_dig = function( pos, player )
 			return travelnet.can_dig( pos, player, 'travelnet box' )
 		end,
 
