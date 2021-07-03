@@ -32,29 +32,33 @@ travelnet = {}
 travelnet.targets = {}
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
+local function mod_dofile(filename)
+	dofile(travelnet.path .. "/"..filename..".lua")
+end
+
 -- privs
-dofile(travelnet.path .. "/privs.lua")
+mod_dofile("privs")
 
 -- read the configuration
-dofile(travelnet.path .. "/config.lua")
+mod_dofile("config")
 
 -- saving / reading
-dofile(travelnet.path .. "/persistence.lua")
+mod_dofile("persistence")
 
 -- common functions
-dofile(travelnet.path .. "/functions.lua")
+mod_dofile("functions")
 
 -- formspec stuff
-dofile(travelnet.path .. "/formspecs.lua")
+mod_dofile("formspecs")
 
 -- travelnet / elevator update
-dofile(travelnet.path .. "/update_formspec.lua")
+mod_dofile("update_formspec")
 
 -- add button
-dofile(travelnet.path .. "/add_target.lua")
+mod_dofile("add_target")
 
 -- receive fields handler
-dofile(travelnet.path .. "/on_receive_fields.lua")
+mod_dofile("on_receive_fields")
 
 -- invisible node to place inside top of travelnet box and elevator
 minetest.register_node("travelnet:hidden_top", {
@@ -110,21 +114,21 @@ end
 
 if travelnet.travelnet_enabled then
 	-- register-functions for travelnet nodes
-	dofile(travelnet.path .. "/register_travelnet.lua")
+	mod_dofile("register_travelnet")
 	-- default travelnet registrations
-	dofile(travelnet.path .. "/travelnet.lua")
+	mod_dofile("travelnet")
 end
 if travelnet.elevator_enabled then
-	dofile(travelnet.path .. "/elevator.lua")  -- allows up/down transfers only
+	mod_dofile("elevator")  -- allows up/down transfers only
 end
 if travelnet.doors_enabled then
 	-- doors that open and close automaticly when the travelnet or elevator is used
-	dofile(travelnet.path .. "/doors.lua")
+	mod_dofile("doors")
 end
 
 if travelnet.enable_abm then
 	-- restore travelnet data when players pass by broken networks
-	dofile(travelnet.path .. "/restore_network_via_abm.lua")
+	mod_dofile("restore_network_via_abm")
 end
 
 -- upon server start, read the savefile

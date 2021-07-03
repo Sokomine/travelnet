@@ -3,7 +3,7 @@ local S = minetest.get_translator("travelnet")
 local mod_data_path = minetest.get_worldpath() .. "/mod_travelnet.data"
 
 -- called whenever a station is added or removed
-travelnet.save_data = function()
+function travelnet.save_data()
 	local data = minetest.serialize(travelnet.targets)
 
 	local success = minetest.safe_file_write(mod_data_path, data)
@@ -13,7 +13,7 @@ travelnet.save_data = function()
 end
 
 
-travelnet.restore_data = function()
+function travelnet.restore_data()
 	local file = io.open(mod_data_path, "r")
 	if not file then
 		print(S("[Mod travelnet] Error: Savefile '@1' not found.", mod_data_path))

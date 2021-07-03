@@ -1,15 +1,15 @@
 local S = minetest.get_translator("travelnet")
 
+local function is_falsey_string(str)
+	return not str or str == ""
+end
+
 -- called "on_punch" of travelnet and elevator
-travelnet.update_formspec = function(pos, puncher_name, fields)
+function travelnet.update_formspec(pos, puncher_name, fields)
 	local meta = minetest.get_meta(pos)
 
 	local this_node   = minetest.get_node(pos)
-	local is_elevator = false
-
-	if this_node ~= nil and this_node.name == "travelnet:elevator" then
-		is_elevator = true
-	end
+	local is_elevator = this_node ~= nil and this_node.name == "travelnet:elevator"
 
 	if not meta then
 		return
@@ -20,8 +20,8 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 	local station_network = meta:get_string("station_network")
 
 	if	   not owner_name
-		or not station_name or station_network == ""
-		or not station_network
+		or not station_name
+		or is_falsey_string(station_network)
 	then
 		if is_elevator then
 			travelnet.add_target(nil, nil, pos, puncher_name, meta, owner_name)
@@ -34,19 +34,9 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 	end
 
 	-- if the station got lost from the network for some reason (savefile corrupted?) then add it again
-	if	   not travelnet.targets[owner_name]
-		or not travelnet.targets[owner_name][station_network]
-		or not travelnet.targets[owner_name][station_network][station_name]
-	then
-		-- first one by this player?
-		if not travelnet.targets[owner_name] then
-			travelnet.targets[owner_name] = {}
-		end
+	if not travelnet.get_station(owner_name, station_network, station_name) then
 
-		-- first station on this network?
-		if not travelnet.targets[owner_name][station_network] then
-			travelnet.targets[owner_name][station_network] = {}
-		end
+		local network = travelnet.get_or_create_network(owner_name, station_network)
 
 		local zeit = meta:get_int("timestamp")
 		if not zeit or type(zeit) ~= "number" or zeit < 100000 then
@@ -54,7 +44,7 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 		end
 
 		-- add this station
-		travelnet.targets[owner_name][station_network][station_name] = {
+		network[station_name] = {
 			pos = pos,
 			timestamp = zeit
 		}
@@ -67,20 +57,29 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 
 
 	-- add name of station + network + owner + update-button
-	local zusatzstr = ""
-	local trheight = "10"
 
-	local formspec = "size[12," .. trheight .. "]" ..
-		"label[3.3,0.0;" .. S("Travelnet-Box") .. ":]" .. "label[6.3,0.0;" ..
-		S("Punch box to update target list.") .. "]" ..
-		"label[0.3,0.4;" .. S("Name of this station:") .. "]" ..
-		"label[6.3,0.4;" .. minetest.formspec_escape(station_name or "?") .. "]" ..
-		"label[0.3,0.8;" .. S("Assigned to Network:") .. "]" ..
-		"label[6.3,0.8;" .. minetest.formspec_escape(station_network or "?") .. "]" ..
-		"label[0.3,1.2;" .. S("Owned by:") .. "]" ..
-		"label[6.3,1.2;" .. minetest.formspec_escape(owner_name or "?") .. "]" ..
-		"label[3.3,1.6;" .. S("Click on target to travel there:") .. "]" ..
-		zusatzstr
+	local formspec = ([[
+			size[12,10]
+			label[3.3,0.0;%s:]
+			label[6.3,0.0;%s]
+			label[0.3,0.4;%s]
+			label[6.3,0.4;%s]
+			label[0.3,0.8;%s]
+			label[6.3,0.8;%s]
+			label[0.3,1.2;%s]
+			label[6.3,1.2;%s]
+			label[3.3,1.6;%s]
+		]]):format(
+			S("Travelnet-Box"),
+			S("Punch box to update target list."),
+			S("Name of this station:"),
+			minetest.formspec_escape(station_name or "?"),
+			S("Assigned to Network:"),
+			minetest.formspec_escape(station_network or "?"),
+			S("Owned by:"),
+			minetest.formspec_escape(owner_name or "?"),
+			S("Click on target to travel there:")
+		)
 
 	local x = 0
 	local y = 0
@@ -88,52 +87,51 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 
 	-- collect all station names in a table
 	local stations = {}
+	local network = travelnet.targets[owner_name][station_network]
 
-	for k in pairs(travelnet.targets[owner_name][station_network]) do
+	for k in pairs(network) do
 		table.insert(stations, k)
 	end
 
 	local ground_level = 1
 	if is_elevator then
 		table.sort(stations, function(a, b)
-			return travelnet.targets[owner_name][station_network][a].pos.y >
-					travelnet.targets[owner_name][station_network][b].pos.y
+			return network[a].pos.y > network[b].pos.y
 		end)
 
 		-- find ground level
 		local vgl_timestamp = 999999999999
 		for index,k in ipairs(stations) do
-			if not travelnet.targets[owner_name][station_network][k].timestamp then
-				travelnet.targets[owner_name][station_network][k].timestamp = os.time()
+			local station = network[k]
+			if not station.timestamp then
+				station.timestamp = os.time()
 			end
-			if travelnet.targets[owner_name][station_network][k].timestamp < vgl_timestamp then
-				vgl_timestamp = travelnet.targets[owner_name][station_network][k].timestamp
+			if station.timestamp < vgl_timestamp then
+				vgl_timestamp = station.timestamp
 				ground_level  = index
 			end
 		end
 
 		for index,k in ipairs(stations) do
+			local station = network[k]
 			if index == ground_level then
-				travelnet.targets[owner_name][station_network][k].nr = "G"
+				station.nr = "G"
 			else
-				travelnet.targets[owner_name][station_network][k].nr = tostring(ground_level - index)
+				station.nr = tostring(ground_level - index)
 			end
 		end
 	else
 		-- sort the table according to the timestamp (=time the station was configured)
 		table.sort(stations, function(a, b)
-			return travelnet.targets[owner_name][station_network][a].timestamp <
-				travelnet.targets[owner_name][station_network][b].timestamp
+			return network[a].timestamp < network[b].timestamp
 		end)
 	end
 
 	-- does the player want to move this station one position up in the list?
 	-- only the owner and players with the travelnet_attach priv can change the order of the list
 	-- Note: With elevators, only the "G"(round) marking is actually moved
-	if	    fields
-		and (fields.move_up or fields.move_down)
-		and owner_name
-		and owner_name ~= ""
+	if	    fields and (fields.move_up or fields.move_down)
+		and not is_falsey_string(owner_name)
 		and (
 			   (owner_name == puncher_name)
 			or (minetest.check_player_privs(puncher_name, { travelnet_attach=true }))
@@ -144,6 +142,7 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 		for index, k in ipairs(stations) do
 			if k == station_name then
 				current_pos = index
+				-- break??
 			end
 		end
 
@@ -153,6 +152,7 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 		else
 			swap_with_pos = current_pos+1
 		end
+
 		-- handle errors
 		if swap_with_pos < 1 then
 			travelnet.show_message(pos, puncher_name, "Info", S("This station is already the first one on the list."))
@@ -161,19 +161,19 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 			travelnet.show_message(pos, puncher_name, "Info", S("This station is already the last one on the list."))
 			return
 		else
+			local current_station = stations[current_pos]
+			local swap_with_station = stations[swap_with_pos]
+
 			-- swap the actual data by which the stations are sorted
-			local old_timestamp = travelnet.targets[owner_name][station_network][stations[swap_with_pos]].timestamp
-			travelnet.targets[owner_name][station_network][stations[swap_with_pos]].timestamp =
-					travelnet.targets[owner_name][station_network][stations[current_pos]].timestamp
-			travelnet.targets[owner_name][station_network][stations[current_pos]].timestamp =
-					old_timestamp
+			local old_timestamp = network[swap_with_station].timestamp
+			network[swap_with_station].timestamp = network[current_station].timestamp
+			network[current_station].timestamp = old_timestamp
 
 			-- for elevators, only the "G"(round) marking is moved; no point in swapping stations
 			if not is_elevator then
 				-- actually swap the stations
-				local old_val = stations[swap_with_pos]
-				stations[swap_with_pos] = stations[current_pos]
-				stations[current_pos]   = old_val
+				stations[swap_with_pos] = current_station
+				stations[current_pos]   = swap_with_station
 			end
 
 			-- store the changed order
@@ -187,42 +187,47 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 	end
 
 	for _,k in ipairs(stations) do
+
+		i = i+1
+
+		-- new column
+		if y == 8 then
+			x = x + 4
+			y = 0
+		end
+
 		-- check if there is an elevator door in front that needs to be opened
-		local open_door_cmd = false
 		if k == station_name then
-			open_door_cmd = true
+			formspec = formspec ..
+				("button_exit[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
+						:format(x, y + 2.5, x + 0.9, y + 2.35, k)
+		elseif is_elevator then
+			formspec = formspec ..
+				("button_exit[%f,%f;1,0.5;target;%s]label[%f,%f;%s]")
+						:format(x, y + 2.5, tostring(network[k].nr), x + 0.9, y + 2.35, k)
+		else
+			formspec = formspec ..
+				("button_exit[%f,%f;4,0.5;target;%s]")
+						:format(x, y + 2.5, k)
 		end
 
-		if k ~= station_name or open_door_cmd then
-			i = i+1
-
-			-- new column
-			if y == 8 then
-				x = x + 4
-				y = 0
-			end
-
-			if open_door_cmd then
-				formspec = formspec .. "button_exit[" .. x .. "," .. (y + 2.5) .. ";1,0.5;open_door;<>]" ..
-					"label[" .. (x + 0.9) .. "," .. (y + 2.35) .. ";" .. tostring(k) .. "]"
-			elseif is_elevator then
-				formspec = formspec .. "button_exit[" .. x .. "," .. (y + 2.5) .. ";1,0.5;target;" ..
-					tostring(travelnet.targets[owner_name][station_network][k].nr) .. "]" ..
-					"label[" .. (x + 0.9) .. "," .. (y + 2.35) .. ";" .. tostring(k) .. "]"
-			else
-				formspec = formspec .. "button_exit[" .. x .. "," .. (y + 2.5) .. ";4,0.5;target;" .. k .. "]"
-			end
-
-			y = y+1
-		end
+		y = y+1
 	end
 
-	formspec = formspec ..
-		"label[8.0,1.6;" .. S("Position in list:") .. "]" ..
-		"button_exit[11.3,0.0;1.0,0.5;station_exit;" .. S("Exit") .. "]" ..
-		"button_exit[10.0,0.5;2.2,0.7;station_dig;" .. S("Remove station") .. "]" ..
-		"button[9.6,1.6;1.4,0.5;move_up;" .. S("move up") .. "]" ..
-		"button[10.9,1.6;1.4,0.5;move_down;" .. S("move down") .. "]"
+	formspec = formspec .. ([[
+			label[8.0,1.6;%s]
+			button_exit[11.3,0.0;1.0,0.5;station_exit;%s]
+			button_exit[10.0,0.5;2.2,0.7;station_dig;%s]
+			button[9.6,1.6;1.4,0.5;move_up;%s]
+			button[10.9,1.6;1.4,0.5;move_down;%s]
+		]]):format(
+			S("Position in list:"),
+			S("Exit"),
+			S("Remove station"),
+			S("move up"),
+			S("move down")
+		)
+
 
 	meta:set_string("formspec", formspec)
 

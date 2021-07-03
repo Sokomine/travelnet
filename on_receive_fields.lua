@@ -1,7 +1,7 @@
 local S = minetest.get_translator("travelnet")
 
 
-travelnet.on_receive_fields = function(pos, _, fields, player)
+function travelnet.on_receive_fields(pos, _, fields, player)
 	if not pos then
 		return
 	end
@@ -14,11 +14,31 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 		return
 	end
 
+	local owner_name      = meta:get_string("owner")
+	local station_network = meta:get_string("station_network")
+	local station_name    = meta:get_string("station_name")
+
+	-- if there is something wrong with the data
+	if not owner_name or not station_network or not station_name then
+		minetest.chat_send_player(name, S("Error") .. ": " ..
+				S("There is something wrong with the configuration of this station.") ..
+					" DEBUG DATA: owner: " .. (owner_name or "?") ..
+					" station_name: " .. (station_name or "?") ..
+					" station_network: " .. (station_network or "?") .. "."
+		)
+		print(
+			"ERROR: The travelnet at " .. minetest.pos_to_string(pos) .. " has a problem: " ..
+			" DATA: owner: " .. (owner_name or "?") ..
+			" station_name: " .. (station_name or "?") ..
+			" station_network: " .. (station_network or "?") .. "."
+		)
+		return
+	end
+
+	local node = minetest.get_node(pos)
+
 	-- the player wants to remove the station
 	if fields.station_dig then
-		local owner = meta:get_string("owner")
-		local network_name = meta:get_string("station_network")
-		local node = minetest.get_node(pos)
 		local description
 
 		if node and minetest.get_item_group(node.name, "travelnet") == 1 then
@@ -37,16 +57,16 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 		-- players with travelnet_remove priv can dig the station
 		if	    not minetest.check_player_privs(name, { travelnet_remove=true })
 			-- the function travelnet.allow_dig(..) may allow additional digging
-			and not travelnet.allow_dig(name, owner, network_name, pos)
+			and not travelnet.allow_dig(name, owner_name, station_network, pos)
 			-- the owner can remove the station
-			and owner ~= name
+			and owner_name ~= name
 			-- stations without owner can be removed by anybody
-			and owner ~= ""
+			and owner_name ~= ""
 		then
 			minetest.chat_send_player(name,
 				S("This %s belongs to %s. You can't remove it."):format(
 					description,
-					tostring(meta:get_string("owner"))
+					tostring(owner_name)
 				)
 			)
 			return
@@ -60,14 +80,14 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 			return
 		end
 
-		local pinv = player:get_inventory()
-		if not pinv:room_for_item("main", node.name) then
+		local player_inventory = player:get_inventory()
+		if not player_inventory:room_for_item("main", node.name) then
 			minetest.chat_send_player(name, S("You do not have enough room in your inventory."))
 			return
 		end
 
 		-- give the player the box
-		pinv:add_item("main", node.name)
+		player_inventory:add_item("main", node.name)
 		-- remove the box from the data structure
 		travelnet.remove_box(pos, nil, meta:to_table(), player)
 		-- remove the node as such
@@ -77,13 +97,13 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 
 
 	-- if the box has not been configured yet
-	if meta:get_string("station_network") == "" then
+	if station_network == "" then
 		travelnet.add_target(fields.station_name, fields.station_network, pos, name, meta, fields.owner)
 		return
 	end
 
 	if fields.open_door then
-		travelnet.open_close_door(pos, player, 0)
+		travelnet.open_close_door(pos, player, "toggle")
 		return
 	end
 
@@ -98,62 +118,25 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 		return
 	end
 
+	local network = travelnet.get_network(owner_name, station_network)
 
-	-- if there is something wrong with the data
-	local owner_name      = meta:get_string("owner")
-	local station_name    = meta:get_string("station_name")
-	local station_network = meta:get_string("station_network")
-
-	if	   not owner_name
-		or not station_name
-		or not station_network
-		or not travelnet.targets[owner_name]
-		or not travelnet.targets[owner_name][station_network]
-	then
-		if	    owner_name
-			and station_name
-			and station_network
-		then
-			travelnet.add_target(station_name, station_network, pos, owner_name, meta, owner_name)
-		else
-			minetest.chat_send_player(name, S("Error") .. ": " ..
-					S("There is something wrong with the configuration of this station.") ..
-						" DEBUG DATA: owner: " .. (owner_name or "?") ..
-						" station_name: " .. (station_name or "?") ..
-						" station_network: " .. (station_network or "?") .. "."
-			)
-			return
-		end
+	if not network then
+		travelnet.add_target(station_name, station_network, pos, owner_name, meta, owner_name)
 	end
 
-	if	   not owner_name
-		or not station_network
-		or not travelnet.targets
-		or not travelnet.targets[owner_name]
-		or not travelnet.targets[owner_name][station_network]
-	then
-		minetest.chat_send_player(name, S("Error") .. ": " ..
-			S("This travelnet is lacking data and/or improperly configured."))
-			print(
-				"ERROR: The travelnet at " .. minetest.pos_to_string(pos) .. " has a problem: " ..
-				" DATA: owner: " .. (owner_name or "?") ..
-				" station_name: " .. (station_name or "?") ..
-				" station_network: " .. (station_network or "?") .. "."
-			)
-		return
-	end
-
-	local this_node = minetest.get_node(pos)
-	if this_node ~= nil and this_node.name == "travelnet:elevator" then
-		for k,_ in pairs(travelnet.targets[owner_name][station_network]) do
-			if travelnet.targets[owner_name][station_network][k].nr == fields.target then
+	if node ~= nil and travelnet.is_elevator(node.name) then
+		for k,_ in pairs(network) do
+			if network[k].nr == fields.target then
 				fields.target = k
+				-- break ??
 			end
 		end
 	end
 
+	local target_station = network[fields.target]
+
 	-- if the target station is gone
-	if not travelnet.targets[owner_name][station_network][fields.target] then
+	if not target_station then
 		minetest.chat_send_player(name,
 				S("Station '@1' does not exist (anymore?)" ..
 					" " .. "on this network.", fields.target or "?")
@@ -169,7 +152,7 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"))
 
 	if travelnet.travelnet_sound_enabled then
-		if this_node.name == "travelnet:elevator" then
+		if node.name == "travelnet:elevator" then
 			minetest.sound_play("travelnet_bell", {
 				pos = pos,
 				gain = 0.75,
@@ -185,20 +168,20 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	end
 
 	if travelnet.travelnet_effect_enabled then
-		minetest.add_entity({ x=pos.x, y=pos.y + 0.5, z=pos.z }, "travelnet:effect")  -- it self-destructs after 20 turns
+		minetest.add_entity(vector.add(pos, { x=0, y=0.5, z=0 }), "travelnet:effect")  -- it self-destructs after 20 turns
 	end
 
 	-- close the doors at the sending station
-	travelnet.open_close_door(pos, player, 1)
+	travelnet.open_close_door(pos, player, "close")
 
 	-- transport the player to the target location
 
 	-- may be 0.0 for some versions of MT 5 player model
 	local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5
 	local player_model_vec = vector.new(0, player_model_bottom, 0)
-	local target_pos = travelnet.targets[owner_name][station_network][fields.target].pos
+	local target_pos = target_station.pos
 
-	local top_pos = { x=pos.x, y=pos.y+1, z=pos.z }
+	local top_pos = vector.add(pos, { x=0, y=1, z=0 })
 	local top_node = minetest.get_node(top_pos)
 	if top_node.name ~= "travelnet:hidden_top" then
 		local def = minetest.registered_nodes[top_node.name]
@@ -210,10 +193,10 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	player:move_to(vector.add(target_pos, player_model_vec), false)
 
 	-- check if the box has at the other end has been removed.
-	local node2 = minetest.get_node_or_nil(target_pos)
-	if node2 ~= nil then
-		local node2_def = minetest.registered_nodes[node2.name]
-		local has_travelnet_group = node2_def.groups.travelnet or node2_def.groups.elevator
+	local target_node = minetest.get_node_or_nil(target_pos)
+	if target_node ~= nil then
+		local target_node_def = minetest.registered_nodes[target_node.name]
+		local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
 
 		if not has_travelnet_group then
 			-- provide information necessary to identify the removed box

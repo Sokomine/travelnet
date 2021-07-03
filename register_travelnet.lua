@@ -55,25 +55,26 @@ function travelnet.register_travelnet_box(cfg)
 			local meta = minetest.get_meta(pos)
 			travelnet.reset_formspec(meta)
 			meta:set_string("owner", placer:get_player_name())
-			local top_pos = { x=pos.x, y=pos.y+1, z=pos.z }
-			minetest.set_node(top_pos, { name="travelnet:hidden_top" })
+			minetest.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
 		end,
 
 		on_receive_fields = travelnet.on_receive_fields,
 		on_punch = function(pos, node, puncher)
 			local item = puncher:get_wielded_item()
-			if	    travelnet_dyes[item:get_name()]
+			local item_name = item:get_name()
+			local player_name = puncher:get_player_name()
+			if	    travelnet_dyes[item_name]
 				and puncher:get_player_control().sneak
-				and not minetest.is_protected(pos, puncher:get_player_name())
+				and not minetest.is_protected(pos, player_name)
 			then
 				-- in-place travelnet coloring
-				node.name = travelnet_dyes[item:get_name()]
+				node.name = travelnet_dyes[item_name]
 				minetest.swap_node(pos, node)
 				item:take_item()
 				puncher:set_wielded_item(item)
 				return
 			end
-			travelnet.update_formspec(pos, puncher:get_player_name(), nil)
+			travelnet.update_formspec(pos, player_name, nil)
 		end,
 
 		can_dig = function(pos, player)
@@ -89,8 +90,7 @@ function travelnet.register_travelnet_box(cfg)
 
 		-- taken from VanessaEs homedecor fridge
 		on_place = function(itemstack, placer, pointed_thing)
-			local pos = pointed_thing.above
-			local node = minetest.get_node({ x=pos.x, y=pos.y+1, z=pos.z })
+			local node = minetest.get_node(vector.add(pointed_thing.above, { x=0, y=1, z=0 }))
 			local def = minetest.registered_nodes[node.name]
 			-- leftover top nodes can be removed by placing a new travelnet underneath
 			if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
@@ -104,8 +104,7 @@ function travelnet.register_travelnet_box(cfg)
 		end,
 
 		on_destruct = function(pos)
-			pos = { x=pos.x, y=pos.y+1, z=pos.z }
-			minetest.remove_node(pos)
+			minetest.remove_node(vector.add(pos, { x=0, y=1, z=0 }))
 		end
 	})
 
