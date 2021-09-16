@@ -8,8 +8,8 @@ end
 function travelnet.update_formspec(pos, puncher_name, fields)
 	local meta = minetest.get_meta(pos)
 
-	local this_node   = minetest.get_node(pos)
-	local is_elevator = this_node ~= nil and this_node.name == "travelnet:elevator"
+	local node = minetest.get_node(pos)
+	local is_elevator = travelnet.is_elevator(node.name)
 
 	if not meta then
 		return

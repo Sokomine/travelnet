@@ -153,7 +153,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"))
 
 	if travelnet.travelnet_sound_enabled then
-		if node.name == "travelnet:elevator" then
+		if travelnet.is_elevator(node.name) then
 			minetest.sound_play("travelnet_bell", {
 				pos = pos,
 				gain = 0.75,
