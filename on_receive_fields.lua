@@ -122,6 +122,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 
 	if not network then
 		travelnet.add_target(station_name, station_network, pos, owner_name, meta, owner_name)
+		return
 	end
 
 	if node ~= nil and travelnet.is_elevator(node.name) then
