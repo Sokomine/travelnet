@@ -38,7 +38,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	local node = minetest.get_node(pos)
 
 	-- the player wants to remove the station
-	if fields.station_dig then
+	if fields.station_dig or fields.station_edit then
 		local description
 
 		if node and minetest.get_item_group(node.name, "travelnet") == 1 then
@@ -64,7 +64,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			and owner_name ~= ""
 		then
 			minetest.chat_send_player(name,
-				S("This %s belongs to %s. You can't remove it."):format(
+				S("This %s belongs to %s. You can't remove or edit it."):format(
 					description,
 					tostring(owner_name)
 				)
@@ -80,18 +80,24 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			return
 		end
 
-		local player_inventory = player:get_inventory()
-		if not player_inventory:room_for_item("main", node.name) then
-			minetest.chat_send_player(name, S("You do not have enough room in your inventory."))
-			return
-		end
+		if fields.station_dig then
+			-- remove station
+			local player_inventory = player:get_inventory()
+			if not player_inventory:room_for_item("main", node.name) then
+				minetest.chat_send_player(name, S("You do not have enough room in your inventory."))
+				return
+			end
 
-		-- give the player the box
-		player_inventory:add_item("main", node.name)
-		-- remove the box from the data structure
-		travelnet.remove_box(pos, nil, meta:to_table(), player)
-		-- remove the node as such
-		minetest.remove_node(pos)
+			-- give the player the box
+			player_inventory:add_item("main", node.name)
+			-- remove the box from the data structure
+			travelnet.remove_box(pos, nil, meta:to_table(), player)
+			-- remove the node as such
+			minetest.remove_node(pos)
+		else
+			-- edit station
+			travelnet.edit_formspec(pos, meta, name)
+		end
 		return
 	end
 
@@ -217,3 +223,4 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		end
 	end
 end
+

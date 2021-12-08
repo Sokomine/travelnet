@@ -217,13 +217,13 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 	formspec = formspec .. ([[
 			label[8.0,1.6;%s]
 			button_exit[11.3,0.0;1.0,0.5;station_exit;%s]
-			button_exit[10.0,0.5;2.2,0.7;station_dig;%s]
+			button_exit[10.0,0.5;2.2,0.7;station_edit;%s]
 			button[9.6,1.6;1.4,0.5;move_up;%s]
 			button[10.9,1.6;1.4,0.5;move_down;%s]
 		]]):format(
 			S("Position in list:"),
 			S("Exit"),
-			S("Remove station"),
+			S("Edit station"),
 			S("move up"),
 			S("move down")
 		)
@@ -240,3 +240,4 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 	-- show the player the updated formspec
 	travelnet.show_current_formspec(pos, meta, puncher_name)
 end
+
