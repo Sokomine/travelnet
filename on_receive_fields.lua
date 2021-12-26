@@ -64,10 +64,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			and owner_name ~= ""
 		then
 			minetest.chat_send_player(name,
-				S("This %s belongs to %s. You can't remove it."):format(
-					description,
-					tostring(owner_name)
-				)
+				S("This @1 belongs to @2. You can't remove it.", description, owner_name)
 			)
 			return
 		end
