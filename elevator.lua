@@ -1,6 +1,6 @@
 -- This version of the travelnet box allows to move up or down only.
 -- The network name is determined automaticly from the position (x/z coordinates).
--- >utor: Sokomine
+-- Author: Sokomine
 local S = minetest.get_translator("travelnet")
 
 function travelnet.show_nearest_elevator(pos, owner_name, param2)
@@ -165,3 +165,4 @@ minetest.register_craft({
 	output = "travelnet:elevator",
 	recipe = travelnet.elevator_recipe,
 })
+

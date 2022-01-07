@@ -1,10 +1,5 @@
 local S = minetest.get_translator("travelnet")
 
-
-local function is_falsey_string(str)
-	return not str or str == ""
-end
-
 -- add a new target; meta is optional
 function travelnet.add_target(station_name, network_name, pos, player_name, meta, owner_name)
 
@@ -22,23 +17,23 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 
 	if is_elevator then
 		network_name = travelnet.elevator_network(pos)
-		if is_falsey_string(station_name) then
+		if travelnet.is_falsey_string(station_name) then
 			station_name = S("at @1 m", tostring(pos.y))
 		end
 	end
 
-	if is_falsey_string(station_name) then
+	if travelnet.is_falsey_string(station_name) then
 		travelnet.show_message(pos, player_name, S("Error"), S("Please provide a name for this station."))
 		return
 	end
 
-	if is_falsey_string(network_name) then
+	if travelnet.is_falsey_string(network_name) then
 		travelnet.show_message(pos, player_name, S("Error"),
 				S("Please provide the name of the network this station ought to be connected to."))
 		return
 	end
 
-	if is_falsey_string(owner_name) or owner_name == player_name or is_elevator then -- elevator networks
+	if travelnet.is_falsey_string(owner_name) or owner_name == player_name or is_elevator then -- elevator networks
 		owner_name = player_name
 	elseif	not minetest.check_player_privs(player_name, { travelnet_attach=true })
 		and not travelnet.allow_attach(player_name, owner_name, network_name)
@@ -108,3 +103,4 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 		travelnet.save_data()
 	end
 end
+
