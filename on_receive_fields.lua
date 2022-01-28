@@ -190,30 +190,27 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		end
 	end
 
-	player:move_to(vector.add(target_pos, player_model_vec), false)
+	minetest.load_area(target_pos)
 
 	-- check if the box has at the other end has been removed.
-	local target_node = minetest.get_node_or_nil(target_pos)
-	if target_node ~= nil then
-		local target_node_def = minetest.registered_nodes[target_node.name]
-		local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
+	local target_node = minetest.get_node(target_pos)
+	local target_node_def = minetest.registered_nodes[target_node.name]
+	local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
 
-		if not has_travelnet_group then
-			-- provide information necessary to identify the removed box
-			local oldmetadata = {
-				fields = {
-					owner           = owner_name,
-					station_name    = fields.target,
-					station_network = station_network
-				}
+	if not has_travelnet_group then
+		-- provide information necessary to identify the removed box
+		local oldmetadata = {
+			fields = {
+				owner           = owner_name,
+				station_name    = fields.target,
+				station_network = station_network
 			}
+		}
 
-			travelnet.remove_box(target_pos, nil, oldmetadata, player)
-			-- send the player back as there's no receiving travelnet
-			player:move_to(pos, false)
-		else
-			travelnet.rotate_player(target_pos, player, 0)
-		end
+		travelnet.remove_box(target_pos, nil, oldmetadata, player)
+	else
+		player:move_to(vector.add(target_pos, player_model_vec), false)
+		travelnet.rotate_player(target_pos, player)
 	end
-end
 
+end
