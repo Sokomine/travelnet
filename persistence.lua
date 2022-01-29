@@ -4,7 +4,7 @@ local mod_data_path = minetest.get_worldpath() .. "/mod_travelnet.data"
 
 -- called whenever a station is added or removed
 function travelnet.save_data()
-	local data = minetest.serialize(travelnet.targets)
+	local data = minetest.write_json(travelnet.targets)
 
 	local success = minetest.safe_file_write(mod_data_path, data)
 	if not success then
@@ -21,7 +21,11 @@ function travelnet.restore_data()
 	end
 
 	local data = file:read("*all")
-	travelnet.targets = minetest.deserialize(data)
+	if data:sub(1, 1) == "{" then
+		travelnet.targets = minetest.parse_json(data)
+	else
+		travelnet.targets = minetest.deserialize(data)
+	end
 
 	if not travelnet.targets then
 		local backup_file = mod_data_path .. ".bak"
