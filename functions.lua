@@ -381,7 +381,7 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 			return
 		end
 		-- does the new network have space at all?
-		if 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
+		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
 			travelnet.show_message(pos, player_name, S("Error"),
 				S('Network "@1", already contains the maximum number (@2) of '
 					.. 'allowed stations per network. Please choose a '
@@ -426,7 +426,7 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 			return
 		end
 		-- does the new network have space at all?
-		if 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
+		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
 			travelnet.show_message(pos, player_name, S("Error"),
 				S('Network "@1", already contains the maximum number (@2) of '
 					.. 'allowed stations per network. Please choose a '

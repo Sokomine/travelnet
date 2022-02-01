@@ -1,4 +1,5 @@
 
+-- set this to 0 if you want no limit
 travelnet.MAX_STATIONS_PER_NETWORK = 24
 
 -- set this to true if you want a simulated beam effect

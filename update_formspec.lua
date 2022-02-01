@@ -4,8 +4,9 @@ local function is_falsey_string(str)
 	return not str or str == ""
 end
 
--- called "on_punch" of travelnet and elevator
-function travelnet.update_formspec(pos, puncher_name, fields)
+
+function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
+
 	local meta = minetest.get_meta(pos)
 
 	local node = minetest.get_node(pos)
@@ -185,13 +186,34 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 	if #stations < 10 then
 		x = 4
 	end
+	local paging = (
+			travelnet.MAX_STATIONS_PER_NETWORK == 0
+			or travelnet.MAX_STATIONS_PER_NETWORK > 24
+		) and (#stations > 24)
 
-	for _,k in ipairs(stations) do
+	local column_size = paging and 7 or 8
+	local page_size = column_size*3
+	local pages = math.ceil(#stations/page_size)
+	if not page_number then
+		page_number = 1
+		if paging then
+			for number,k in ipairs(stations) do
+				if k == station_name then
+					page_number = math.ceil(number/page_size)
+					break
+				end
+			end
+		end
+	end
 
+	-- for number,k in ipairs(stations) do
+	for n=((page_number-1)*page_size)+1,(page_number*page_size) do
+		local k = stations[n]
+		if not k then break end
 		i = i+1
 
 		-- new column
-		if y == 8 then
+		if y == column_size then
 			x = x + 4
 			y = 0
 		end
@@ -227,9 +249,42 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 			S("move up"),
 			S("move down")
 		)
+	if paging then
+		if page_number > 2 then
+			formspec = formspec .. ("button[0,9.2;2,1;first_page;%s]"):format(minetest.formspec_escape(S("<<")))
+		end
+		if page_number > 1 then
+			formspec = formspec .. ("button[2,9.2;2,1;prev_page;%s]"):format(minetest.formspec_escape(S("<")))
+		end
+		formspec = formspec
+			.. ("label[5,9.4;%s]"):format(minetest.formspec_escape(S("Page @1/@2", page_number, pages)))
+			.. ("field[20,20;0.1,0.1;page_number;Page;%i]"):format(page_number)
+			.. ("field[20,20;0.1,0.1;pos2str;Pos;%s]"):format(minetest.pos_to_string(pos))
+		if page_number < pages then
+			formspec = formspec .. ("button[8,9.2;2,1;next_page;%s]"):format(minetest.formspec_escape(S(">")))
+		end
+		if page_number < pages-1 then
+			formspec = formspec .. ("button[10,9.2;2,1;last_page;%s]"):format(minetest.formspec_escape(S(">>")))
+		end
+	end
 
+	return formspec
+end
+
+-- called "on_punch" of travelnet and elevator
+function travelnet.update_formspec(pos, puncher_name, fields)
+
+	local formspec = travelnet.primary_formspec(pos, puncher_name, fields)
+
+	if not formspec then return end
+
+	local meta = minetest.get_meta(pos)
 
 	meta:set_string("formspec", formspec)
+
+	local owner_name      = meta:get_string("owner")
+	local station_name    = meta:get_string("station_name")
+	local station_network = meta:get_string("station_network")
 
 	meta:set_string("infotext",
 			S("Station '@1'" .. " " ..
@@ -240,4 +295,3 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 	-- show the player the updated formspec
 	travelnet.show_current_formspec(pos, meta, puncher_name)
 end
-

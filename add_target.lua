@@ -58,7 +58,7 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 	end
 
 	-- we don't want too many stations in the same network because that would get confusing when displaying the targets
-	if station_count > travelnet.MAX_STATIONS_PER_NETWORK then
+	if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and station_count > travelnet.MAX_STATIONS_PER_NETWORK then
 		travelnet.show_message(pos, player_name, S("Error"),
 				S("Network '@1', already contains the maximum number (@2) of allowed stations per network. " ..
 					"Please choose a different/new network name.", network_name, travelnet.MAX_STATIONS_PER_NETWORK))
@@ -103,4 +103,3 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 		travelnet.save_data()
 	end
 end
-
