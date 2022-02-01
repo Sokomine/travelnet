@@ -212,7 +212,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	-- may be 0.0 for some versions of MT 5 player model
 	local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5
 	local player_model_vec = vector.new(0, player_model_bottom, 0)
-	local target_pos = target_station.pos
+	local target_pos, tnode = target_station.pos, minetest.get_node(target_station.pos)
 
 	local top_pos = vector.add(pos, { x=0, y=1, z=0 })
 	local top_node = minetest.get_node(top_pos)
@@ -226,9 +226,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	minetest.load_area(target_pos)
 
 	-- check if the box has at the other end has been removed.
-	local has_travelnet_group = travelnet.is_travelnet_or_elevator(target_pos)
-
-	if not has_travelnet_group then
+	if minetest.get_item_group(tnode.name, "travelnet") == 0 and minetest.get_item_group(tnode.name, "elevator") == 0 then
 		-- provide information necessary to identify the removed box
 		local oldmetadata = {
 			fields = {
