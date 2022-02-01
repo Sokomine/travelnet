@@ -80,6 +80,12 @@ function travelnet.is_elevator(node_name)
 	return node_name == "travelnet:elevator"
 end
 
+function travelnet.is_travelnet_or_elevator(pos)
+	local node = minetest.get_node(pos)
+	local node_def = minetest.registered_nodes[node.name]
+	return node_def and node_def.groups and (node_def.groups.travelnet or node_def.groups.elevator)
+end
+
 function travelnet.door_is_open(node, opposite_direction)
 	return string.sub(node.name, -5) == "_open"
 		-- handle doors that change their facedir

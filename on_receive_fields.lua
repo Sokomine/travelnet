@@ -226,9 +226,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	minetest.load_area(target_pos)
 
 	-- check if the box has at the other end has been removed.
-	local target_node = minetest.get_node(target_pos)
-	local target_node_def = minetest.registered_nodes[target_node.name]
-	local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
+	local has_travelnet_group = travelnet.is_travelnet_or_elevator(target_pos)
 
 	if not has_travelnet_group then
 		-- provide information necessary to identify the removed box
