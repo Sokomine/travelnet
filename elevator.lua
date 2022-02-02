@@ -117,7 +117,7 @@ minetest.register_node("travelnet:elevator", {
 		meta:set_string("formspec", ([[
 			size[12,10]
 			field[0.3,5.6;6,0.7;station_name;%s;]
-			button_exit[6.3,6.2;1.7,0.7;station_set;%s]
+			button[6.3,6.2;1.7,0.7;station_set;%s]
 		]]):format(S("Name of this station:"), S("Store")))
 
 		minetest.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
@@ -165,4 +165,3 @@ minetest.register_craft({
 	output = "travelnet:elevator",
 	recipe = travelnet.elevator_recipe,
 })
-

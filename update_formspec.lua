@@ -221,15 +221,15 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 		-- check if there is an elevator door in front that needs to be opened
 		if k == station_name then
 			formspec = formspec ..
-				("button_exit[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
+				("button[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
 						:format(x, y + 2.5, x + 0.9, y + 2.35, k)
 		elseif is_elevator then
 			formspec = formspec ..
-				("button_exit[%f,%f;1,0.5;target;%s]label[%f,%f;%s]")
+				("button[%f,%f;1,0.5;target;%s]label[%f,%f;%s]")
 						:format(x, y + 2.5, minetest.formspec_escape(tostring(network[k].nr)), x + 0.9, y + 2.35, k)
 		else
 			formspec = formspec ..
-				("button_exit[%f,%f;4,0.5;target;%s]")
+				("button[%f,%f;4,0.5;target;%s]")
 						:format(x, y + 2.5, minetest.formspec_escape(k))
 		end
 
@@ -238,8 +238,8 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 
 	formspec = formspec .. ([[
 			label[8.0,1.6;%s]
-			button_exit[11.3,0.0;1.0,0.5;station_exit;%s]
-			button_exit[10.0,0.5;2.2,0.7;station_edit;%s]
+			button[11.3,0.0;1.0,0.5;station_exit;%s]
+			button[10.0,0.5;2.2,0.7;station_edit;%s]
 			button[9.6,1.6;1.4,0.5;move_up;%s]
 			button[10.9,1.6;1.4,0.5;move_down;%s]
 		]]):format(

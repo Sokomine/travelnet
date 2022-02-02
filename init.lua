@@ -29,6 +29,7 @@ end
 
 travelnet = {}
 
+travelnet.player_formspec_data = {}
 travelnet.targets = {}
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
@@ -133,3 +134,4 @@ end
 
 -- upon server start, read the savefile
 travelnet.restore_data()
+travelnet.player_formspec_data = nil

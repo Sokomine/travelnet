@@ -1,7 +1,6 @@
 local S = minetest.get_translator("travelnet")
 
-
-function travelnet.on_receive_fields(pos, _, fields, player)
+local function on_receive_fields_internal(pos, _, fields, player)
 	if not pos then
 		return
 	end
@@ -118,7 +117,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			minetest.remove_node(pos)
 		else
 			-- edit station
-			minetest.after(0.2, travelnet.edit_formspec, pos, meta, name)
+			travelnet.edit_formspec(pos, meta, name)
 		end
 		return
 	end
@@ -244,4 +243,13 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		travelnet.rotate_player(target_pos, player)
 	end
 
+end
+
+local player_formspec_data = travelnet.player_formspec_data
+function travelnet.on_receive_fields(pos, _, fields, player)
+	local name = player:get_player_name()
+	player_formspec_data[name] = {wait_mode=true}
+	on_receive_fields_internal(pos, _, fields, player)
+	travelnet.show_formspec(name)
+	player_formspec_data[name] = nil
 end

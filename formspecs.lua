@@ -10,9 +10,9 @@ function travelnet.show_message(pos, player_name, title, message)
 	local formspec = ([[
 			size[8,3]
 			label[3,0;%s]
-			textlist[0,0.5;8,1.5;;%s;]
-			button_exit[3.5,2.5;1.0,0.5;back;%s]
-			button_exit[6.8,2.5;1.0,0.5;station_exit;%s]
+			textarea[0.5,0.5;7,1.5;;%s;]
+			button[3.5,2.5;1.0,0.5;back;%s]
+			button[6.8,2.5;1.0,0.5;station_exit;%s]
 			field[20,20;0.1,0.1;pos2str;Pos;%s]
 		]]):format(
 			minetest.formspec_escape(title or S("Error")),
@@ -21,7 +21,7 @@ function travelnet.show_message(pos, player_name, title, message)
 			S("Exit"),
 			minetest.pos_to_string(pos)
 		)
-	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	travelnet.set_formspec(player_name, formspec)
 end
 
 -- show the player the formspec they would see when right-clicking the node;
@@ -34,7 +34,7 @@ function travelnet.show_current_formspec(pos, meta, player_name)
 	local formspec = meta:get_string("formspec") ..
 		("field[20,20;0.1,0.1;pos2str;Pos;%s]"):format(minetest.pos_to_string(pos))
 	-- show the formspec manually
-	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	travelnet.set_formspec(player_name, formspec)
 end
 
 -- a player clicked on something in the formspec hse was manually shown
@@ -82,15 +82,15 @@ function travelnet.reset_formspec(meta)
 			([[
 				size[10,6.0]
 				label[2.0,0.0;--> %s <--]
-				button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+				button[8.0,0.0;2.2,0.7;station_dig;%s]
 				field[0.3,1.2;9,0.9;station_name;%s:;]
 				label[0.3,1.5;%s]
 				field[0.3,2.8;9,0.9;station_network;%s;%s]
 				label[0.3,3.1;%s]
 				field[0.3,4.4;9,0.9;owner;%s;]
 				label[0.3,4.7;%s]
-				button_exit[3.8,5.3;1.7,0.7;station_set;%s]
-				button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+				button[3.8,5.3;1.7,0.7;station_set;%s]
+				button[6.3,5.3;1.7,0.7;station_exit;%s]
 			]]):format(
 				S("Configure this travelnet station"),
 				S("Remove station"),
@@ -128,15 +128,15 @@ function travelnet.edit_formspec(pos, meta, player_name)
 	local formspec = ([[
 		size[10,6.0]
 		label[2.0,0.0;--> %s <--]
-		button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+		button[8.0,0.0;2.2,0.7;station_dig;%s]
 		field[0.3,1.2;9,0.9;station_name;%s:;%s]
 		label[0.3,1.5;%s]
 		field[0.3,2.8;9,0.9;station_network;%s;%s]
 		label[0.3,3.1;%s]
 		field[0.3,4.4;9,0.9;owner;%s;%s]
 		label[0.3,4.7;%s]
-		button_exit[3.8,5.3;1.7,0.7;station_set;%s]
-		button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+		button[3.8,5.3;1.7,0.7;station_set;%s]
+		button[6.3,5.3;1.7,0.7;station_exit;%s]
 		field[20,20;0.1,0.1;pos2str;Pos;%s]
 	]]):format(
 		S("Configure this travelnet station"),
@@ -156,7 +156,7 @@ function travelnet.edit_formspec(pos, meta, player_name)
 	)
 
 	-- show the formspec manually
-	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	travelnet.set_formspec(player_name, formspec)
 end
 
 
@@ -171,10 +171,10 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	local formspec = ([[
 		size[10,6.0]
 		label[2.0,0.0;--> %s <--]
-		button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+		button[8.0,0.0;2.2,0.7;station_dig;%s]
 		field[0.3,1.2;9,0.9;station_name;%s:;%s]
-		button_exit[3.8,5.3;1.7,0.7;station_set;%s]
-		button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+		button[3.8,5.3;1.7,0.7;station_set;%s]
+		button[6.3,5.3;1.7,0.7;station_exit;%s]
 		field[20,20;0.1,0.1;pos2str;Pos;%s]
 	]]):format(
 		S("Configure this elevator station"),
@@ -187,7 +187,26 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	)
 
 	-- show the formspec manually
-	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	travelnet.set_formspec(player_name, formspec)
+end
+
+local player_formspec_data = travelnet.player_formspec_data
+function travelnet.set_formspec(player_name, formspec)
+	if player_formspec_data[player_name] and player_formspec_data[player_name].wait_mode then
+		player_formspec_data[player_name].formspec = formspec
+	else
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	end
+end
+
+function travelnet.show_formspec(player_name)
+	local formspec = player_formspec_data[player_name] and player_formspec_data[player_name].formspec
+	if formspec then
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	else
+		minetest.show_formspec(player_name, "", "")
+	end
+	player_formspec_data[player_name].formspec = nil
 end
 
 function travelnet.page_formspec(pos, player_name, page)
