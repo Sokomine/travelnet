@@ -43,10 +43,9 @@ function travelnet.form_input_handler(player, formname, fields)
 	if formname ~= travelnet_form_name then return end
 	if fields and fields.pos2str then
 		local pos = minetest.string_to_pos(fields.pos2str)
-		if not pos then
-			return
-		end
-		if not travelnet.is_travelnet_or_elevator(pos) then
+		if not pos then return end
+		local node = minetest.get_node(pos)
+		if minetest.get_item_group(node.name, "travelnet") == 0 and minetest.get_item_group(node.name, "elevator") == 0 then
 			return
 		end
 
