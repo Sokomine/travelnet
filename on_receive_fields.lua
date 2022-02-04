@@ -212,7 +212,6 @@ local function on_receive_fields_internal(pos, _, fields, player)
 	local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5
 	local player_model_vec = vector.new(0, player_model_bottom, 0)
 	local target_pos = target_station.pos
-	local tnode = minetest.get_node(target_pos)
 
 	local top_pos = vector.add(pos, { x=0, y=1, z=0 })
 	local top_node = minetest.get_node(top_pos)
@@ -225,6 +224,7 @@ local function on_receive_fields_internal(pos, _, fields, player)
 
 	minetest.load_area(target_pos)
 
+	local tnode = minetest.get_node(target_pos)
 	-- check if the box has at the other end has been removed.
 	if minetest.get_item_group(tnode.name, "travelnet") == 0 and minetest.get_item_group(tnode.name, "elevator") == 0 then
 		-- provide information necessary to identify the removed box
