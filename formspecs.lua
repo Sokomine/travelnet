@@ -2,6 +2,8 @@ local S = minetest.get_translator("travelnet")
 
 local travelnet_form_name = "travelnet:show"
 
+local player_formspec_data = travelnet.player_formspec_data
+
 -- minetest.chat_send_player is sometimes not so well visible
 function travelnet.show_message(pos, player_name, title, message)
 	if not pos or not player_name or not message then
@@ -13,7 +15,6 @@ function travelnet.show_message(pos, player_name, title, message)
 			textarea[0.5,0.5;7,1.5;;%s;]
 			button[3.5,2.5;1.0,0.5;back;%s]
 			button[6.8,2.5;1.0,0.5;station_exit;%s]
-			field[20,20;0.1,0.1;pos2str;Pos;%s]
 		]]):format(
 			minetest.formspec_escape(title or S("Error")),
 			minetest.formspec_escape(message or "- nothing -"),
@@ -31,8 +32,7 @@ function travelnet.show_current_formspec(pos, meta, player_name)
 		return
 	end
 	-- we need to supply the position of the travelnet box
-	local formspec = meta:get_string("formspec") ..
-		("field[20,20;0.1,0.1;pos2str;Pos;%s]"):format(minetest.pos_to_string(pos))
+	local formspec = meta:get_string("formspec")
 	-- show the formspec manually
 	travelnet.set_formspec(player_name, formspec)
 end
@@ -41,20 +41,18 @@ end
 -- (back from help page, moved travelnet up or down etc.)
 function travelnet.form_input_handler(player, formname, fields)
 	if formname ~= travelnet_form_name then return end
-	if fields and fields.pos2str then
-		local pos = minetest.string_to_pos(fields.pos2str)
-		if not pos then return end
-		local node = minetest.get_node(pos)
-		if minetest.get_item_group(node.name, "travelnet") == 0 and minetest.get_item_group(node.name, "elevator") == 0 then
-			return
-		end
-
+	if fields then
 		-- back button leads back to the main menu
 		if fields.back and fields.back ~= "" then
+			local player_name = player:get_player_name()
+			local pos = player_formspec_data[player_name] and player_formspec_data[player_name].pos
+			if not pos then
+				return
+			end
 			return travelnet.show_current_formspec(pos,
-					minetest.get_meta(pos), player:get_player_name())
+					minetest.get_meta(pos), player_name)
 		end
-		return travelnet.on_receive_fields(pos, formname, fields, player)
+		return travelnet.on_receive_fields(nil, formname, fields, player)
 	end
 end
 
@@ -136,7 +134,6 @@ function travelnet.edit_formspec(pos, meta, player_name)
 		label[0.3,4.7;%s]
 		button[3.8,5.3;1.7,0.7;station_set;%s]
 		button[6.3,5.3;1.7,0.7;station_exit;%s]
-		field[20,20;0.1,0.1;pos2str;Pos;%s]
 	]]):format(
 		S("Configure this travelnet station"),
 		S("Remove station"),
@@ -174,7 +171,6 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 		field[0.3,1.2;9,0.9;station_name;%s:;%s]
 		button[3.8,5.3;1.7,0.7;station_set;%s]
 		button[6.3,5.3;1.7,0.7;station_exit;%s]
-		field[20,20;0.1,0.1;pos2str;Pos;%s]
 	]]):format(
 		S("Configure this elevator station"),
 		S("Remove station"),
@@ -189,7 +185,6 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	travelnet.set_formspec(player_name, formspec)
 end
 
-local player_formspec_data = travelnet.player_formspec_data
 function travelnet.set_formspec(player_name, formspec)
 	if player_formspec_data[player_name] and player_formspec_data[player_name].wait_mode then
 		player_formspec_data[player_name].formspec = formspec
@@ -206,12 +201,13 @@ function travelnet.show_formspec(player_name)
 		minetest.show_formspec(player_name, "", "")
 	end
 	player_formspec_data[player_name].formspec = nil
+	return formspec
 end
 
 function travelnet.page_formspec(pos, player_name, page)
 	local formspec = travelnet.primary_formspec(pos, player_name, nil, page)
 	if formspec then
-		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+		travelnet.set_formspec(player_name, formspec)
 		return
 	end
 end

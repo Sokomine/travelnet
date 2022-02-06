@@ -1,5 +1,7 @@
 local S = minetest.get_translator("travelnet")
 
+local player_formspec_data = travelnet.player_formspec_data
+
 local function is_falsey_string(str)
 	return not str or str == ""
 end
@@ -259,7 +261,6 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 		formspec = formspec
 			.. ("label[5,9.4;%s]"):format(minetest.formspec_escape(S("Page @1/@2", page_number, pages)))
 			.. ("field[20,20;0.1,0.1;page_number;Page;%i]"):format(page_number)
-			.. ("field[20,20;0.1,0.1;pos2str;Pos;%s]"):format(minetest.pos_to_string(pos))
 		if page_number < pages then
 			formspec = formspec .. ("button[8,9.2;2,1;next_page;%s]"):format(minetest.formspec_escape(S(">")))
 		end
@@ -291,6 +292,9 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 				"on travelnet '@2' (owned by @3)" .. " " ..
 				"ready for usage. Right-click to travel, punch to update.",
 				tostring(station_name), tostring(station_network), tostring(owner_name)))
+
+	player_formspec_data[puncher_name] = player_formspec_data[puncher_name] or {}
+	player_formspec_data[puncher_name].pos = pos
 
 	-- show the player the updated formspec
 	travelnet.show_current_formspec(pos, meta, puncher_name)

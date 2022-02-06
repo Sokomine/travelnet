@@ -1,6 +1,8 @@
 local S = minetest.get_translator("travelnet")
 
-local function on_receive_fields_internal(pos, _, fields, player)
+local player_formspec_data = travelnet.player_formspec_data
+
+local function on_receive_fields_internal(pos, fields, player)
 	if not pos then
 		return
 	end
@@ -244,11 +246,22 @@ local function on_receive_fields_internal(pos, _, fields, player)
 
 end
 
-local player_formspec_data = travelnet.player_formspec_data
 function travelnet.on_receive_fields(pos, _, fields, player)
 	local name = player:get_player_name()
-	player_formspec_data[name] = {wait_mode=true}
-	on_receive_fields_internal(pos, _, fields, player)
-	travelnet.show_formspec(name)
-	player_formspec_data[name] = nil
+	player_formspec_data[name] = player_formspec_data[name] or {}
+	if pos then
+		player_formspec_data[name].pos = pos
+	else
+		pos = player_formspec_data[name].pos
+	end
+
+	player_formspec_data[name].wait_mode = true
+	on_receive_fields_internal(pos, fields, player)
+
+	local closed = not travelnet.show_formspec(name)
+	if fields.quit or closed then
+		player_formspec_data[name] = nil
+	else
+		player_formspec_data[name].wait_mode = nil
+	end
 end
