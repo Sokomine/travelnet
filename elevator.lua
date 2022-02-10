@@ -3,6 +3,8 @@
 -- Author: Sokomine
 local S = minetest.get_translator("travelnet")
 
+local player_formspec_data = travelnet.player_formspec_data
+
 function travelnet.show_nearest_elevator(pos, owner_name, param2)
 	if not pos or not pos.x or not pos.z or not owner_name then
 		return
@@ -70,6 +72,30 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 end
 
 
+local function on_interact(pos, _, player)
+	local meta = minetest.get_meta(pos)
+	local station_network = meta:get_string("station_network")
+	local player_name = player:get_player_name()
+	local legacy_formspec = meta:get_string("formspec")
+	if not travelnet.is_falsey_string(legacy_formspec) then
+		meta:set_string("formspec", "")
+	end
+
+	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
+	player_formspec_data[player_name].pos = pos
+
+	if travelnet.is_falsey_string(station_network) then
+		-- request initial data
+		travelnet.set_formspec(player:get_player_name(), ([[
+			size[12,10]
+			field[0.3,5.6;6,0.7;station_name;%s;]
+			button[6.3,6.2;1.7,0.7;station_set;%s]
+		]]):format(S("Name of this station:"), S("Store")))
+	else
+		travelnet.show_current_formspec(pos, nil, player_name)
+	end
+end
+
 minetest.register_node("travelnet:elevator", {
 	description = S("Elevator"),
 	drawtype = "mesh",
@@ -113,21 +139,12 @@ minetest.register_node("travelnet:elevator", {
 		meta:set_string("station_network","")
 		meta:set_string("owner",          placer:get_player_name())
 
-		-- request initial data
-		meta:set_string("formspec", ([[
-			size[12,10]
-			field[0.3,5.6;6,0.7;station_name;%s;]
-			button[6.3,6.2;1.7,0.7;station_set;%s]
-		]]):format(S("Name of this station:"), S("Store")))
-
 		minetest.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
 		travelnet.show_nearest_elevator(pos, placer:get_player_name(), minetest.dir_to_facedir(placer:get_look_dir()))
 	end,
 
-	on_receive_fields = travelnet.on_receive_fields,
-	on_punch = function(pos, _, puncher)
-		travelnet.update_formspec(pos, puncher:get_player_name())
-	end,
+	on_rightclick = on_interact,
+	on_punch = on_interact,
 
 	can_dig = function(pos, player)
 		return travelnet.can_dig(pos, player, "elevator")

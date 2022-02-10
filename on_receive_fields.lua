@@ -142,7 +142,7 @@ local function on_receive_fields_internal(pos, fields, player)
 
 	-- the owner or players with the travelnet_attach priv can move stations up or down in the list
 	if fields.move_up or fields.move_down then
-		travelnet.update_formspec(pos, name, fields)
+		travelnet.change_order(pos, name, fields)
 		return
 	end
 
@@ -175,7 +175,7 @@ local function on_receive_fields_internal(pos, fields, player)
 				S("Station '@1' does not exist (anymore?)" ..
 					" " .. "on this network.", fields.target or "?")
 		)
-		travelnet.update_formspec(pos, name, nil)
+		travelnet.show_current_formspec(pos, nil, name)
 		return
 	end
 

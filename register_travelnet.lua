@@ -7,7 +7,59 @@
 
 local S = minetest.get_translator("travelnet")
 
+local player_formspec_data = travelnet.player_formspec_data
+
 local travelnet_dyes = {}
+
+local function on_interact(pos, _, player)
+	local meta = minetest.get_meta(pos)
+	local station_network = meta:get_string("station_network")
+	local player_name = player:get_player_name()
+	local legacy_formspec = meta:get_string("formspec")
+	if not travelnet.is_falsey_string(legacy_formspec) then
+		meta:set_string("formspec", "")
+	end
+
+	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
+	player_formspec_data[player_name].pos = pos
+
+	if travelnet.is_falsey_string(station_network) then
+		-- some players seem to be confused with entering network names at first; provide them
+		-- with a default name
+		local default_network = "net1"
+
+		-- request initinal data
+		travelnet.set_formspec(player_name,
+				([[
+					size[10,6.0]
+					label[2.0,0.0;--> %s <--]
+					button[8.0,0.0;2.2,0.7;station_dig;%s]
+					field[0.3,1.2;9,0.9;station_name;%s:;]
+					label[0.3,1.5;%s]
+					field[0.3,2.8;9,0.9;station_network;%s;%s]
+					label[0.3,3.1;%s]
+					field[0.3,4.4;9,0.9;owner;%s;]
+					label[0.3,4.7;%s]
+					button[3.8,5.3;1.7,0.7;station_set;%s]
+					button[6.3,5.3;1.7,0.7;station_exit;%s]
+				]]):format(
+					S("Configure this travelnet station"),
+					S("Remove station"),
+					S("Name of this station"),
+					S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
+					S("Assign to Network:"),
+					default_network,
+					S("You can have more than one network. If unsure, use \"@1\".", default_network),
+					S("Owned by:"),
+					S("Unless you know what you are doing, leave this empty."),
+					S("Save"),
+					S("Exit")
+				)
+		)
+	else
+		travelnet.show_current_formspec(pos, nil, player_name)
+	end
+end
 
 -- travelnet box register function
 function travelnet.register_travelnet_box(cfg)
@@ -53,12 +105,15 @@ function travelnet.register_travelnet_box(cfg)
 		light_source = cfg.light_source or 10,
 		after_place_node = function(pos, placer)
 			local meta = minetest.get_meta(pos)
-			travelnet.reset_formspec(meta)
+			meta:set_string("infotext",       S("Travelnet-box (unconfigured)"))
+			meta:set_string("station_name",   "")
+			meta:set_string("station_network","")
 			meta:set_string("owner", placer:get_player_name())
 			minetest.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
 		end,
 
 		on_receive_fields = travelnet.on_receive_fields,
+		on_rightclick = on_interact,
 		on_punch = function(pos, node, puncher)
 			local item = puncher:get_wielded_item()
 			local item_name = item:get_name()
@@ -74,7 +129,7 @@ function travelnet.register_travelnet_box(cfg)
 				puncher:set_wielded_item(item)
 				return
 			end
-			travelnet.update_formspec(pos, player_name, nil)
+			on_interact(pos, nil, puncher)
 		end,
 
 		can_dig = function(pos, player)

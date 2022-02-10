@@ -84,20 +84,11 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 		meta:set_string("owner",           owner_name)
 		meta:set_int   ("timestamp",       creation_timestamp)
 
-		meta:set_string("formspec",
-				([[
-					size[12,10]
-					field[0.3,0.6;6,0.7;station_name;%s;%s]
-					field[0.3,3.6;6,0.7;station_network;%s;%s]
-				]]):format(
-					S("Station:"),
-					minetest.formspec_escape(station_name),
-					S("Network:"),
-					minetest.formspec_escape(network_name)
-				))
-
-		-- display a list of all stations that can be reached from here
-		travelnet.update_formspec(pos, player_name, nil)
+		meta:set_string("infotext",
+				S("Station '@1'" .. " " ..
+					"on travelnet '@2' (owned by @3)" .. " " ..
+					"ready for usage.",
+					tostring(station_name), tostring(network_name), tostring(owner_name)))
 
 		-- save the updated network data in a savefile over server restart
 		travelnet.save_data()

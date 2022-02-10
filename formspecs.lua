@@ -27,14 +27,8 @@ end
 
 -- show the player the formspec they would see when right-clicking the node;
 -- needs to be simulated this way as calling on_rightclick would not do
-function travelnet.show_current_formspec(pos, meta, player_name)
-	if not pos or not meta or not player_name then
-		return
-	end
-	-- we need to supply the position of the travelnet box
-	local formspec = meta:get_string("formspec")
-	-- show the formspec manually
-	travelnet.set_formspec(player_name, formspec)
+function travelnet.show_current_formspec(pos, _, player_name)
+	travelnet.page_formspec(pos, player_name)
 end
 
 -- a player clicked on something in the formspec hse was manually shown
@@ -49,8 +43,7 @@ function travelnet.form_input_handler(player, formname, fields)
 			if not pos then
 				return
 			end
-			return travelnet.show_current_formspec(pos,
-					minetest.get_meta(pos), player_name)
+			return travelnet.show_current_formspec(pos, nil, player_name)
 		end
 		return travelnet.on_receive_fields(nil, formname, fields, player)
 	end
@@ -62,46 +55,10 @@ end
 minetest.register_on_player_receive_fields(travelnet.form_input_handler)
 
 
-function travelnet.reset_formspec(meta)
-	if not meta then return end
-
-	meta:set_string("infotext",       S("Travelnet-box (unconfigured)"))
-	meta:set_string("station_name",   "")
-	meta:set_string("station_network","")
-	meta:set_string("owner",          "")
-
-	-- some players seem to be confused with entering network names at first; provide them
-	-- with a default name
-	local default_network = "net1"
-
-	-- request initinal data
-	meta:set_string("formspec",
-			([[
-				size[10,6.0]
-				label[2.0,0.0;--> %s <--]
-				button[8.0,0.0;2.2,0.7;station_dig;%s]
-				field[0.3,1.2;9,0.9;station_name;%s:;]
-				label[0.3,1.5;%s]
-				field[0.3,2.8;9,0.9;station_network;%s;%s]
-				label[0.3,3.1;%s]
-				field[0.3,4.4;9,0.9;owner;%s;]
-				label[0.3,4.7;%s]
-				button[3.8,5.3;1.7,0.7;station_set;%s]
-				button[6.3,5.3;1.7,0.7;station_exit;%s]
-			]]):format(
-				S("Configure this travelnet station"),
-				S("Remove station"),
-				S("Name of this station"),
-				S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
-				S("Assign to Network:"),
-				default_network,
-				S("You can have more than one network. If unsure, use \"@1\".", default_network),
-				S("Owned by:"),
-				S("Unless you know what you are doing, leave this empty."),
-				S("Save"),
-				S("Exit")
-			)
-	)
+function travelnet.reset_formspec()
+	minetest.log("warning",
+		"[travelnet] the travelnet.reset_formspec method is deprecated. "..
+		"Run meta:set_string('station_network', '') to reset the travelnet.")
 end
 
 
