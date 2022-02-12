@@ -13,52 +13,15 @@ local travelnet_dyes = {}
 
 local function on_interact(pos, _, player)
 	local meta = minetest.get_meta(pos)
-	local station_network = meta:get_string("station_network")
-	local player_name = player:get_player_name()
 	local legacy_formspec = meta:get_string("formspec")
 	if not travelnet.is_falsey_string(legacy_formspec) then
 		meta:set_string("formspec", "")
 	end
 
+	local player_name = player:get_player_name()
 	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
 	player_formspec_data[player_name].pos = pos
-
-	if travelnet.is_falsey_string(station_network) then
-		-- some players seem to be confused with entering network names at first; provide them
-		-- with a default name
-		local default_network = "net1"
-
-		-- request initinal data
-		travelnet.set_formspec(player_name,
-				([[
-					size[10,6.0]
-					label[2.0,0.0;--> %s <--]
-					button[8.0,0.0;2.2,0.7;station_dig;%s]
-					field[0.3,1.2;9,0.9;station_name;%s:;]
-					label[0.3,1.5;%s]
-					field[0.3,2.8;9,0.9;station_network;%s;%s]
-					label[0.3,3.1;%s]
-					field[0.3,4.4;9,0.9;owner;%s;]
-					label[0.3,4.7;%s]
-					button[3.8,5.3;1.7,0.7;station_set;%s]
-					button[6.3,5.3;1.7,0.7;station_exit;%s]
-				]]):format(
-					S("Configure this travelnet station"),
-					S("Remove station"),
-					S("Name of this station"),
-					S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
-					S("Assign to Network:"),
-					default_network,
-					S("You can have more than one network. If unsure, use \"@1\".", default_network),
-					S("Owned by:"),
-					S("Unless you know what you are doing, leave this empty."),
-					S("Save"),
-					S("Exit")
-				)
-		)
-	else
-		travelnet.show_current_formspec(pos, nil, player_name)
-	end
+	travelnet.show_current_formspec(pos, meta, player_name)
 end
 
 -- travelnet box register function

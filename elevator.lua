@@ -74,26 +74,15 @@ end
 
 local function on_interact(pos, _, player)
 	local meta = minetest.get_meta(pos)
-	local station_network = meta:get_string("station_network")
-	local player_name = player:get_player_name()
 	local legacy_formspec = meta:get_string("formspec")
 	if not travelnet.is_falsey_string(legacy_formspec) then
 		meta:set_string("formspec", "")
 	end
 
+	local player_name = player:get_player_name()
 	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
 	player_formspec_data[player_name].pos = pos
-
-	if travelnet.is_falsey_string(station_network) then
-		-- request initial data
-		travelnet.set_formspec(player:get_player_name(), ([[
-			size[12,10]
-			field[0.3,5.6;6,0.7;station_name;%s;]
-			button[6.3,6.2;1.7,0.7;station_set;%s]
-		]]):format(S("Name of this station:"), S("Store")))
-	else
-		travelnet.show_current_formspec(pos, nil, player_name)
-	end
+	travelnet.show_current_formspec(pos, meta, player_name)
 end
 
 minetest.register_node("travelnet:elevator", {
