@@ -3,6 +3,7 @@ travelnet.MAX_STATIONS_PER_NETWORK (max stations on a network, 0 for unlimited) 
 travelnet.travelnet_effect_enabled (simulated beam effect) bool false
 travelnet.travelnet_sound_enabled (sound played on travelent use) bool true
 travelnet.travelnet_enabled (enable/disable travelnets) bool true
+travelnet.travelnet_cleanup_lbm (enable/disable cleanup lbm) bool false
 travelnet.elevator_enabled (enable/disable elevators) bool true
 travelnet.doors_enabled (enable/disable travelnet doors) bool true
 travelnet.abm_enabled (abm solution for load travelnet network back from meta) bool false

@@ -63,6 +63,11 @@ mod_dofile("add_target")
 -- receive fields handler
 mod_dofile("on_receive_fields")
 
+-- meta-formspec migration lbm
+if travelnet.travelnet_cleanup_lbm then
+	mod_dofile("migrate_formspecs_lbm")
+end
+
 -- invisible node to place inside top of travelnet box and elevator
 minetest.register_node("travelnet:hidden_top", {
 	drawtype = "nodebox",
