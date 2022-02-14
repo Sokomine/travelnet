@@ -22,7 +22,7 @@ function travelnet.show_current_formspec(pos, meta, player_name)
 			station_name = meta:get_string("station_name"),
 			owner_name = meta:get_string("owner"),
 			is_elevator = travelnet.is_elevator(node.name)
-		}, minetest.get_player_by_name(player_name)))
+		}, player_name))
 end
 
 -- a player clicked on something in the formspec hse was manually shown
