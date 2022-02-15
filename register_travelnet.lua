@@ -7,8 +7,6 @@
 
 local S = minetest.get_translator("travelnet")
 
-local player_formspec_data = travelnet.player_formspec_data
-
 local travelnet_dyes = {}
 
 local function on_interact(pos, _, player)
@@ -19,8 +17,6 @@ local function on_interact(pos, _, player)
 	end
 
 	local player_name = player:get_player_name()
-	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
-	player_formspec_data[player_name].pos = pos
 	travelnet.show_current_formspec(pos, meta, player_name)
 end
 

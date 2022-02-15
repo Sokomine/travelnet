@@ -3,8 +3,6 @@
 -- Author: Sokomine
 local S = minetest.get_translator("travelnet")
 
-local player_formspec_data = travelnet.player_formspec_data
-
 function travelnet.show_nearest_elevator(pos, owner_name, param2)
 	if not pos or not pos.x or not pos.z or not owner_name then
 		return
@@ -80,8 +78,6 @@ local function on_interact(pos, _, player)
 	end
 
 	local player_name = player:get_player_name()
-	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
-	player_formspec_data[player_name].pos = pos
 	travelnet.show_current_formspec(pos, meta, player_name)
 end
 
