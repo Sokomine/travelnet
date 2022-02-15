@@ -33,8 +33,13 @@ end
 -- (back from help page, moved travelnet up or down etc.)
 function travelnet.form_input_handler(player, formname, fields)
 	if formname ~= travelnet_form_name then return end
+	if not player then return end
 
-	return travelnet.on_receive_fields(nil, nil, fields, player)
+	local name = player:get_player_name()
+	player_formspec_data[name] = player_formspec_data[name] or {}
+	local pos = player_formspec_data[name].pos
+
+	return travelnet.on_receive_fields(pos, nil, fields, player)
 end
 
 -- most formspecs the travelnet uses are stored in the travelnet node itself,

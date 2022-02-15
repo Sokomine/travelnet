@@ -99,7 +99,7 @@ function travelnet.formspecs.primary(options, player_name)
 	if not options then options = {} end
 	-- add name of station + network + owner + update-button
 	local formspec = ([[
-			size[12,10]
+			size[12,%s]
 			label[3.3,0.0;%s:]
 			label[0.3,0.4;%s]
 			label[6.3,0.4;%s]
@@ -110,6 +110,7 @@ function travelnet.formspecs.primary(options, player_name)
 			label[3.3,1.6;%s]
 			button[11.3,0.0;1.0,0.5;station_exit;%s]
 		]]):format(
+			tostring(options.height or 10),
 			S("Travelnet-Box"),
 			S("Name of this station:"),
 			minetest.formspec_escape(options.station_name or "?"),
