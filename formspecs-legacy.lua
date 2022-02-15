@@ -1,5 +1,7 @@
 local travelnet_form_name = "travelnet:show"
 
+local player_formspec_data = travelnet.player_formspec_data
+
 -- minetest.chat_send_player is sometimes not so well visible
 function travelnet.show_message(pos, player_name, title, message)
 	if not pos or not player_name or not message then
@@ -15,6 +17,8 @@ end
 -- show the player the formspec they would see when right-clicking the node;
 -- needs to be simulated this way as calling on_rightclick would not do
 function travelnet.show_current_formspec(pos, meta, player_name)
+	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
+	player_formspec_data[player_name].pos = pos
 	local node = minetest.get_node(pos)
 	travelnet.show_formspec(player_name,
 		travelnet.formspecs.current({
