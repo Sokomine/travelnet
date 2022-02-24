@@ -39,7 +39,7 @@ travelnet.tiles_elevator = {
 	"travelnet_elevator_sides_outside.png",
 	"travelnet_elevator_inside_ceiling.png",
 	"travelnet_elevator_inside_floor.png",
-	"default_steel_block.png"
+	"travelnet_top.png"
 }
 travelnet.elevator_inventory_image  = "travelnet_elevator_inv.png"
 
