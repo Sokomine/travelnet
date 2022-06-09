@@ -51,7 +51,7 @@ function travelnet.formspecs.edit_travelnet(options)
 		label[0.3,1.5;%s]
 		field[0.3,2.8;9,0.9;station_network;%s;%s]
 		label[0.3,3.1;%s]
-		field[0.3,4.4;9,0.9;owner;%s;%s]
+		field[0.3,4.4;9,0.9;owner_name;%s;%s]
 		label[0.3,4.7;%s]
 		button[3.8,5.3;1.7,0.7;station_set;%s]
 		button[6.3,5.3;1.7,0.7;station_exit;%s]

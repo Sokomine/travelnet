@@ -1,7 +1,7 @@
 local S = minetest.get_translator("travelnet")
 
 return function (node_info, _, player)
-	local owner_name      = node_info.props.owner
+	local owner_name      = node_info.props.owner_name
 	local station_name    = node_info.props.station_name
 	local station_network = node_info.props.station_network
 

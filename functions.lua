@@ -310,7 +310,7 @@ travelnet.remove_box = function(_, _, oldmetadata, digger)
 		return
 	end
 
-	local owner_name      = oldmetadata.fields["owner"]
+	local owner_name      = oldmetadata.fields["owner_name"]
 	local station_name    = oldmetadata.fields["station_name"]
 	local station_network = oldmetadata.fields["station_network"]
 
