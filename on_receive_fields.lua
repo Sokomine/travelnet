@@ -140,13 +140,13 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 
 	-- Validate node's meta data
 	local valid, props = validate_travelnet(pos, meta)
-	props.is_elevator = travelnet.is_elevator(node.name)
 	if not valid then
 		minetest.chat_send_player(name, props)
 		travelnet.actions.end_input(action_args, fields, player)
 		travelnet.show_formspec(name, false)
 		return
 	end
+	props.is_elevator = travelnet.is_elevator(node.name)
 	action_args.props = props
 
 	-- Decide which action to run based on fields given

@@ -20,7 +20,7 @@ return function (node_info, fields, player)
 		return false, S("Unknown node.")
 	end
 
-	if owner_name == fields.owner
+	if owner_name == fields.owner_name
 		and station_network == fields.station_network
 		and station_name == fields.station_name
 	then
@@ -36,7 +36,7 @@ return function (node_info, fields, player)
 		error_message = error_message .. ' '
 			..S('Please provide a network name.')
 	end
-	if travelnet.is_falsey_string(fields.owner) then
+	if travelnet.is_falsey_string(fields.owner_name) then
 		error_message = error_message .. ' '
 			..S('Please provide an owner.')
 	end
@@ -72,15 +72,15 @@ return function (node_info, fields, player)
 
 	local network
 	local timestamp = os.time()
-	if owner_name ~= fields.owner then
+	if owner_name ~= fields.owner_name then
 		-- new owner -> remove station from old network then add to new owner
 		-- but only if there is space on the network
 		-- get the new network
-		network = travelnet.get_or_create_network(fields.owner, fields.station_network)
+		network = travelnet.get_or_create_network(fields.owner_name, fields.station_network)
 		-- does a station with the new name already exist?
 		if network[fields.station_name] then
 			return false, S('Station "@1" already exists on network "@2" of player "@3".',
-					fields.station_name, fields.station_network, fields.owner)
+					fields.station_name, fields.station_network, fields.owner_name)
 		end
 		-- does the new network have space at all?
 		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
@@ -104,7 +104,7 @@ return function (node_info, fields, player)
 		-- update meta
 		meta:set_string("station_name",    fields.station_name)
 		meta:set_string("station_network", fields.station_network)
-		meta:set_string("owner",           fields.owner)
+		meta:set_string("owner",           fields.owner_name)
 		meta:set_int   ("timestamp",       timestamp)
 
 		minetest.chat_send_player(player_name,
@@ -113,9 +113,9 @@ return function (node_info, fields, player)
 				.. 'and from owner "@5" to owner "@6".',
 				station_name, fields.station_name,
 				station_network, fields.station_network,
-				owner_name, fields.owner))
+				owner_name, fields.owner_name))
 
-		new_owner_name = fields.owner
+		new_owner_name = fields.owner_name
 		new_station_network = fields.station_network
 		new_station_name = fields.station_name
 	elseif station_network ~= fields.station_network then
