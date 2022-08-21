@@ -87,7 +87,12 @@ return function (node_info, fields, player)
 			}
 		}
 
-		travelnet.remove_box(target_pos, nil, oldmetadata, player)
+		local success, reason = travelnet.remove_box_action(oldmetadata)
+		if not success then
+			return false, reason
+		end
+
+		travelnet.remove_box_message(oldmetadata, player)
 	else
 		player:move_to(vector.add(target_pos, player_model_vec), false)
 		travelnet.rotate_player(target_pos, player)

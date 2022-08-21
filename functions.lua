@@ -303,14 +303,12 @@ travelnet.rotate_player = function(target_pos, player)
 end
 
 
-travelnet.remove_box = function(_, _, oldmetadata, digger)
+travelnet.remove_box_action = function(oldmetadata)
 	if not oldmetadata or oldmetadata == "nil" or not oldmetadata.fields then
-		minetest.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..
-				S("Could not find information about the station that is to be removed."))
-		return
+		return false, S("Could not find information about the station that is to be removed.")
 	end
 
-	local owner_name      = oldmetadata.fields["owner_name"]
+	local owner_name      = oldmetadata.fields["owner"]
 	local station_name    = oldmetadata.fields["station_name"]
 	local station_network = oldmetadata.fields["station_network"]
 
@@ -318,26 +316,37 @@ travelnet.remove_box = function(_, _, oldmetadata, digger)
 	if	not (owner_name and station_network and station_name)
 		or not travelnet.get_station(owner_name, station_network, station_name)
 	then
-		minetest.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..
-				S("Could not find the station that is to be removed."))
-		return
+		return false, S("Could not find the station that is to be removed.")
 	end
 
 	travelnet.targets[owner_name][station_network][station_name] = nil
 
-	-- inform the owner
-	minetest.chat_send_player(owner_name,
-			S("Station '@1'" .. " " ..
-				"has been REMOVED from the network '@2'.", station_name, station_network))
-
-	if digger and owner_name ~= digger:get_player_name() then
-		minetest.chat_send_player(digger:get_player_name(),
-				S("Station '@1'" .. " " ..
-					"has been REMOVED from the network '@2'.", station_name, station_network))
-	end
-
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
+
+	return true
+end
+travelnet.remove_box_message = function(oldmetadata, digger)
+	local removal_message = S(
+		"Station '@1'" .. " " .. "has been REMOVED from the network '@2'.",
+		oldmetadata.fields["station_name"],
+		oldmetadata.fields["station_network"]
+	)
+	local owner_name = oldmetadata.fields["owner"]
+	minetest.chat_send_player(owner_name, removal_message)
+	local digger_name = digger and digger:get_player_name()
+	if digger and owner_name ~= digger_name then
+		minetest.chat_send_player(digger_name, removal_message)
+	end
+end
+travelnet.remove_box = function(_, _, oldmetadata, digger)
+	local success, reason = travelnet.remove_box_action(oldmetadata)
+
+	if success then
+		travelnet.remove_box_message(oldmetadata, digger)
+	else
+		minetest.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..reason)
+	end
 end
 
 -- privs of player are already checked by on_receive_fields before sending
