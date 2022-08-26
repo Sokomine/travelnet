@@ -53,7 +53,7 @@ return function (node_info, fields, player)
 		-- stations without owner can be removed/edited by anybody
 		and owner_name ~= ""
 	then
-		return false, S("This %s belongs to %s. You can't edit it.",
+		return false, S("This @1 belongs to @2. You can't edit it.",
 				description,
 				tostring(owner_name)
 			)
@@ -190,7 +190,7 @@ return function (node_info, fields, player)
 
 	meta:set_string("infotext",
 			S("Station '@1'" .. " " ..
-				"on travelnet '@2' (owned by @3)" .. " " ..
+				"on network '@2' (owned by @3)" .. " " ..
 				"ready for usage.",
 				tostring(new_station_name or station_name),
 				tostring(new_station_network or station_network),

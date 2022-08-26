@@ -37,8 +37,8 @@ return function (node_info, fields, player)
 		-- stations without owner can be removed/edited by anybody
 		and owner_name ~= ""
 	then
-		return false, S("This %s belongs to %s. You can't edit it.",
-				"elevator",
+		return false, S("This @1 belongs to @2. You can't edit it.",
+				description,
 				tostring(owner_name)
 			)
 	end
@@ -48,8 +48,8 @@ return function (node_info, fields, player)
 		and not minetest.check_player_privs(player_name, { protection_bypass = true })
 	then
 		minetest.record_protection_violation(pos, player_name)
-		return false, S("This %s belongs to %s. You can't edit it.",
-				"elevator",
+		return false, S("This @1 belongs to @2. You can't edit it.",
+				description,
 				tostring(owner_name)
 			)
 	end
@@ -79,7 +79,7 @@ return function (node_info, fields, player)
 
 	meta:set_string("infotext",
 			S("Station '@1'" .. " " ..
-				"on travelnet '@2' (owned by @3)" .. " " ..
+				"on network '@2' (owned by @3)" .. " " ..
 				"ready for usage.",
 				tostring(fields.station_name), tostring(station_network), tostring(owner_name)))
 

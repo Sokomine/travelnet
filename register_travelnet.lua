@@ -64,7 +64,7 @@ function travelnet.register_travelnet_box(cfg)
 		light_source = cfg.light_source or 10,
 		after_place_node = function(pos, placer)
 			local meta = minetest.get_meta(pos)
-			meta:set_string("infotext",       S("Travelnet-box (unconfigured)"))
+			meta:set_string("infotext",       S("Travelnet-Box (unconfigured)"))
 			meta:set_string("station_name",   "")
 			meta:set_string("station_network","")
 			meta:set_string("owner", placer:get_player_name())

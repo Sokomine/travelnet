@@ -27,13 +27,13 @@ function travelnet.node_description(pos)
 	local description
 
 	if minetest.get_item_group(node.name, "travelnet") == 1 then
-		description = "travelnet box"
+		description = S("travelnet box")
 	elseif minetest.get_item_group(node.name, "elevator") == 1 then
-		description = "elevator"
+		description = S("elevator")
 	elseif node.name == "locked_travelnet:travelnet" then
-		description = "locked travelnet"
+		description = S("locked travelnet")
 	elseif node.name == "locked_travelnet:elevator" then
-		description = "locked elevator"
+		description = S("locked elevator")
 	else
 		description = nil
 	end

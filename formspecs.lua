@@ -70,7 +70,7 @@ function travelnet.formspecs.edit_travelnet(options)
 		S("You can have more than one network. If unsure, use \"@1\".", default_network),
 		S("Owned by:"),
 		minetest.formspec_escape(options.owner_name or ""),
-		S("Unless you know what you are doing, leave this empty."),
+		S("Unless you know what you are doing, leave this as is."),
 		S("Save"),
 		S("Exit")
 	)
@@ -100,7 +100,7 @@ function travelnet.formspecs.primary(options, player_name)
 	-- add name of station + network + owner + update-button
 	local formspec = ([[
 			size[12,%s]
-			label[3.3,0.0;%s:]
+			label[3.3,0.0;%s]
 			label[0.3,0.4;%s]
 			label[6.3,0.4;%s]
 			label[0.3,0.8;%s]
@@ -111,7 +111,7 @@ function travelnet.formspecs.primary(options, player_name)
 			button[11.3,0.0;1.0,0.5;station_exit;%s]
 		]]):format(
 			tostring(options.height or 10),
-			S("Travelnet-Box"),
+			options.is_elevator and S("Elevator:") or S("Travelnet-Box:"),
 			S("Name of this station:"),
 			minetest.formspec_escape(options.station_name or "?"),
 			S("Assigned to Network:"),

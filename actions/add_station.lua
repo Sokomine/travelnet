@@ -83,7 +83,7 @@ return function (node_info, fields, player)
 
 		meta:set_string("infotext",
 				S("Station '@1'" .. " " ..
-					"on travelnet '@2' (owned by @3)" .. " " ..
+					"on network '@2' (owned by @3)" .. " " ..
 					"ready for usage.",
 					tostring(station_name), tostring(station_network), tostring(owner_name)))
 

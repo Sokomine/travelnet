@@ -25,7 +25,7 @@ local function validate_travelnet(pos, meta)
 	-- TODO: This check seems odd, re-think this. Don't get node twice, don't hard-code node names.
 	local description = travelnet.node_description(pos)
 	if not description then
-		return false, "Error: Unknown node."
+		return false, S("Unknown node.")
 	end
 
 	return true, {

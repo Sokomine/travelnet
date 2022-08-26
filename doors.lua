@@ -9,7 +9,7 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 	local open_door = node_base_name .. "_open"
 
 	minetest.register_node(open_door, {
-		description = S("elevator door (open)"),
+		description = S("Elevator door (open)"),
 		drawtype = "nodebox",
 		tiles = def_tiles,
 		use_texture_alpha = "clip",
@@ -48,7 +48,7 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 	})
 
 	minetest.register_node(closed_door, {
-		description = S("elevator door (closed)"),
+		description = S("Elevator door (closed)"),
 		drawtype = "nodebox",
 		tiles = def_tiles,
 		use_texture_alpha = "clip",

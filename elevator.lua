@@ -23,7 +23,7 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 		and next(travelnet.targets[owner_name][network_name], nil)
 	then
 		minetest.chat_send_player(owner_name,
-				S("This elevator will automaticly connect to the " ..
+				S("This elevator will automatically connect to the " ..
 					"other elevators you have placed at different heights. Just enter a station name " ..
 					"and click on \"store\" to set it up. Or just punch it to set the height as station " ..
 					"name."))
@@ -36,7 +36,7 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 		minetest.chat_send_player(owner_name,
 				S("This is your first elevator. It differs from " ..
 					"travelnet networks by only allowing movement in vertical direction (up or down). " ..
-					"All further elevators which you will place at the same x,z coordinates at differnt " ..
+					"All further elevators which you will place at the same x,z coordinates at different " ..
 					"heights will be able to connect to this elevator."))
 		return
 	end
