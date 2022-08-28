@@ -81,7 +81,7 @@ return function (node_info, fields, player)
 		-- provide information necessary to identify the removed box
 		local oldmetadata = {
 			fields = {
-				owner_name      = node_info.props.owner_name,
+				owner           = node_info.props.owner_name,
 				station_name    = fields.target,
 				station_network = node_info.props.station_network
 			}
