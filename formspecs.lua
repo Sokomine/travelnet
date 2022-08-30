@@ -47,7 +47,7 @@ function travelnet.formspecs.edit_travelnet(options)
 		size[10,6.0]
 		label[2.0,0.0;--> %s <--]
 		button[8.0,0.0;2.2,0.7;station_dig;%s]
-		field[0.3,1.2;9,0.9;station_name;%s:;%s]
+		field[0.3,1.2;9,0.9;station_name;%s;%s]
 		label[0.3,1.5;%s]
 		field[0.3,2.8;9,0.9;station_network;%s;%s]
 		label[0.3,3.1;%s]
@@ -58,7 +58,7 @@ function travelnet.formspecs.edit_travelnet(options)
 	]]):format(
 		S("Configure this travelnet station"),
 		S("Remove station"),
-		S("Name of this station"),
+		S("Name of this station:"),
 		minetest.formspec_escape(options.station_name or ""),
 		S("What do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
 		S("Assign to network:"),
@@ -82,13 +82,13 @@ function travelnet.formspecs.edit_elevator(options)
 		size[10,6.0]
 		label[2.0,0.0;--> %s <--]
 		button[8.0,0.0;2.2,0.7;station_dig;%s]
-		field[0.3,1.2;9,0.9;station_name;%s:;%s]
+		field[0.3,1.2;9,0.9;station_name;%s;%s]
 		button[3.8,5.3;1.7,0.7;station_set;%s]
 		button[6.3,5.3;1.7,0.7;station_exit;%s]
 	]]):format(
 		S("Configure this elevator station"),
 		S("Remove station"),
-		S("Name of this station"),
+		S("Name of this station:"),
 		minetest.formspec_escape(options.station_name),
 		S("Save"),
 		S("Exit")
