@@ -7,6 +7,15 @@ travelnet.travelnet_cleanup_lbm (enable/disable cleanup lbm) bool false
 travelnet.elevator_enabled (enable/disable elevators) bool true
 travelnet.doors_enabled (enable/disable travelnet doors) bool true
 travelnet.abm_enabled (abm solution for load travelnet network back from meta) bool false
+
+#    Other users may not add stations to a user's network unless this setting is enabled.
+#    A user may have the "travelnet_attach" privilege. In that case, the user may
+#    attach boxes to any network, too - and this setting is not needed.
 travelnet.allow_attach (allow anyone to add a travelnet to any network) bool false
+
+#    Allows foreign users to remove a travelnet station from a network.
+#    The "travelnet_remove" privilege can be handed out instead.
 travelnet.allow_dig (allow anyone to remove travelnets from any network) bool false
+
+#    Determines if a user may use the travel network created by another user.
 travelnet.allow_travel (allow players to use other networks) bool true

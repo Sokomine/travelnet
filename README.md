@@ -16,6 +16,12 @@
 An unconfigured travelnet box can be configured by anyone. If it is misconfigured, just dig it and place it anew.
 All stations that have the same network name set and are owned by the same user connect to the same network.
 
+
+## Settings
+
+See https://github.com/mt-mods/travelnet/blob/master/settingtypes.txt
+
+
 ## Documentation
 
 * [API](./doc/api.md)
