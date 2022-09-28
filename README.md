@@ -17,9 +17,14 @@ An unconfigured travelnet box can be configured by anyone. If it is misconfigure
 All stations that have the same network name set and are owned by the same user connect to the same network.
 
 
+## Crafting
+The Travelnet mod provides five craftable items.
+See [doc/crafting.md](https://github.com/mt-mods/travelnet/blob/master/doc/crafting.md).
+
+
 ## Settings
 
-See https://github.com/mt-mods/travelnet/blob/master/settingtypes.txt
+See [settingtypes.txt](https://github.com/mt-mods/travelnet/blob/master/settingtypes.txt).
 
 
 ## Documentation
