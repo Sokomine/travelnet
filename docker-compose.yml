@@ -1,0 +1,17 @@
+version: "3.6"
+
+services:
+ sut:
+  build:
+   context: ./test
+   args:
+    ENGINE_VERSION: ${ENGINE_VERSION:-5.6.0}
+  user: root
+  volumes:
+    - "./:/root/.minetest/worlds/world/worldmods/travelnet/"
+    - "world_data:/root/.minetest/worlds/world"
+    - "./test/world.mt:/root/.minetest/worlds/world/world.mt"
+    - "./test/minetest.conf:/minetest.conf"
+
+volumes:
+  world_data: {}

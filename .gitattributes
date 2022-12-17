@@ -4,4 +4,3 @@
 # Exclusions for release export
 .* export-ignore
 etc export-ignore
-integration-test.sh export-ignore

@@ -1,7 +1,7 @@
 # Travelnet
 
 [![luacheck](https://github.com/mt-mods/travelnet/workflows/luacheck/badge.svg)](https://github.com/mt-mods/travelnet/actions?query=workflow%3Aluacheck)
-[![Integration test](https://github.com/mt-mods/travelnet/workflows/integration-test/badge.svg)](https://github.com/mt-mods/travelnet/actions?query=workflow%3Aintegration-test)
+[![test](https://github.com/mt-mods/travelnet/workflows/luacheck/badge.svg)](https://github.com/mt-mods/travelnet/actions?query=workflow%3Atest)
 [![ContentDB](https://content.minetest.net/packages/mt-mods/travelnet/shields/downloads/)](https://content.minetest.net/packages/mt-mods/travelnet/)
 
 ## How this works
