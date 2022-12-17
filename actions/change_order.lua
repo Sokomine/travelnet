@@ -61,7 +61,7 @@ return function (node_info, fields, player)
 			end
 
 			-- store the changed order
-			travelnet.save_data()
+			travelnet.save_data(player_name)
 			return true, { formspec = travelnet.formspecs.primary }
 		end
 	end

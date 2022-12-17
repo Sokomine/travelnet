@@ -33,7 +33,7 @@ return function (node_info, _, player)
 		minetest.chat_send_player(owner_name,
 				S("Station '@1'" .. " " ..
 					"has been reattached to the network '@2'.", station_name, station_network))
-		travelnet.save_data()
+		travelnet.save_data(owner_name)
 	end
 	return true, { formspec = travelnet.formspecs.primary }
 end

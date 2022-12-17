@@ -8,7 +8,8 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 		return
 	end
 
-	if not travelnet.targets[owner_name] then
+	local player_travelnets = travelnet.get_travelnets(owner_name)
+	if not player_travelnets then
 		minetest.chat_send_player(owner_name,
 				S("Congratulations! This is your first elevator. " ..
 					"You can build an elevator network by placing further elevators somewhere above " ..
@@ -18,9 +19,9 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 
 	local network_name = travelnet.elevator_network(pos)
 	-- will this be an elevator that will be added to an existing network?
-	if	    travelnet.targets[owner_name][network_name]
+	if	    player_travelnets[network_name]
 		-- does the network have any members at all?
-		and next(travelnet.targets[owner_name][network_name], nil)
+		and next(player_travelnets[network_name], nil)
 	then
 		minetest.chat_send_player(owner_name,
 				S("This elevator will automatically connect to the " ..

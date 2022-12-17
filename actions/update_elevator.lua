@@ -84,7 +84,7 @@ return function (node_info, fields, player)
 				tostring(fields.station_name), tostring(station_network), tostring(owner_name)))
 
 	-- save the updated network data in a savefile over server restart
-	travelnet.save_data()
+	travelnet.save_data(owner_name)
 
 	return true, { formspec = travelnet.formspecs.primary, options = {
 		station_name = fields.station_name

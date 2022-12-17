@@ -37,3 +37,22 @@ function travelnet.restore_data()
 	end
 	file:close()
 end
+
+-- getter/setter for the legacy `travelnet.targets` table
+-- use those methods to access the per-player data, direct table access is deprecated
+-- and will be removed in the future
+
+-- returns the player's travelnets
+function travelnet.get_travelnets(playername, create)
+	if not travelnet.targets[playername] and create then
+		-- create a new entry
+		travelnet.targets[playername] = {}
+	end
+	return travelnet.targets[playername]
+end
+
+-- saves the player's modified travelnets
+function travelnet.set_travelnets(playername, travelnets)
+	travelnet.targets[playername] = travelnets
+	travelnet.save_data(playername)
+end

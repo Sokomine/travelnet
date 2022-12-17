@@ -197,8 +197,11 @@ return function (node_info, fields, player)
 				tostring(new_owner_name or owner_name)
 			))
 
-	-- save the updated network data in a savefile over server restart
-	travelnet.save_data()
+	-- save the updated network data
+	travelnet.save_data(owner_name)
+	if new_owner_name then
+		travelnet.save_data(new_owner_name)
+	end
 
 	return true, { formspec = travelnet.formspecs.primary, options = {
 		station_name = new_station_name or station_name,

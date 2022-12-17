@@ -47,7 +47,9 @@ function travelnet.find_nearest_elevator_network(pos, owner_name)
 	local nearest_dist = false
 	local nearest_dist_x
 	local nearest_dist_z
-	for target_network_name, network in pairs(travelnet.targets[owner_name]) do
+
+	local player_travelnets = travelnet.get_travelnets(owner_name)
+	for target_network_name, network in pairs(player_travelnets) do
 		local station_name = next(network, nil)
 		if station_name then
 			local station = network[station_name]
@@ -116,32 +118,23 @@ function travelnet.param2_to_yaw(param2)
 end
 
 function travelnet.get_or_create_network(owner_name, network_name)
-	if not travelnet.targets then
-		travelnet.targets = {}
-	end
-
 	-- first one by this player?
-	if not travelnet.targets[owner_name] then
-		travelnet.targets[owner_name] = {}
-	end
-
-	local owners_targets = travelnet.targets[owner_name]
+	local player_travelnets = travelnet.get_travelnets(owner_name, true)
 
 	-- first station on this network?
-	if not owners_targets[network_name] then
-		owners_targets[network_name] = {}
+	if not player_travelnets[network_name] then
+		player_travelnets[network_name] = {}
 	end
 
-	return owners_targets[network_name]
+	return player_travelnets[network_name]
 end
 
 function travelnet.get_network(owner_name, network_name)
-	if not travelnet.targets then return end
+	local player_travelnets = travelnet.get_travelnets(owner_name)
 
-	local owners_targets = travelnet.targets[owner_name]
-	if not owners_targets then return end
+	if not player_travelnets then return end
 
-	return owners_targets[network_name]
+	return player_travelnets[network_name]
 end
 
 function travelnet.get_ordered_stations(owner_name, network_name, is_elevator)
@@ -319,10 +312,9 @@ travelnet.remove_box_action = function(oldmetadata)
 		return false, S("Could not find the station that is to be removed.")
 	end
 
-	travelnet.targets[owner_name][station_network][station_name] = nil
-
-	-- save the updated network data in a savefile over server restart
-	travelnet.save_data()
+	local player_travelnets = travelnet.get_travelnets(owner_name)
+	player_travelnets[station_network][station_name] = nil
+	travelnet.set_travelnets(owner_name, player_travelnets)
 
 	return true
 end
